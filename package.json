@@ -1,0 +1,30 @@
+{
+  "name" : "wrapper_bootstrap_fontawesome",
+  "version": "0.0.1",
+  "license" : "SEE LICENSE IN LICENSE",
+  "repository": "Caleydo/wrapper_bootstrap_fontawesome",
+  "dependencies": {
+  },
+  "peerDependencies": {
+  },
+  "caleydo": {
+    "dependencies": {
+      "web": {
+        "font-awesome": ">=4.3.0",
+        "bootstrap": "~3.3.4"
+      }
+    },
+
+    "requirejs-config": {
+      "paths": {
+        "bootstrap": "${baseUrl}/bootstrap/dist/js/bootstrap"
+      },
+      "shim": {
+        "bootstrap": [
+          "jquery",
+          "css!${baseUrl}/bootstrap/dist/css/bootstrap"
+        ]
+      }
+    }
+  }
+}
