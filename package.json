@@ -19,6 +19,11 @@
       "paths": {
         "bootstrap": "${baseUrl}/bootstrap/dist/js/bootstrap"
       },
+      "map": {
+        "*": {
+         "font-awesome": "${baseUrl}/require-css/css.js!${baseUrl}/font-awesome/css/font-awesome.min"
+        }
+      },
       "shim": {
         "bootstrap": [
           "jquery",
