@@ -4,15 +4,18 @@
 /// <amd-dependency path="bootstrap" />
 
 /// <amd-dependency path="text!./header.html" />
+/* tslint:disable no-var-requires*/
 declare var require:(moduleId:string) => any;
-const template:string = require("text!./header.html");
+const template:string = require('text!./header.html');
+/* tslint:enable no-var-requires*/
+
 
 import C = require('../caleydo_core/main');
 
 export interface IHeaderLink {
   name: string;
   action: () => any;
-  href: string
+  href: string;
 }
 
 function createLi(name:string, action:() => any, href = '#') {

@@ -1,7 +1,7 @@
 {
-  "name" : "wrapper_bootstrap_fontawesome",
+  "name": "wrapper_bootstrap_fontawesome",
   "version": "0.0.1",
-  "license" : "SEE LICENSE IN LICENSE",
+  "license": "SEE LICENSE IN LICENSE",
   "repository": "Caleydo/wrapper_bootstrap_fontawesome",
   "dependencies": {
   },
@@ -15,14 +15,13 @@
         "text": "~2.0.14"
       }
     },
-
     "requirejs-config": {
       "paths": {
         "bootstrap": "${baseUrl}/bootstrap/dist/js/bootstrap"
       },
       "map": {
         "*": {
-         "font-awesome": "${baseUrl}/require-css/css.js!${baseUrl}/font-awesome/css/font-awesome.min"
+          "font-awesome": "${baseUrl}/require-css/css.js!${baseUrl}/font-awesome/css/font-awesome.min"
         }
       },
       "shim": {
