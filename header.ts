@@ -28,6 +28,7 @@ export class AppHeader {
   private _options = {
     prepend : true,
     app: 'Caleydo Web',
+    addLogo: true,
     mainMenu: new Array<IHeaderLink>(),
     rightMenu: new Array<IHeaderLink>()
   };
@@ -56,7 +57,11 @@ export class AppHeader {
     }
 
     //create handler
-    (<HTMLElement>parent.querySelector('*[data-header="app"]')).innerHTML = this._options.app;
+    const app = (<HTMLElement>parent.querySelector('*[data-header="app"]'));
+    app.innerHTML = this._options.app;
+    if (this._options.addLogo) {
+       app.setAttribute('style','padding-left: 2em; background: black url("../assets/caleydo_c.svg") no-repeat left top; background-size: contain; background-origin: border-box;');
+    }
 
     this.mainMenu = <HTMLElement>parent.querySelector('*[data-header="main"]');
     this.rightMenu = <HTMLElement>parent.querySelector('*[data-header="rightmenu"]');
