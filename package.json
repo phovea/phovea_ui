@@ -11,7 +11,8 @@
     "dependencies": {
       "web": {
         "font-awesome": ">=4.3.0",
-        "bootstrap": "~3.3.4"
+        "bootstrap": "~3.3.4",
+        "text": "~2.0.14"
       }
     },
 

@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#headerNavBar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" data-header="app"></a>
+        </div>
+        <div class="collapse navbar-collapse" id="headerNavBar">
+            <ul class="nav navbar-nav" data-header="main">
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right" data-header="rightmenu">
+                <li><a data-header='options' href="#" data-toggle="modal" data-target="#headerOptionsDialog"><span class="glyphicon glyphicon-cog" title="Options"></span></a></li>
+                <li><a data-header='about' href="#" data-toggle="modal" data-target="#headerAboutDialog"><span class="glyphicon glyphicon-info-sign" title="About"></span></a></li>
+                <li><a data-header='help' href="#" target="_blank"><span class="glyphicon glyphicon-question-sign" title="Help"></span></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- About Dialog -->
+<div class="modal fade" id="headerAboutDialog" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove-sign" title="Close"></span></button>
+        <h4 class="modal-title">About</h4>
+      </div>
+      <div class="modal-body" data-header="about">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Options Dialog -->
+<div class="modal fade" id="headerOptionsDialog" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove-sign" title="Close"></span></button>
+        <h4 class="modal-title">Options</h4>
+      </div>
+      <div class="modal-body" data-header="options">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
