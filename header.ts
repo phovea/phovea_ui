@@ -90,6 +90,14 @@ export class AppHeader {
     this.rightMenu.insertBefore(li, this.rightMenu.firstChild);
     return li;
   }
+
+  wait() {
+    $('#headerWaitingOverlay').fadeIn();
+  }
+
+  ready() {
+    $('#headerWaitingOverlay').fadeOut();
+  }
 }
 
 export function create(parent:HTMLElement, options:any = {}) {
