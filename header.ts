@@ -2,12 +2,8 @@
  * Created by Samuel Gratzl on 24.11.2014.
  */
 /// <amd-dependency path="bootstrap" />
-
-/// <amd-dependency path="text!./header.html" />
-/* tslint:disable no-var-requires*/
-declare var require:(moduleId:string) => any;
-const template:string = require('text!./header.html');
-/* tslint:enable no-var-requires*/
+/// <amd-dependency path="text!./header.html" name="template"/>
+declare var template:string;
 
 
 import C = require('../caleydo_core/main');
