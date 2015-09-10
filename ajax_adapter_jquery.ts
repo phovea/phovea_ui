@@ -2,7 +2,7 @@
  * Created by Samuel Gratzl on 04.08.2014.
  */
 /// <reference path="../../tsd.d.ts" />
-import ajax = require('./ajax');
+import ajax = require('../caleydo_core/ajax');
 import $ = require('jquery');
 'use strict';
 

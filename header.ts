@@ -7,6 +7,7 @@ declare var template:string;
 
 
 import C = require('../caleydo_core/main');
+import $ = require('jquery');
 
 export interface IHeaderLink {
   name: string;
