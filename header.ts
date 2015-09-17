@@ -33,8 +33,8 @@ export class AppHeader {
     rightMenu: new Array<IHeaderLink>()
   };
 
-  private mainMenu:HTMLElement;
-  private rightMenu:HTMLElement;
+  mainMenu:HTMLElement;
+  rightMenu:HTMLElement;
 
   about:HTMLElement;
   options:HTMLElement;
