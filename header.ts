@@ -60,7 +60,7 @@ export class AppHeader {
     const app = (<HTMLElement>parent.querySelector('*[data-header="app"]'));
     app.innerHTML = this._options.app;
     if (this._options.addLogo) {
-       app.setAttribute('style','padding-left: 2em; background: black url("../assets/caleydo_c.svg") no-repeat left top; background-size: contain; background-origin: border-box;');
+       app.setAttribute('style','padding-left: 2em; background: transparent url("../assets/caleydo_c.svg") no-repeat left top; background-size: contain; background-origin: border-box;');
     }
 
     this.mainMenu = <HTMLElement>parent.querySelector('*[data-header="main"]');
