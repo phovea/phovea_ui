@@ -4,6 +4,7 @@
 /// <reference path="../../tsd.d.ts" />
 /// <amd-dependency path="bootstrap" />
 import $ = require('jquery');
+import C = require('../caleydo_core/main');
 
 function generateDialog(title: string) {
   const dialog = document.createElement('div');
@@ -46,19 +47,71 @@ export function msg(text: string, category='info'): Promise<void> {
 /**
  * simple prompt dialog
  * @param text
- * @param title
+ * @param options
  * @returns {Promise}
  */
-export function prompt(text: string, title: string = 'Input'): Promise<string> {
+export function prompt(text:string,  options :any = {}):Promise<string> {
+  var o = {
+   title: 'Input',
+    placeholder: 'Enter...'
+  };
+  if (typeof options === 'string') {
+    options = { title: options};
+  }
+  C.mixin(o, options);
   return new Promise((resolve) => {
-    var dialog = generateDialog(title);
-    dialog.body.innerHTML = `<form><input type="text" class="form-control" value="${text}"></form>`;
+    var dialog = generateDialog(o.title);
+    dialog.body.innerHTML = `<form><input type="text" class="form-control" value="${text}" placeholder="${o.placeholder}"></form>`;
     (<HTMLFormElement>dialog.body.querySelector('form')).onsubmit = () => {
       dialog.hide();
       return false;
     };
     dialog.onHide(() => {
       resolve((<HTMLInputElement>dialog.body.querySelector('input')).value);
+      dialog.destroy();
+    });
+    dialog.show();
+  })
+}
+
+/**
+ * simple choose dialog
+ * @param items
+ * @param options
+ * @returns {Promise}
+ */
+export function choose(items:string[], options :any = {}):Promise<string> {
+  var o = {
+    title :  'Choose',
+    placeholder: 'Enter...',
+    editable: false
+  };
+  if (typeof options === 'string') {
+    options = { title: options};
+  }
+  C.mixin(o, options);
+
+  return new Promise((resolve) => {
+    var dialog = generateDialog(o.title);
+    const option = items.map((d) =>`<option value="${d}">${d}</option>`).join('\n');
+    if (o.editable) {
+      dialog.body.innerHTML = `<form><input type="text" list="chooseList" class="form-control" placeholder="${o.placeholder}">
+        <datalist id="chooseList">${option}</datalist>
+      </form>`;
+    } else {
+      dialog.body.innerHTML = `<form><select class="form-control">${option}</select></form>`;
+    }
+
+    (<HTMLFormElement>dialog.body.querySelector('form')).onsubmit = () => {
+      dialog.hide();
+      return false;
+    };
+    dialog.onHide(() => {
+      if (options.editable) {
+        resolve((<HTMLInputElement>dialog.body.querySelector('input')).value);
+      } else {
+        resolve(items[(<HTMLSelectElement>dialog.body.querySelector('select')).selectedIndex]);
+      }
       dialog.destroy();
     });
     dialog.show();
