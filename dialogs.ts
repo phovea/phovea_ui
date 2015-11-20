@@ -71,7 +71,7 @@ export function prompt(text:string,  options :any = {}):Promise<string> {
       dialog.destroy();
     });
     dialog.show();
-  })
+  });
 }
 
 /**
@@ -115,5 +115,5 @@ export function choose(items:string[], options :any = {}):Promise<string> {
       dialog.destroy();
     });
     dialog.show();
-  })
+  });
 }
