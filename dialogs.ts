@@ -6,7 +6,7 @@
 import $ = require('jquery');
 import C = require('../caleydo_core/main');
 
-function generateDialog(title: string) {
+function generateDialog(title: string, hide='OK') {
   const dialog = document.createElement('div');
   dialog.setAttribute('role','dialog');
   dialog.classList.add('modal','fade');
@@ -20,6 +20,9 @@ function generateDialog(title: string) {
         <div class="modal-body">
 
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">${hide}</button>
+        </div>
       </div>
     </div>`;
   document.body.appendChild(dialog);
@@ -28,6 +31,7 @@ function generateDialog(title: string) {
     show: () => $dialog.modal('show'),
     hide: () => $dialog.modal('hide'),
     body: <HTMLElement>dialog.querySelector('.modal-body'),
+    footer: <HTMLElement>dialog.querySelector('.modal-footer'),
     onHide: (callback: ()=>void) => $dialog.on('hidden.bs.modal', callback),
     destroy: () => $dialog.remove()
   };
@@ -113,6 +117,32 @@ export function choose(items:string[], options :any = {}):Promise<string> {
         resolve(items[(<HTMLSelectElement>dialog.body.querySelector('select')).selectedIndex]);
       }
       dialog.destroy();
+    });
+    dialog.show();
+  });
+}
+
+export function areyousure(msg: string, options :any = {}):Promise<boolean> {
+  var o = {
+    title :  'Are you sure?',
+    button: '<span class="glyphicon glyphicon-remove"></span> Delete'
+  };
+  if (typeof options === 'string') {
+    options = { title: options};
+  }
+  C.mixin(o, options);
+
+  return new Promise((resolve) => {
+    var dialog = generateDialog(o.title, 'Cancel');
+    dialog.body.innerHTML = msg;
+    $('<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Delete</button>').appendTo(dialog.footer);
+    $(dialog.footer).find('button.btn-danger').on('click', function() {
+      dialog.destroy();
+      resolve(true);
+    });
+    dialog.onHide(() => {
+      dialog.destroy();
+      resolve(false);
     });
     dialog.show();
   });
