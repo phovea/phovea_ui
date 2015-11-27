@@ -6,7 +6,7 @@
 import $ = require('jquery');
 import C = require('../caleydo_core/main');
 
-function generateDialog(title: string, hide='OK') {
+export function generateDialog(title: string, hide='OK') {
   const dialog = document.createElement('div');
   dialog.setAttribute('role','dialog');
   dialog.classList.add('modal','fade');
