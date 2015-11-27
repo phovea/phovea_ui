@@ -67,9 +67,9 @@ export function prompt(text:string,  options :any = {}):Promise<string> {
   return new Promise((resolve) => {
     var dialog = generateDialog(o.title);
     if (o.multiline) {
-      dialog.body.innerHTML = `<form><textarea class="form-control" rows="5" placeholder="${o.placeholder}">${text}</textarea></form>`;
+      dialog.body.innerHTML = `<form><textarea class="form-control" rows="5" placeholder="${o.placeholder}" autofocus="autofocus">${text}</textarea></form>`;
     } else {
-      dialog.body.innerHTML = `<form><input type="text" class="form-control" value="${text}" placeholder="${o.placeholder}"></form>`;
+      dialog.body.innerHTML = `<form><input type="text" class="form-control" value="${text}" autofocus="autofocus" placeholder="${o.placeholder}"></form>`;
     }
     (<HTMLFormElement>dialog.body.querySelector('form')).onsubmit = () => {
       dialog.hide();
@@ -104,7 +104,7 @@ export function choose(items:string[], options :any = {}):Promise<string> {
     var dialog = generateDialog(o.title);
     const option = items.map((d) =>`<option value="${d}">${d}</option>`).join('\n');
     if (o.editable) {
-      dialog.body.innerHTML = `<form><input type="text" list="chooseList" class="form-control" placeholder="${o.placeholder}">
+      dialog.body.innerHTML = `<form><input type="text" list="chooseList" class="form-control" autofocus="autofocus" placeholder="${o.placeholder}">
         <datalist id="chooseList">${option}</datalist>
       </form>`;
     } else {
