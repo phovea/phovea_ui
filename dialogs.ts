@@ -56,8 +56,9 @@ export function msg(text: string, category='info'): Promise<void> {
  */
 export function prompt(text:string,  options :any = {}):Promise<string> {
   var o = {
-   title: 'Input',
-    placeholder: 'Enter...'
+    title: 'Input',
+    placeholder: 'Enter...',
+    multiline: false
   };
   if (typeof options === 'string') {
     options = { title: options};
@@ -65,13 +66,17 @@ export function prompt(text:string,  options :any = {}):Promise<string> {
   C.mixin(o, options);
   return new Promise((resolve) => {
     var dialog = generateDialog(o.title);
-    dialog.body.innerHTML = `<form><input type="text" class="form-control" value="${text}" placeholder="${o.placeholder}"></form>`;
+    if (o.multiline) {
+      dialog.body.innerHTML = `<form><textarea class="form-control" rows="5" placeholder="${o.placeholder}">${text}</textarea></form>`;
+    } else {
+      dialog.body.innerHTML = `<form><input type="text" class="form-control" value="${text}" placeholder="${o.placeholder}"></form>`;
+    }
     (<HTMLFormElement>dialog.body.querySelector('form')).onsubmit = () => {
       dialog.hide();
       return false;
     };
     dialog.onHide(() => {
-      resolve((<HTMLInputElement>dialog.body.querySelector('input')).value);
+      resolve((<HTMLInputElement>dialog.body.querySelector('input, textarea')).value);
       dialog.destroy();
     });
     dialog.show();
