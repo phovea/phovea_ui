@@ -2,6 +2,7 @@
  * Created by Samuel Gratzl on 24.11.2014.
  */
 /// <amd-dependency path="bootstrap" />
+/// <amd-dependency path="css!./style.css"/>
 /// <amd-dependency path="text!./header.html" name="template"/>
 declare var template:string;
 
@@ -60,7 +61,7 @@ export class AppHeader {
     const app = (<HTMLElement>parent.querySelector('*[data-header="app"]'));
     app.innerHTML = this._options.app;
     if (this._options.addLogo) {
-       app.setAttribute('style','padding-left: 2em; background: transparent url("../assets/caleydo_c.svg") no-repeat left top; background-size: contain; background-origin: border-box;');
+       app.classList.add('caleydo_app');
     }
 
     this.mainMenu = <HTMLElement>parent.querySelector('*[data-header="main"]');
