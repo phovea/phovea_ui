@@ -31,7 +31,8 @@ export class AppHeader {
     app: 'Caleydo Web',
     addLogo: true,
     mainMenu: new Array<IHeaderLink>(),
-    rightMenu: new Array<IHeaderLink>()
+    rightMenu: new Array<IHeaderLink>(),
+    inverse: true
   };
 
   mainMenu:HTMLElement;
@@ -55,6 +56,10 @@ export class AppHeader {
       while (helper.firstChild) {
         parent.appendChild(helper.firstChild);
       }
+    }
+
+    if (this._options.inverse) {
+      (<HTMLElement>document.querySelector('nav.navbar')).classList.add('navbar-inverse');
     }
 
     //create handler
