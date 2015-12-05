@@ -141,13 +141,14 @@ export function areyousure(msg: string, options :any = {}):Promise<boolean> {
     var dialog = generateDialog(o.title, 'Cancel');
     dialog.body.innerHTML = msg;
     $('<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Delete</button>').appendTo(dialog.footer);
+    var clicked = false;
     $(dialog.footer).find('button.btn-danger').on('click', function() {
-      dialog.destroy();
-      resolve(true);
+      clicked = true;
+      dialog.hide();
     });
     dialog.onHide(() => {
       dialog.destroy();
-      resolve(false);
+      resolve(clicked);
     });
     dialog.show();
   });
