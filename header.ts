@@ -3,7 +3,7 @@
  */
 /// <amd-dependency path="bootstrap" />
 /// <amd-dependency path="css!./style.css"/>
-/// <amd-dependency path="text!./header.html" name="template"/>
+/// <amd-dependency path="text!./_header.html" name="template"/>
 declare var template:string;
 
 
