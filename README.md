@@ -13,5 +13,5 @@ In addition, several utility modules are included. Including:
 Installation
 ------------
 ```bash
-./manage.sh clone Caleydo/wrapper_bootstrap_fontawesome
+./manage.sh clone Caleydo/caleydo_bootstrap_fontawesome
 ```
