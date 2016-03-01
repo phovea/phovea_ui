@@ -43,7 +43,7 @@ export function msg(text: string, category='info'): Promise<void> {
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span class="glyphicon glyphicon-remove-sign" title="Close"></span></button>
         ${text}
     </div>`).appendTo('body');
-    div.on('closed.bs.alert', resolve);
+    div.on('closed.bs.alert', () => resolve);
     (<any>div).alert();
   });
 }
