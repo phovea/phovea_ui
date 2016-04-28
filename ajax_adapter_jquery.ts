@@ -4,7 +4,6 @@
 /// <reference path="../../tsd.d.ts" />
 import ajax = require('../caleydo_core/ajax');
 import $ = require('jquery');
-'use strict';
 
 function wrap(d:JQueryXHR):Promise<any> {
   //since JQueryXHR is thenable
