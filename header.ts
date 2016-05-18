@@ -16,6 +16,20 @@ export interface IHeaderLink {
   href: string;
 }
 
+export class AppHeaderLink implements IHeaderLink {
+  public name: string = 'Caleydo Web';
+  public action: () => any = () => false;
+  public href:string = '#';
+  public addLogo:boolean = true;
+
+  constructor(name?, action?, href?, addLogo?) {
+    if(name) this.name = name;
+    if(action) this.action = action;
+    if(href) this.href = href;
+    if(addLogo) this.addLogo = addLogo;
+  }
+}
+
 function createLi(name:string, action:() => any, href = '#') {
   const li = <HTMLElement>document.createElement('li');
   li.innerHTML = '<a href="' + href + '">' + name + '</a>';
@@ -28,8 +42,9 @@ function createLi(name:string, action:() => any, href = '#') {
 export class AppHeader {
   private _options = {
     prepend : true,
-    app: 'Caleydo Web',
-    addLogo: true,
+    //app: 'Caleydo Web', //DEPRECATED use `appLink.name` instead
+    //addLogo: true, //DEPRECATED use `appLink.addLogo` instead
+    appLink: new AppHeaderLink(),
     mainMenu: new Array<IHeaderLink>(),
     rightMenu: new Array<IHeaderLink>(),
     inverse: true
@@ -43,6 +58,14 @@ export class AppHeader {
 
   constructor(private parent:HTMLElement, options:any = {}) {
     C.mixin(this._options, options);
+
+    // legacy support
+    if(options.app !== undefined && options.appLink === undefined) {
+      this._options.appLink.name = options.app;
+    }
+    if(options.addLogo !== undefined && !options.appLink === undefined) {
+      this._options.appLink.addLogo = options.addLogo;
+    }
 
     //create the content and copy it in the parent
     const helper = document.createElement('div');
@@ -64,8 +87,12 @@ export class AppHeader {
 
     //create handler
     const app = (<HTMLElement>parent.querySelector('*[data-header="app"]'));
-    app.innerHTML = this._options.app;
-    if (this._options.addLogo) {
+
+    app.innerHTML = this._options.appLink.name;
+    app.onclick = this._options.appLink.action;
+    app.setAttribute('href', this._options.appLink.href);
+
+    if (this._options.appLink.addLogo) {
        app.classList.add('caleydo_app');
     }
 
