@@ -23,10 +23,21 @@ export class AppHeaderLink implements IHeaderLink {
   public addLogo:boolean = true;
 
   constructor(name?, action?, href?, addLogo?) {
-    if(name) this.name = name;
-    if(action) this.action = action;
-    if(href) this.href = href;
-    if(addLogo) this.addLogo = addLogo;
+    if(name) {
+      this.name = name;
+    }
+
+    if(action) {
+      this.action = action;
+    }
+
+    if(href) {
+      this.href = href;
+    }
+
+    if(addLogo) {
+      this.addLogo = addLogo;
+    }
   }
 }
 
