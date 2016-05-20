@@ -1,5 +1,6 @@
 {
   "name": "caleydo_bootstrap_fontawesome",
+  "description": "Wrapper for integration of Bootstrap and FontAwesome along with a common header for Caleydo Web apps",
   "version": "0.0.1",
   "license": "SEE LICENSE IN LICENSE",
   "repository": "Caleydo/caleydo_bootstrap_fontawesome",
@@ -8,6 +9,8 @@
   "peerDependencies": {
   },
   "caleydo": {
+    "type": "plugin",
+    "category": "utility",
     "plugins": {
       "web": [
         {
