@@ -14,7 +14,7 @@ export function generateDialog(title: string, hide='OK') {
      <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove-sign" title="Close"></span></button>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
           <h4 class="modal-title">${title}</h4>
         </div>
         <div class="modal-body">
@@ -40,7 +40,7 @@ export function generateDialog(title: string, hide='OK') {
 export function msg(text: string, category='info'): Promise<void> {
   return new Promise<void>((resolve) => {
     const div = $(`<div class="alert alert-${category} alert-dismissible fade in" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span class="glyphicon glyphicon-remove-sign" title="Close"></span></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
         ${text}
     </div>`).appendTo('body');
     div.on('closed.bs.alert', () => resolve);
