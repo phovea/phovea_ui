@@ -130,7 +130,7 @@ export function choose(items:string[], options :any = {}):Promise<string> {
 export function areyousure(msg: string, options :any = {}):Promise<boolean> {
   var o = {
     title :  'Are you sure?',
-    button: '<span class="glyphicon glyphicon-remove"></span> Delete'
+    button: '<i class="fa fa-trash" aria-hidden="true"></i> Delete'
   };
   if (typeof options === 'string') {
     options = { title: options};
@@ -140,7 +140,7 @@ export function areyousure(msg: string, options :any = {}):Promise<boolean> {
   return new Promise((resolve) => {
     var dialog = generateDialog(o.title, 'Cancel');
     dialog.body.innerHTML = msg;
-    $('<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Delete</button>').appendTo(dialog.footer);
+    $('<button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>').appendTo(dialog.footer);
     var clicked = false;
     $(dialog.footer).find('button.btn-danger').on('click', function() {
       clicked = true;
