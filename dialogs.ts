@@ -6,7 +6,7 @@
 import $ = require('jquery');
 import C = require('../caleydo_core/main');
 
-export function generateDialog(title: string, hide='OK') {
+export function generateDialog(title: string, primaryBtnText='OK') {
   const dialog = document.createElement('div');
   dialog.setAttribute('role','dialog');
   dialog.classList.add('modal','fade');
@@ -21,7 +21,7 @@ export function generateDialog(title: string, hide='OK') {
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">${hide}</button>
+          <button type="button" class="btn btn-default btn-primary">${primaryBtnText}</button>
         </div>
       </div>
     </div>`;
@@ -33,6 +33,7 @@ export function generateDialog(title: string, hide='OK') {
     body: <HTMLElement>dialog.querySelector('.modal-body'),
     footer: <HTMLElement>dialog.querySelector('.modal-footer'),
     onHide: (callback: ()=>void) => $dialog.on('hidden.bs.modal', callback),
+    onSubmit: (callback: ()=>void) => (<HTMLElement>dialog.querySelector('.modal-footer > button')).onclick = callback,
     destroy: () => $dialog.remove()
   };
 }
