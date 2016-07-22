@@ -23,6 +23,26 @@ body, html {
   z-index: 999;
 }
 
+#headerAboutDialog {
+  .caleydoInfo {
+    display: flex;
+    align-items: center;
+
+    .logo {
+      width: 100px;
+      margin-right: 15px;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    p {
+      margin-bottom: 0;
+    }
+  }
+}
+
 nav {
   .navbar-nav > li > a, a.navbar-brand {
     padding-top: 5px !important;
