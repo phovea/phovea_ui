@@ -6,7 +6,7 @@
 /// <amd-dependency path="text!./_header.html" name="template"/>
 declare var template:string;
 
-
+import ajax = require('../caleydo_core/ajax');
 import C = require('../caleydo_core/main');
 import $ = require('jquery');
 
@@ -111,6 +111,14 @@ export class AppHeader {
     this.rightMenu = <HTMLElement>parent.querySelector('*[data-header="rightmenu"]');
     this.about = <HTMLElement>parent.querySelector('*[data-header="about"]');
     this.options = <HTMLElement>parent.querySelector('*[data-header="options"]');
+
+    Promise.resolve(ajax.getAPIJSON(`/last_deployment`, {})).then((msg) => {
+      if(msg.timestamp) {
+        var newDate = new Date();
+        newDate.setTime(msg.timestamp);
+        this.about.querySelector('.lastDeployment span').textContent = newDate.toLocaleString();
+      }
+    });
 
     this._options.mainMenu.forEach((l) => this.addMainMenu(l.name, l.action, l.href));
     this._options.rightMenu.forEach((l) => this.addRightMenu(l.name, l.action, l.href));
