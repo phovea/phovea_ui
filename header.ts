@@ -114,9 +114,7 @@ export class AppHeader {
 
     Promise.resolve(ajax.getAPIJSON(`/last_deployment`, {})).then((msg) => {
       if(msg.timestamp) {
-        var newDate = new Date();
-        newDate.setTime(msg.timestamp);
-        this.about.querySelector('.lastDeployment span').textContent = newDate.toLocaleString();
+        this.about.querySelector('.lastDeployment span').textContent = new Date(msg.timestamp).toUTCString();
       }
     });
 
