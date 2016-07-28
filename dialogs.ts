@@ -27,15 +27,29 @@ export function generateDialog(title: string, primaryBtnText='OK') {
     </div>`;
   document.body.appendChild(dialog);
   const $dialog = (<any>$(dialog));
-  return {
-    show: () => $dialog.modal('show'),
-    hide: () => $dialog.modal('hide'),
+  const r = {
+    _restoreKeyDownListener: null, // temporal for restoring an old keydown listener
+    show: () => {
+      r._restoreKeyDownListener = document.onkeydown;
+      document.onkeydown = (evt) => {
+        evt = evt || <KeyboardEvent>window.event;
+        if (evt.keyCode === 27) { // 27 === ESC key
+          r.hide();
+        }
+      };
+      return $dialog.modal('show');
+    },
+    hide: () => {
+      document.onkeydown = r._restoreKeyDownListener;
+      return $dialog.modal('hide');
+    },
     body: <HTMLElement>dialog.querySelector('.modal-body'),
     footer: <HTMLElement>dialog.querySelector('.modal-footer'),
     onHide: (callback: ()=>void) => $dialog.on('hidden.bs.modal', callback),
     onSubmit: (callback: ()=>void) => (<HTMLElement>dialog.querySelector('.modal-footer > button')).onclick = callback,
     destroy: () => $dialog.remove()
   };
+  return r;
 }
 
 export function msg(text: string, category='info'): Promise<void> {
