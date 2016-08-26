@@ -58,7 +58,7 @@ export class AppHeader {
     appLink: new AppHeaderLink(),
     mainMenu: new Array<IHeaderLink>(),
     rightMenu: new Array<IHeaderLink>(),
-    inverse: true
+    inverse: false
   };
 
   mainMenu:HTMLElement;
@@ -93,7 +93,7 @@ export class AppHeader {
     }
 
     if (this._options.inverse) {
-      (<HTMLElement>document.querySelector('nav.navbar')).classList.add('navbar-inverse');
+      (<HTMLElement>parent.querySelector('nav.navbar')).classList.add('navbar-inverse');
     }
 
     //create handler
