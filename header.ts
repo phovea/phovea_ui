@@ -8,7 +8,6 @@ declare var template:string;
 
 import ajax = require('../caleydo_core/ajax');
 import C = require('../caleydo_core/main');
-import $ = require('jquery');
 
 /**
  * Defines a header link
