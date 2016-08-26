@@ -76,17 +76,7 @@ nav.navbar-inverse {
   }
 }
 
-// waiting animation in the header
-#headerWaitingOverlay {
-  display: none;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.26) url('/assets/caleydo_c_anim.svg') no-repeat fixed center;
-  z-index: 999;
-}
-
-// about dialog that opens from a link in the header
+// aboutDialog dialog that opens from a link in the header
 #headerAboutDialog {
   .caleydoInfo {
     margin-top: 15px;

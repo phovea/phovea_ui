@@ -10,12 +10,29 @@ import ajax = require('../caleydo_core/ajax');
 import C = require('../caleydo_core/main');
 import $ = require('jquery');
 
+/**
+ * Defines a header link
+ */
 export interface IHeaderLink {
+  /**
+   * Text of the link
+   */
   name: string;
+
+  /**
+   * Action that should be performed on click (instead of href)
+   */
   action: () => any;
+
+  /**
+   * The href of the link
+   */
   href: string;
 }
 
+/**
+ * Header link extends the header link with a  flag for disabling the logo
+ */
 export class AppHeaderLink implements IHeaderLink {
   public name: string = 'Caleydo Web';
   public action: () => any = () => false;
@@ -41,90 +58,177 @@ export class AppHeaderLink implements IHeaderLink {
   }
 }
 
-function createLi(name:string, action:() => any, href = '#') {
+/**
+ * Helper function to create a list item for the header menus
+ * @param name
+ * @param action
+ * @param href
+ * @returns {HTMLElement}
+ */
+function createLi(name:string, action:() => any, href:string = '#') {
   const li = <HTMLElement>document.createElement('li');
-  li.innerHTML = '<a href="' + href + '">' + name + '</a>';
+  li.innerHTML = `<a href="${href}">${name}</a>`;
   if (action) {
     (<HTMLElement>li.querySelector('a')).onclick = action;
   }
   return li;
 }
 
+/**
+ * The Caleydo App Header provides an app name and customizable menus
+ */
 export class AppHeader {
+
+  /**
+   * Default options that can be overridden in the constructor
+   * @private
+   */
   private _options = {
+    /**
+     * insert as first-child or append as child node to the given parent node
+     */
     prepend : true,
-    //app: 'Caleydo Web', //DEPRECATED use `appLink.name` instead
-    //addLogo: true, //DEPRECATED use `appLink.addLogo` instead
+
+    /**
+     * color scheme: bright (= false) or dark (= true)
+     */
+    inverse: false,
+
+    /**
+     * @DEPRECATED use `appLink.name` instead
+     */
+    //app: 'Caleydo Web',
+
+    /**
+     * @DEPRECATED use `appLink.addLogo` instead
+     */
+    //addLogo: true,
+
+    /**
+     * the app link with the app name
+     */
     appLink: new AppHeaderLink(),
-    mainMenu: new Array<IHeaderLink>(),
-    rightMenu: new Array<IHeaderLink>(),
-    inverse: false
+
+    /**
+     * a list of links that should be shown in the main menu
+     */
+    mainMenu: <IHeaderLink[]>[],
+
+    /**
+     * a list of links that should be shown in the right menu
+     */
+    rightMenu: <IHeaderLink[]>[],
+
+    /**
+     * show/hide the options link
+     */
+    showOptionsLink: false,
+
+    /**
+     * show/hide the bug report link
+     */
+    showReportBugLink: true
   };
 
+  /**
+   * Main menu is positioned next to the app name
+   */
   mainMenu:HTMLElement;
+
+  /**
+   * Right menu is positioned to the right of the document
+   */
   rightMenu:HTMLElement;
 
-  about:HTMLElement;
-  options:HTMLElement;
+  /**
+   * About dialog
+   */
+  aboutDialog:HTMLElement;
 
-  constructor(private parent:HTMLElement, options:any = {}) {
-    C.mixin(this._options, options);
+  /**
+   * Options dialog
+   */
+  optionsDialog:HTMLElement;
 
+  /**
+   * Constructor overrides the default options with the given options
+   * @param parent
+   * @param options
+   */
+  constructor(private parent:HTMLElement, private options:any = {}) {
+    this.options = C.mixin(this._options, options);
+    this.build();
+  }
+
+  private build() {
     // legacy support
-    if(options.app !== undefined && options.appLink === undefined) {
-      this._options.appLink.name = options.app;
+    if(this.options.app !== undefined && this.options.appLink === undefined) {
+      this.options.appLink.name = this.options.app;
     }
-    if(options.addLogo !== undefined && !options.appLink === undefined) {
-      this._options.appLink.addLogo = options.addLogo;
+    if(this.options.addLogo !== undefined && !this.options.appLink === undefined) {
+      this.options.appLink.addLogo = this.options.addLogo;
     }
 
-    //create the content and copy it in the parent
+    // create the content and copy it in the parent
     const helper = document.createElement('div');
     helper.innerHTML = template;
-    let old = parent.firstChild;
-    if (this._options.prepend && old) {
+    let old = this.parent.firstChild;
+    if (this.options.prepend && old) {
       while (helper.firstChild) {
-        parent.insertBefore(helper.firstChild, old);
+        this.parent.insertBefore(helper.firstChild, old);
       }
     } else {
       while (helper.firstChild) {
-        parent.appendChild(helper.firstChild);
+        this.parent.appendChild(helper.firstChild);
       }
     }
 
-    if (this._options.inverse) {
-      (<HTMLElement>parent.querySelector('nav.navbar')).classList.add('navbar-inverse');
+    // use the inverse color scheme
+    if (this.options.inverse) {
+      (<HTMLElement>this.parent.querySelector('nav.navbar')).classList.add('navbar-inverse');
     }
 
-    //create handler
-    const app = (<HTMLElement>parent.querySelector('*[data-header="app"]'));
+    // modify app header link
+    const appLink = (<HTMLElement>this.parent.querySelector('*[data-header="appLink"]'));
 
-    app.innerHTML = this._options.appLink.name;
-    app.onclick = this._options.appLink.action;
-    app.setAttribute('href', this._options.appLink.href);
+    appLink.innerHTML = this.options.appLink.name;
+    appLink.onclick = this.options.appLink.action;
+    appLink.setAttribute('href', this.options.appLink.href);
 
-    if (this._options.appLink.addLogo) {
-       app.classList.add('caleydo_app');
+    if (this.options.appLink.addLogo) {
+       appLink.classList.add('caleydo_app');
     }
 
-    this.mainMenu = <HTMLElement>parent.querySelector('*[data-header="main"]');
-    this.rightMenu = <HTMLElement>parent.querySelector('*[data-header="rightmenu"]');
-    this.about = <HTMLElement>parent.querySelector('*[data-header="about"]');
-    this.options = <HTMLElement>parent.querySelector('*[data-header="options"]');
+    this.mainMenu = <HTMLElement>this.parent.querySelector('*[data-header="mainMenu"]');
+    this.rightMenu = <HTMLElement>this.parent.querySelector('*[data-header="rightMenu"]');
+    this.aboutDialog = <HTMLElement>this.parent.querySelector('*[data-header="about"]');
+    this.optionsDialog = <HTMLElement>this.parent.querySelector('*[data-header="options"]');
 
+    // show/hide links
+    this.toggleOptionsLink(this.options.showOptionsLink);
+    this.toggleAboutLink(true); // always visible
+    this.toggleReportBugLink(this.options.showReportBugLink);
+
+    // request last deployment data
     Promise.resolve(ajax.getAPIJSON(`/last_deployment`, {})).then((msg) => {
       if(msg.timestamp) {
-        this.about.querySelector('.lastDeployment span').textContent = new Date(msg.timestamp).toUTCString();
+        this.aboutDialog.querySelector('.lastDeployment span').textContent = new Date(msg.timestamp).toUTCString();
       }
     });
 
-    this._options.mainMenu.forEach((l) => this.addMainMenu(l.name, l.action, l.href));
-    this._options.rightMenu.forEach((l) => this.addRightMenu(l.name, l.action, l.href));
+    this.options.mainMenu.forEach((l) => this.addMainMenu(l.name, l.action, l.href));
+    this.options.rightMenu.forEach((l) => this.addRightMenu(l.name, l.action, l.href));
   }
 
   addMainMenu(name:string, action:() => any, href = '#') {
     const li = createLi(name, action, href);
     this.mainMenu.appendChild(li);
+    return li;
+  }
+
+  addRightMenu(name:string, action:() => any, href = '#') {
+    const li = createLi(name, action, href);
+    this.rightMenu.insertBefore(li, this.rightMenu.firstChild);
     return li;
   }
 
@@ -136,18 +240,47 @@ export class AppHeader {
     this.rightMenu.parentElement.appendChild(element);
   }
 
-  addRightMenu(name:string, action:() => any, href = '#') {
-    const li = createLi(name, action, href);
-    this.rightMenu.insertBefore(li, this.rightMenu.firstChild);
-    return li;
-  }
-
   wait() {
-    $('#headerWaitingOverlay').fadeIn();
+    AppHeader.setVisibility(<HTMLElement>document.querySelector('#headerWaitingOverlay'), true);
+    //$('#headerWaitingOverlay').fadeIn();
   }
 
   ready() {
-    $('#headerWaitingOverlay').fadeOut();
+    AppHeader.setVisibility(<HTMLElement>document.querySelector('#headerWaitingOverlay'), false);
+    //$('#headerWaitingOverlay').fadeOut();
+  }
+
+  private static setVisibility(element:HTMLElement, isVisible) {
+    if(isVisible) {
+      element.classList.remove('hidden');
+    } else {
+      element.classList.add('hidden');
+    }
+  }
+
+  toggleOptionsLink(isVisible) {
+    const link = <HTMLElement>this.parent.querySelector('*[data-header="optionsLink"]');
+    AppHeader.setVisibility(link, isVisible);
+  }
+
+  toggleReportBugLink(isVisible) {
+    const link = <HTMLElement>this.parent.querySelector('*[data-header="bugLink"]');
+    AppHeader.setVisibility(link, isVisible);
+
+    // set the URL to GitHub issues dynamically
+    if(isVisible) {
+      const appNameFromUrl = window.location.pathname.split('/')[1];
+      const appDesc = C.registry.extensions.filter((d) => d.id === appNameFromUrl && (d.type === 'app' || d.type === 'application'));
+
+      if(appDesc.length > 0) {
+        link.querySelector('a').setAttribute('href', `//github.com/${appDesc[0].repository}/issues`);
+      }
+    }
+  }
+
+  private toggleAboutLink(isVisible) {
+    const link = <HTMLElement>this.parent.querySelector('*[data-header="aboutLink"]');
+    AppHeader.setVisibility(link, isVisible);
   }
 }
 
