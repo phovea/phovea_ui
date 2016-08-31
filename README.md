@@ -1,10 +1,7 @@
 Caleydo Bootstrap and Font Awesome ![Caleydo Web Client Plugin](https://img.shields.io/badge/Caleydo%20Web-Client%20Plugin-F47D20.svg)
 =============================================
 
-Purpose
--------
-This plugin is a utility plugin for including two common libraries: [Bootstrap](http://getbootstrap.com/) and [Font Awesome](http://fontawesome.io). 
-In addition, several utility modules are included. Including:
+This plugin is a utility plugin for including [Bootstrap](http://getbootstrap.com/) and [Font Awesome](http://fontawesome.io) into an Caleydo Web application. In addition this repository includes the following modules:
  
  * an AJAX provider based on [jQuery](http://jquery.com/) in `ajax_adapter_jquery.ts`
  * a common header for application in `header.ts`
