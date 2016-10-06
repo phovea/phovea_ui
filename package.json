@@ -27,7 +27,8 @@
         "text": "~2.0.14"
       },
       "tsd": {
-        "jquery": "dca2d4"
+        "jquery": "dca2d4",
+        "bootstrap": "1f0791"
       }
     },
     "requirejs-config": {

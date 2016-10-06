@@ -26,7 +26,7 @@ export function generateDialog(title: string, primaryBtnText='OK') {
       </div>
     </div>`;
   document.body.appendChild(dialog);
-  const $dialog = (<any>$(dialog));
+  const $dialog = $(dialog);
   const r = {
     _restoreKeyDownListener: null, // temporal for restoring an old keydown listener
     show: () => {
