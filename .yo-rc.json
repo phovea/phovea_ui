@@ -26,6 +26,7 @@
     },
     "libraryAliases": {
       "font-awesome": "font-awesome",
+      "jquery": "jquery",
       "bootstrap": "bootstrap"
     },
     "entries": "./index.js",
