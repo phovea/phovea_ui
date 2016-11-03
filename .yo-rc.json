@@ -15,7 +15,9 @@
     ],
     "sextensions": [],
     "libraries": [
-      "font-awesome"
+      "font-awesome",
+      "jquery",
+      "bootstrap"
     ],
     "unknown": {
       "requirements": [],
@@ -23,10 +25,13 @@
       "redhatPackages": []
     },
     "libraryAliases": {
-      "font-awesome": "font-awesome"
+      "font-awesome": "font-awesome",
+      "bootstrap": "bootstrap"
     },
     "entries": "./index.js",
-    "ignores": [],
+    "ignores": [
+      "[\\\\/]_(bootstrap|font-awesome).ts$"
+    ],
     "today": "Thu, 03 Nov 2016 14:31:55 GMT"
   }
 }
