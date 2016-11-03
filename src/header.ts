@@ -6,8 +6,8 @@
 /// <amd-dependency path="text!./_header.html" name="template"/>
 declare var template:string;
 
-import ajax = require('../caleydo_core/ajax');
-import C = require('../caleydo_core/main');
+import * as ajax from 'phovea_core/src/ajax';
+import * as C from 'phovea_core/src/index';
 
 /**
  * Defines a header link

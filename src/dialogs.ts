@@ -1,10 +1,10 @@
 /**
  * Created by Samuel Gratzl on 19.11.2015.
  */
-/// <reference path="../../tsd.d.ts" />
+
 /// <amd-dependency path="bootstrap" />
-import $ = require('jquery');
-import C = require('../caleydo_core/main');
+import * as $ from 'jquery';
+import * as C from 'phovea_core/src/index';
 
 export function generateDialog(title: string, primaryBtnText='OK') {
   const dialog = document.createElement('div');
