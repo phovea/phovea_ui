@@ -4,7 +4,9 @@
     "name": "phovea_bootstrap_fontawesome",
     "author": "The Caleydo Team",
     "githubAccount": "phovea",
-    "modules": [],
+    "modules": [
+      "phovea_core"
+    ],
     "extensions": [
       {
         "type": "ajax-adapter",
