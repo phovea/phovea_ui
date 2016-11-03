@@ -2,9 +2,9 @@
  * Created by Samuel Gratzl on 19.11.2015.
  */
 
-/// <amd-dependency path="bootstrap" />
+import './_bootstrap';
 import * as $ from 'jquery';
-import * as C from 'phovea_core/src/index';
+import {mixin} from 'phovea_core/src';
 
 export function generateDialog(title: string, primaryBtnText='OK') {
   const dialog = document.createElement('div');
@@ -78,7 +78,7 @@ export function prompt(text:string,  options :any = {}):Promise<string> {
   if (typeof options === 'string') {
     options = { title: options};
   }
-  C.mixin(o, options);
+  mixin(o, options);
   return new Promise((resolve) => {
     var dialog = generateDialog(o.title);
     if (o.multiline) {
@@ -113,7 +113,7 @@ export function choose(items:string[], options :any = {}):Promise<string> {
   if (typeof options === 'string') {
     options = { title: options};
   }
-  C.mixin(o, options);
+  mixin(o, options);
 
   return new Promise((resolve) => {
     var dialog = generateDialog(o.title);
@@ -150,7 +150,7 @@ export function areyousure(msg: string = '', options :any = {}):Promise<boolean>
   if (typeof options === 'string') {
     options = { title: options};
   }
-  C.mixin(o, options);
+  mixin(o, options);
 
   return new Promise((resolve) => {
     var dialog = generateDialog(o.title, 'Cancel');

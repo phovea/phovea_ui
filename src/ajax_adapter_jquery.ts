@@ -2,7 +2,7 @@
  * Created by Samuel Gratzl on 04.08.2014.
  */
 
-import * as ajax from 'phovea_core/src/ajax';
+import {IAjaxAdapter} from 'phovea_core/src/ajax';
 import * as $ from 'jquery';
 
 function wrap(d:JQueryXHR):Promise<any> {
@@ -14,7 +14,7 @@ function wrap(d:JQueryXHR):Promise<any> {
 /**
  * JQuery implementation of the ajax adapter
  */
-class JQueryAdapter implements ajax.IAjaxAdapter {
+class JQueryAdapter implements IAjaxAdapter {
   send(url: string, data: any = {}, method = 'get', expectedDataType = 'json'): Promise<any> {
     var o : JQueryAjaxSettings = {
       url: url,
