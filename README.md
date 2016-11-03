@@ -1,33 +1,48 @@
-Caleydo Bootstrap and Font Awesome ![Caleydo Web Client Plugin](https://img.shields.io/badge/Caleydo%20Web-Client%20Plugin-F47D20.svg)
-=============================================
+phovea_bootstrap_fontawesome [![Phovea][phovea-image]][phovea-url] [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+=====================
 
-This plugin is a utility plugin for including [Bootstrap](http://getbootstrap.com/) and [Font Awesome](http://fontawesome.io) into an Caleydo Web application. In addition this repository includes the following modules:
+This plugin is a utility plugin for including [Bootstrap](http://getbootstrap.com/) and [Font Awesome](http://fontawesome.io) into an Phovea application. In addition this repository includes the following modules:
  
  * an AJAX provider based on [jQuery](http://jquery.com/) in `ajax_adapter_jquery.ts`
  * a common header for application in `header.ts`
- * utility dialog generators in `dialogs.ts` 
+ * utility dialog generators in `dialogs.ts`
 
 Installation
 ------------
 
-[Set up a virtual machine using Vagrant](http://www.caleydo.org/documentation/vagrant/) and run these commands inside the virtual machine:
-
-```bash
-./manage.sh clone Caleydo/caleydo_bootstrap_fontawesome
-./manage.sh resolve
+```
+git clone https://github.com/phovea/phovea_bootstrap_fontawesome.git
+cd phovea_bootstrap_fontawesome
+npm install
 ```
 
-If you want this plugin to be dynamically resolved as part of another application of plugin, you need to add it as a peer dependency to the _package.json_ of the application or plugin it should belong to:
+Testing
+-------
 
-```bash
-{
-  "peerDependencies": {
-    "caleydo_bootstrap_fontawesome": "*"
-  }
-}
 ```
+npm run test
+```
+
+Building
+--------
+
+```
+npm run build
+```
+
+
 
 ***
 
 <a href="https://caleydo.org"><img src="http://caleydo.org/assets/images/logos/caleydo.svg" align="left" width="200px" hspace="10" vspace="6"></a>
-This repository is part of **[Caleydo Web](http://caleydo.org/)**, a platform for developing web-based visualization applications. For tutorials, API docs, and more information about the build and deployment process, see the [documentation page](http://caleydo.org/documentation/).
+This repository is part of **[Phovea](http://phovea.caleydo.org/)**, a platform for developing web-based visualization applications. For tutorials, API docs, and more information about the build and deployment process, see the [documentation page](http://caleydo.org/documentation/).
+
+
+[phovea-image]: https://img.shields.io/badge/Phovea-Client%20Plugin-F47D20.svg
+[phovea-url]: https://phovea.caleydo.org
+[npm-image]: https://badge.fury.io/js/phovea_bootstrap_fontawesome.svg
+[npm-url]: https://npmjs.org/package/phovea_bootstrap_fontawesome
+[travis-image]: https://travis-ci.org/phovea/phovea_bootstrap_fontawesome.svg?branch=master
+[travis-url]: https://travis-ci.org/phovea/phovea_bootstrap_fontawesome
+[daviddm-image]: https://david-dm.org/phovea/phovea_bootstrap_fontawesome.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/phovea/phovea_bootstrap_fontawesome
