@@ -1,0 +1,40 @@
+{
+  "generator-phovea": {
+    "type": "lib",
+    "name": "phovea_bootstrap_fontawesome",
+    "author": "The Caleydo Team",
+    "githubAccount": "phovea",
+    "modules": [
+      "phovea_core"
+    ],
+    "extensions": [
+      {
+        "type": "ajax-adapter",
+        "id": "caleydo_adapter_jquery",
+        "module": "ajax_adapter_jquery",
+        "extras": {}
+      }
+    ],
+    "sextensions": [],
+    "libraries": [
+      "font-awesome",
+      "jquery",
+      "bootstrap"
+    ],
+    "unknown": {
+      "requirements": [],
+      "debianPackages": [],
+      "redhatPackages": []
+    },
+    "libraryAliases": {
+      "font-awesome": "font-awesome",
+      "jquery": "jquery",
+      "bootstrap": "bootstrap"
+    },
+    "entries": "./index.js",
+    "ignores": [
+      "[\\\\/]_(bootstrap|font-awesome).ts$"
+    ],
+    "today": "Thu, 03 Nov 2016 14:31:55 GMT"
+  }
+}

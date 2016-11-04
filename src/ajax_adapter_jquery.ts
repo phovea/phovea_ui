@@ -1,9 +1,9 @@
 /**
  * Created by Samuel Gratzl on 04.08.2014.
  */
-/// <reference path="../../tsd.d.ts" />
-import ajax = require('../caleydo_core/ajax');
-import $ = require('jquery');
+
+import {IAjaxAdapter} from 'phovea_core/src/ajax';
+import * as $ from 'jquery';
 
 function wrap(d:JQueryXHR):Promise<any> {
   //since JQueryXHR is thenable
@@ -14,7 +14,7 @@ function wrap(d:JQueryXHR):Promise<any> {
 /**
  * JQuery implementation of the ajax adapter
  */
-class JQueryAdapter implements ajax.IAjaxAdapter {
+class JQueryAdapter implements IAjaxAdapter {
   send(url: string, data: any = {}, method = 'get', expectedDataType = 'json'): Promise<any> {
     var o : JQueryAjaxSettings = {
       url: url,

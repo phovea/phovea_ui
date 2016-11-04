@@ -1,13 +1,15 @@
 /**
  * Created by Samuel Gratzl on 24.11.2014.
  */
-/// <amd-dependency path="bootstrap" />
-/// <amd-dependency path="css!./style.css"/>
-/// <amd-dependency path="text!./_header.html" name="template"/>
-declare var template:string;
 
-import ajax = require('../caleydo_core/ajax');
-import C = require('../caleydo_core/main');
+import './_bootstrap';
+import './_font-awesome';
+import './style.scss';
+import * as template from 'html!./_header.html';
+
+import {getAPIJSON} from 'phovea_core/src/ajax';
+import {mixin} from 'phovea_core/src/index';
+import {list as listPlugins} from 'phovea_core/src/plugin';
 
 /**
  * Defines a header link
@@ -155,7 +157,7 @@ export class AppHeader {
    * @param options
    */
   constructor(private parent:HTMLElement, private options:any = {}) {
-    this.options = C.mixin(this._options, options);
+    this.options = mixin(this._options, options);
     this.build();
   }
 
@@ -170,16 +172,9 @@ export class AppHeader {
 
     // create the content and copy it in the parent
     const helper = document.createElement('div');
-    helper.innerHTML = template;
-    let old = this.parent.firstChild;
-    if (this.options.prepend && old) {
-      while (helper.firstChild) {
-        this.parent.insertBefore(helper.firstChild, old);
-      }
-    } else {
-      while (helper.firstChild) {
-        this.parent.appendChild(helper.firstChild);
-      }
+    helper.innerHTML = String(template);
+    while (helper.firstChild) {
+      this.parent.appendChild(helper.firstChild);
     }
 
     // use the inverse color scheme
@@ -209,7 +204,7 @@ export class AppHeader {
     this.toggleReportBugLink(this.options.showReportBugLink);
 
     // request last deployment data
-    Promise.resolve(ajax.getAPIJSON(`/last_deployment`, {})).then((msg) => {
+    Promise.resolve(getAPIJSON(`/last_deployment`, {})).then((msg) => {
       if(msg.timestamp) {
         this.aboutDialog.querySelector('.lastDeployment span').textContent = new Date(msg.timestamp).toUTCString();
       }
@@ -269,10 +264,10 @@ export class AppHeader {
     // set the URL to GitHub issues dynamically
     if(isVisible) {
       const appNameFromUrl = window.location.pathname.split('/')[1];
-      const appDesc = C.registry.extensions.filter((d) => d.id === appNameFromUrl && (d.type === 'app' || d.type === 'application'));
+      const appDesc = listPlugins((d) => d.id === appNameFromUrl && (d.type === 'app' || d.type === 'application'));
 
-      if(appDesc.length > 0) {
-        link.querySelector('a').setAttribute('href', `//github.com/${appDesc[0].repository}/issues`);
+      if(appDesc.length > 0 && (<any>appDesc[0]).repository) {
+        link.querySelector('a').setAttribute('href', `//github.com/${(<any>appDesc[0]).repository}/issues`);
       }
     }
   }
