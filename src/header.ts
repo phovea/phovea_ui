@@ -173,8 +173,8 @@ export class AppHeader {
     // create the content and copy it in the parent
     const helper = document.createElement('div');
     helper.innerHTML = String(template);
-    while (helper.firstChild) {
-      this.parent.appendChild(helper.firstChild);
+    while (helper.lastChild) {
+      this.parent.insertBefore(helper.lastChild, this.parent.firstChild);
     }
 
     // use the inverse color scheme

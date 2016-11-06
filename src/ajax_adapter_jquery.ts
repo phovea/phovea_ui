@@ -3,7 +3,7 @@
  */
 
 import {IAjaxAdapter} from 'phovea_core/src/ajax';
-import * as $ from 'jquery';
+import {ajax} from 'jquery';
 
 function wrap(d:JQueryXHR):Promise<any> {
   //since JQueryXHR is thenable
@@ -27,7 +27,7 @@ class JQueryAdapter implements IAjaxAdapter {
       o.contentType = false;
       o.processData = false;
     }
-    return wrap($.ajax(o));
+    return wrap(ajax(o));
   }
 }
 
