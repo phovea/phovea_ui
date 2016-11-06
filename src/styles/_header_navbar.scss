@@ -22,7 +22,7 @@ nav.navbar-inverse {
   // caleydo logo for the app link
   .caleydo_app {
     padding-left: 2.1em;
-    background: transparent url('assets/caleydo_c.svg') no-repeat 0.6em 45%;
+    background: transparent url('#{$boostrapAssetDir}/caleydo_c.svg') no-repeat 0.6em 45%;
     background-size: 20px;
     background-origin: border-box;
   }
