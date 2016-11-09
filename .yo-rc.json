@@ -26,15 +26,17 @@
       "debianPackages": [],
       "redhatPackages": []
     },
-    "libraryAliases": {
-      "font-awesome": "font-awesome",
-      "jquery": "jquery",
-      "bootstrap": "bootstrap"
-    },
+    "libraryAliases": {},
     "entries": "./index.js",
     "ignores": [
       "[\\\\/]_(bootstrap|font-awesome).ts$"
     ],
-    "today": "Thu, 03 Nov 2016 14:31:55 GMT"
+    "today": "Thu, 03 Nov 2016 14:31:55 GMT",
+    "libraryExternals": [
+      "font-awesome",
+      "jquery",
+      "bootstrap",
+      "bootstrap-sass"
+    ]
   }
 }
