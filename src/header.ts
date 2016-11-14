@@ -5,7 +5,7 @@
 import './_bootstrap';
 import './_font-awesome';
 import './style.scss';
-import * as template from 'html!./_header.html';
+import * as template from 'html-loader!./_header.html';
 
 import {getAPIJSON} from 'phovea_core/src/ajax';
 import {mixin} from 'phovea_core/src/index';
