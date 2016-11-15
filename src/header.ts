@@ -9,7 +9,6 @@ import * as template from 'html-loader!./_header.html';
 
 import {getAPIJSON} from 'phovea_core/src/ajax';
 import {mixin} from 'phovea_core/src/index';
-import {list as listPlugins} from 'phovea_core/src/plugin';
 import * as $ from 'jquery';
 
 /**
