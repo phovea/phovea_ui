@@ -37,11 +37,11 @@ export function generateDialog(title: string, primaryBtnText='OK') {
           r.hide();
         }
       };
-      return $dialog.modal('show');
+      return (<any>$dialog).modal('show');
     },
     hide: () => {
       document.onkeydown = r._restoreKeyDownListener;
-      return $dialog.modal('hide');
+      return (<any>$dialog).modal('hide');
     },
     body: <HTMLElement>dialog.querySelector('.modal-body'),
     footer: <HTMLElement>dialog.querySelector('.modal-footer'),
