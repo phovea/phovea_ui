@@ -7,14 +7,7 @@
     "modules": [
       "phovea_core"
     ],
-    "extensions": [
-      {
-        "type": "ajax-adapter",
-        "id": "caleydo_adapter_jquery",
-        "module": "ajax_adapter_jquery",
-        "extras": {}
-      }
-    ],
+    "extensions": [],
     "sextensions": [],
     "libraries": [
       "font-awesome",
