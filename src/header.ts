@@ -10,6 +10,7 @@ import * as template from 'html-loader!./_header.html';
 import {getAPIJSON} from 'phovea_core/src/ajax';
 import {mixin} from 'phovea_core/src/index';
 import * as $ from 'jquery';
+import buildBuildInfo from './buildInfo';
 
 /**
  * Defines a header link
@@ -306,21 +307,11 @@ export class AppHeader {
     if (isVisible) {
       $('#headerReportBugDialog').on('show.bs.modal', () => {
         const content = <HTMLElement>this.parent.querySelector('*[data-header="bug"]');
-         // use jquery to avoid offline flag since it is a 'local' file
-         $.getJSON('./buildInfo.json').then((result) => {
-           content.innerHTML=`<h4>Build Info</h4><p>
-                Application: ${result.name} <br>
-                Version: ${result.version} <br>
-                GitHub: <a href="${result.resolved.replace(/\.git.*/, '/issues/new')}" target="_blank">Submit Issue (include the build info below)</a>
-            </p>
-            <h4>Build Details</h4>
-            <textarea readonly="readonly">~~~json\n${JSON.stringify(result, null, ' ')}\n~~~</textarea>
-            `;
-         }).fail((error) => {
-           // can't find build info
-           console.warn('cannot find build info');
-           content.innerHTML = `Can't find build Info`;
-         });
+        buildBuildInfo().then((buildInfo) => {
+          content.innerHTML = buildInfo.toHTML();
+        }).catch((error) => {
+          content.innerHTML = error.toString();
+        });
       });
     }
   }
