@@ -307,6 +307,7 @@ export class AppHeader {
     if (isVisible) {
       $('#headerReportBugDialog').on('show.bs.modal', () => {
         const content = <HTMLElement>this.parent.querySelector('*[data-header="bug"]');
+        content.innerHTML = 'Loading...';
         buildBuildInfo().then((buildInfo) => {
           content.innerHTML = buildInfo.toHTML();
         }).catch((error) => {
