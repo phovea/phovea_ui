@@ -97,3 +97,11 @@ nav.navbar-inverse {
     }
   }
 }
+
+#headerReportBugDialog {
+  *[data-header="bug"] textarea {
+    width: 100%;
+    height: 25vh;
+    overflow: auto;
+  }
+}
