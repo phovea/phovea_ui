@@ -1,4 +1,4 @@
-phovea_bootstrap_fontawesome [![Phovea][phovea-image]][phovea-url] [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+phovea_ui [![Phovea][phovea-image]][phovea-url] [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 =====================
 
 This plugin is a utility plugin for including [Bootstrap](http://getbootstrap.com/) and [Font Awesome](http://fontawesome.io) into an Phovea application. In addition this repository includes the following modules:
@@ -11,8 +11,8 @@ Installation
 ------------
 
 ```
-git clone https://github.com/phovea/phovea_bootstrap_fontawesome.git
-cd phovea_bootstrap_fontawesome
+git clone https://github.com/phovea/phovea_ui.git
+cd phovea_ui
 npm install
 ```
 
@@ -40,9 +40,9 @@ This repository is part of **[Phovea](http://phovea.caleydo.org/)**, a platform 
 
 [phovea-image]: https://img.shields.io/badge/Phovea-Client%20Plugin-F47D20.svg
 [phovea-url]: https://phovea.caleydo.org
-[npm-image]: https://badge.fury.io/js/phovea_bootstrap_fontawesome.svg
-[npm-url]: https://npmjs.org/package/phovea_bootstrap_fontawesome
-[travis-image]: https://travis-ci.org/phovea/phovea_bootstrap_fontawesome.svg?branch=master
-[travis-url]: https://travis-ci.org/phovea/phovea_bootstrap_fontawesome
-[daviddm-image]: https://david-dm.org/phovea/phovea_bootstrap_fontawesome.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/phovea/phovea_bootstrap_fontawesome
+[npm-image]: https://badge.fury.io/js/phovea_ui.svg
+[npm-url]: https://npmjs.org/package/phovea_ui
+[travis-image]: https://travis-ci.org/phovea/phovea_ui.svg?branch=master
+[travis-url]: https://travis-ci.org/phovea/phovea_ui
+[daviddm-image]: https://david-dm.org/phovea/phovea_ui.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/phovea/phovea_ui

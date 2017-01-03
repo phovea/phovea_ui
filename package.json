@@ -1,5 +1,5 @@
 {
-  "main": "build/phovea_bootstrap_fontawesome.js",
+  "main": "build/phovea_ui.js",
   "files": [
     "src",
     "index.js",
@@ -30,7 +30,7 @@
     "release:minor": "npm version minor && npm publish && git push --follow-tags",
     "release:patch": "npm version patch && npm publish && git push --follow-tags",
     "predist": "npm run build",
-    "dist": "mkdirp dist && cd build && tar cvzf ../dist/phovea_bootstrap_fontawesome.tar.gz *"
+    "dist": "mkdirp dist && cd build && tar cvzf ../dist/phovea_ui.tar.gz *"
   },
   "devDependencies": {
     "@types/jasmine": "2.5.35",
@@ -71,7 +71,7 @@
     "bootstrap-sass": "3.3.7",
     "phovea_core": "github:phovea/phovea_core#v0.0.3"
   },
-  "name": "phovea_bootstrap_fontawesome",
+  "name": "phovea_ui",
   "description": "Wrapper for integration of Bootstrap and FontAwesome along with a common header for Phovea apps",
   "homepage": "https://phovea.caleydo.org",
   "version": "0.0.3",
@@ -82,10 +82,10 @@
   },
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/phovea/phovea_bootstrap_fontawesome/issues"
+    "url": "https://github.com/phovea/phovea_ui/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/phovea/phovea_bootstrap_fontawesome.git"
+    "url": "https://github.com/phovea/phovea_ui.git"
   }
 }

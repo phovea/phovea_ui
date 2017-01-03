@@ -1,7 +1,7 @@
 {
   "generator-phovea": {
     "type": "lib",
-    "name": "phovea_bootstrap_fontawesome",
+    "name": "phovea_ui",
     "author": "The Caleydo Team",
     "githubAccount": "phovea",
     "modules": [
