@@ -1,4 +1,21 @@
 {
+  "name": "phovea_ui",
+  "description": "Wrapper for integration of Bootstrap and FontAwesome along with a common header for Phovea apps",
+  "homepage": "https://phovea.caleydo.org",
+  "version": "0.1.0-SNAPSHOT",
+  "author": {
+    "name": "The Caleydo Team",
+    "email": "contact@caleydo.org",
+    "url": "https://caleydo.org"
+  },
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/phovea/phovea_ui/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phovea/phovea_ui.git"
+  },
   "main": "build/phovea_ui.js",
   "files": [
     "src",
@@ -32,6 +49,14 @@
     "predist": "npm run build",
     "dist": "mkdirp dist && cd build && tar cvzf ../dist/phovea_ui.tar.gz *"
   },
+  "dependencies": {
+    "font-awesome": "4.6.3",
+    "@types/jquery": "2.0.33",
+    "jquery": "3.1.1",
+    "@types/bootstrap": "3.3.32",
+    "bootstrap-sass": "3.3.7",
+    "phovea_core": "github:phovea/phovea_core#develop"
+  },
   "devDependencies": {
     "@types/jasmine": "2.5.35",
     "awesome-typescript-loader": "2.2.4",
@@ -62,30 +87,5 @@
     "webpack": "2.1.0-beta.26",
     "webpack-dev-server": "2.1.0-beta.10",
     "extract-loader": "0.0.2"
-  },
-  "dependencies": {
-    "font-awesome": "4.6.3",
-    "@types/jquery": "2.0.33",
-    "jquery": "3.1.1",
-    "@types/bootstrap": "3.3.32",
-    "bootstrap-sass": "3.3.7",
-    "phovea_core": "github:phovea/phovea_core#develop"
-  },
-  "name": "phovea_ui",
-  "description": "Wrapper for integration of Bootstrap and FontAwesome along with a common header for Phovea apps",
-  "homepage": "https://phovea.caleydo.org",
-  "version": "0.1.0-SNAPSHOT",
-  "author": {
-    "name": "The Caleydo Team",
-    "email": "contact@caleydo.org",
-    "url": "https://caleydo.org"
-  },
-  "license": "BSD-3-Clause",
-  "bugs": {
-    "url": "https://github.com/phovea/phovea_ui/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/phovea/phovea_ui.git"
   }
 }
