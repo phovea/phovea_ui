@@ -1,7 +1,8 @@
 /**
  * Created by Samuel Gratzl on 19.11.2015.
  */
-
+// to resolve the jquery extensions
+/// <reference types="bootstrap" />
 import './_bootstrap';
 import * as $ from 'jquery';
 import {mixin} from 'phovea_core/src';
@@ -37,11 +38,11 @@ export function generateDialog(title: string, primaryBtnText='OK') {
           r.hide();
         }
       };
-      return (<any>$dialog).modal('show');
+      return $dialog.modal('show');
     },
     hide: () => {
       document.onkeydown = r._restoreKeyDownListener;
-      return (<any>$dialog).modal('hide');
+      return $dialog.modal('hide');
     },
     body: <HTMLElement>dialog.querySelector('.modal-body'),
     footer: <HTMLElement>dialog.querySelector('.modal-footer'),
@@ -70,7 +71,7 @@ export function msg(text: string, category='info'): Promise<void> {
  * @returns {Promise}
  */
 export function prompt(text:string,  options :any = {}):Promise<string> {
-  var o = {
+  const o = {
     title: 'Input',
     placeholder: 'Enter...',
     multiline: false
@@ -80,7 +81,7 @@ export function prompt(text:string,  options :any = {}):Promise<string> {
   }
   mixin(o, options);
   return new Promise((resolve) => {
-    var dialog = generateDialog(o.title);
+    const dialog = generateDialog(o.title);
     if (o.multiline) {
       dialog.body.innerHTML = `<form><textarea class="form-control" rows="5" placeholder="${o.placeholder}" autofocus="autofocus">${text}</textarea></form>`;
     } else {
@@ -105,7 +106,7 @@ export function prompt(text:string,  options :any = {}):Promise<string> {
  * @returns {Promise}
  */
 export function choose(items:string[], options :any = {}):Promise<string> {
-  var o = {
+  const o = {
     title :  'Choose',
     placeholder: 'Enter...',
     editable: false
@@ -116,7 +117,7 @@ export function choose(items:string[], options :any = {}):Promise<string> {
   mixin(o, options);
 
   return new Promise((resolve) => {
-    var dialog = generateDialog(o.title);
+    const dialog = generateDialog(o.title);
     const option = items.map((d) =>`<option value="${d}">${d}</option>`).join('\n');
     if (o.editable) {
       dialog.body.innerHTML = `<form><input type="text" list="chooseList" class="form-control" autofocus="autofocus" placeholder="${o.placeholder}">
@@ -143,7 +144,7 @@ export function choose(items:string[], options :any = {}):Promise<string> {
 }
 
 export function areyousure(msg: string = '', options :any = {}):Promise<boolean> {
-  var o = {
+  const o = {
     title : 'Are you sure?',
     button: `<i class="fa fa-trash" aria-hidden="true"></i> Delete`
   };
@@ -153,10 +154,10 @@ export function areyousure(msg: string = '', options :any = {}):Promise<boolean>
   mixin(o, options);
 
   return new Promise((resolve) => {
-    var dialog = generateDialog(o.title, 'Cancel');
+    const dialog = generateDialog(o.title, 'Cancel');
     dialog.body.innerHTML = msg;
     $(`<button class="btn btn-danger">${o.button}</button>`).appendTo(dialog.footer);
-    var clicked = false;
+    let clicked = false;
     $(dialog.footer).find('button.btn-primary').on('click', function() {
       dialog.hide();
     });
