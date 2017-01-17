@@ -30,7 +30,7 @@ export class BuildInfo {
 Key | Value
 --- | -----
 Application | ${this.buildInfo.name}
-Version | [${this.buildInfo.version}](${this.buildInfo.resolved.replace('.git#','/commit/')})
+Version | [${this.buildInfo.version}](${this.buildInfo.resolved.replace('.git#', '/commit/')})
 Url | \`${location.pathname}${location.hash}\`
 UserAgent | ${navigator.userAgent}
 Platform | ${navigator.platform}
