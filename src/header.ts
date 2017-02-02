@@ -36,27 +36,7 @@ export interface IHeaderLink {
  * Header link extends the header link with a  flag for disabling the logo
  */
 export class AppHeaderLink implements IHeaderLink {
-  public name: string = 'Caleydo Web';
-  public action: () => any = () => false;
-  public href: string = '#';
-  public addLogo: boolean = true;
-
-  constructor(name?, action?, href?, addLogo?) {
-    if (name) {
-      this.name = name;
-    }
-
-    if (action) {
-      this.action = action;
-    }
-
-    if (href) {
-      this.href = href;
-    }
-
-    if (addLogo) {
-      this.addLogo = addLogo;
-    }
+  constructor(public name = 'Phovea', public readonly action = () => false, public readonly href: string = '#', public addLogo:boolean = true) {
   }
 }
 
@@ -203,7 +183,7 @@ export class AppHeader {
     this.build();
   }
 
-  private build() {
+  private async build() {
     // legacy support
     if ((<any>this.options).app !== undefined && this.options.appLink === undefined) {
       this.options.appLink.name = (<any>this.options).app;
@@ -245,15 +225,15 @@ export class AppHeader {
     this.toggleAboutLink(true); // always visible
     this.toggleReportBugLink(this.options.showReportBugLink);
 
-    // request last deployment data
-    Promise.resolve(getAPIJSON(`/last_deployment`, {})).then((msg) => {
-      if (msg.timestamp) {
-        this.aboutDialog.querySelector('.lastDeployment span').textContent = new Date(msg.timestamp).toUTCString();
-      }
-    });
-
     this.options.mainMenu.forEach((l) => this.addMainMenu(l.name, l.action, l.href));
     this.options.rightMenu.forEach((l) => this.addRightMenu(l.name, l.action, l.href));
+
+    // TODO just on demand
+    // request last deployment data
+    const msg: any = await Promise.resolve(getAPIJSON(`/last_deployment`, {}));
+    if (msg.timestamp) {
+      this.aboutDialog.querySelector('.lastDeployment span').textContent = new Date(msg.timestamp).toUTCString();
+    }
   }
 
   addMainMenu(name: string, action: () => any, href = '#') {
