@@ -1,6 +1,7 @@
 /**
  * Created by Samuel Gratzl on 21.11.2016.
  */
+/// <reference types="whatwg-fetch" />
 
 export class BuildInfo {
   constructor(private buildInfo: any) {
@@ -30,7 +31,7 @@ export class BuildInfo {
 Key | Value
 --- | -----
 Application | ${this.buildInfo.name}
-Version | [${this.buildInfo.version}](${this.buildInfo.resolved.replace('.git#','/commit/')})
+Version | [${this.buildInfo.version}](${this.buildInfo.resolved.replace('.git#', '/commit/')})
 Url | \`${location.pathname}${location.hash}\`
 UserAgent | ${navigator.userAgent}
 Platform | ${navigator.platform}
@@ -51,5 +52,5 @@ Window Size | ${window.innerWidth} x ${window.innerHeight}
 }
 
 export default function build(): Promise<BuildInfo> {
-  return (<any>self).fetch('./buildInfo.json').then((response) => response.json()).then((result: any) => new BuildInfo(result));
+  return self.fetch('./buildInfo.json').then((response) => response.json()).then((result: any) => new BuildInfo(result));
 }

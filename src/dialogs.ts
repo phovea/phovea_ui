@@ -1,66 +1,100 @@
 /**
  * Created by Samuel Gratzl on 19.11.2015.
  */
-
+// to resolve the jquery extensions
+/// <reference types="bootstrap" />
 import './_bootstrap';
 import * as $ from 'jquery';
 import {mixin} from 'phovea_core/src';
 
-export function generateDialog(title: string, primaryBtnText='OK') {
-  const dialog = document.createElement('div');
-  dialog.setAttribute('role','dialog');
-  dialog.classList.add('modal','fade');
-  dialog.innerHTML = `
-     <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-          <h4 class="modal-title">${title}</h4>
-        </div>
-        <div class="modal-body">
+export class Dialog {
+  private readonly $dialog: JQuery;
+  private bakKeyDownListener: (ev: KeyboardEvent) => any = null; // temporal for restoring an old keydown listener
 
+  constructor(title: string, primaryBtnText = 'OK') {
+    const dialog = document.createElement('div');
+    dialog.setAttribute('role', 'dialog');
+    dialog.classList.add('modal', 'fade');
+    dialog.innerHTML = `
+       <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">${title}</h4>
+          </div>
+          <div class="modal-body">
+  
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-primary">${primaryBtnText}</button>
+          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default btn-primary">${primaryBtnText}</button>
-        </div>
-      </div>
-    </div>`;
-  document.body.appendChild(dialog);
-  const $dialog = $(dialog);
-  const r = {
-    _restoreKeyDownListener: null, // temporal for restoring an old keydown listener
-    show: () => {
-      r._restoreKeyDownListener = document.onkeydown;
-      document.onkeydown = (evt) => {
-        evt = evt || <KeyboardEvent>window.event;
-        if (evt.keyCode === 27) { // 27 === ESC key
-          r.hide();
-        }
-      };
-      return (<any>$dialog).modal('show');
-    },
-    hide: () => {
-      document.onkeydown = r._restoreKeyDownListener;
-      return (<any>$dialog).modal('hide');
-    },
-    body: <HTMLElement>dialog.querySelector('.modal-body'),
-    footer: <HTMLElement>dialog.querySelector('.modal-footer'),
-    onHide: (callback: ()=>void) => $dialog.on('hidden.bs.modal', callback),
-    onSubmit: (callback: ()=>void) => (<HTMLElement>dialog.querySelector('.modal-footer > button')).onclick = callback,
-    destroy: () => $dialog.remove()
-  };
-  return r;
+      </div>`;
+    document.body.appendChild(dialog);
+    this.$dialog = $(dialog);
+  }
+
+  show() {
+    this.bakKeyDownListener = document.onkeydown;
+    document.onkeydown = (evt) => {
+      evt = evt || <KeyboardEvent>window.event;
+      if (evt.keyCode === 27) { // 27 === ESC key
+        this.hide();
+      }
+    };
+    return this.$dialog.modal('show');
+  }
+
+  hide() {
+    document.onkeydown = this.bakKeyDownListener;
+    return this.$dialog.modal('hide');
+  }
+
+  get body() {
+    return <HTMLElement>this.$dialog[0].querySelector('.modal-body');
+  }
+
+  get footer() {
+    return <HTMLElement>this.$dialog.find('.modal-footer')[0];
+  }
+
+
+  onHide(callback: () => void) {
+    this.$dialog.on('hidden.bs.modal', callback);
+  }
+
+  onSubmit(callback: () => void) {
+    return this.$dialog.find('.modal-footer > button').on('click', callback);
+  }
+
+  hideOnSubmit() {
+    this.onSubmit(this.hide.bind(this));
+  }
+
+  destroy() {
+    return this.$dialog.remove();
+  }
 }
 
-export function msg(text: string, category='info'): Promise<void> {
+export function generateDialog(title: string, primaryBtnText = 'OK') {
+  return new Dialog(title, primaryBtnText);
+}
+
+export function msg(text: string, category = 'info'): Promise<void> {
   return new Promise<void>((resolve) => {
     const div = $(`<div class="alert alert-${category} alert-dismissible fade in" role="alert">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
         ${text}
     </div>`).appendTo('body');
     div.on('closed.bs.alert', () => resolve);
-    (<any>div).alert();
+    div.alert();
   });
+}
+
+export interface IPromptOptions {
+  title?: string;
+  placeholder?: string;
+  multiline?: boolean;
 }
 
 /**
@@ -69,18 +103,18 @@ export function msg(text: string, category='info'): Promise<void> {
  * @param options
  * @returns {Promise}
  */
-export function prompt(text:string,  options :any = {}):Promise<string> {
-  var o = {
+export function prompt(text: string, options: IPromptOptions|string = {}): Promise<string> {
+  const o: IPromptOptions = {
     title: 'Input',
     placeholder: 'Enter...',
     multiline: false
   };
   if (typeof options === 'string') {
-    options = { title: options};
+    options = {title: options};
   }
   mixin(o, options);
   return new Promise((resolve) => {
-    var dialog = generateDialog(o.title);
+    const dialog = generateDialog(o.title);
     if (o.multiline) {
       dialog.body.innerHTML = `<form><textarea class="form-control" rows="5" placeholder="${o.placeholder}" autofocus="autofocus">${text}</textarea></form>`;
     } else {
@@ -98,26 +132,32 @@ export function prompt(text:string,  options :any = {}):Promise<string> {
   });
 }
 
+export interface IChooseOptions {
+  title?: string;
+  placeholder?: string;
+  editable?: boolean;
+}
+
 /**
  * simple choose dialog
  * @param items
  * @param options
  * @returns {Promise}
  */
-export function choose(items:string[], options :any = {}):Promise<string> {
-  var o = {
-    title :  'Choose',
+export function choose(items: string[], options: IChooseOptions|string = {}): Promise<string> {
+  const o: IChooseOptions = {
+    title: 'Choose',
     placeholder: 'Enter...',
     editable: false
   };
   if (typeof options === 'string') {
-    options = { title: options};
+    options = {title: options};
   }
   mixin(o, options);
 
   return new Promise((resolve) => {
-    var dialog = generateDialog(o.title);
-    const option = items.map((d) =>`<option value="${d}">${d}</option>`).join('\n');
+    const dialog = generateDialog(o.title);
+    const option = items.map((d) => `<option value="${d}">${d}</option>`).join('\n');
     if (o.editable) {
       dialog.body.innerHTML = `<form><input type="text" list="chooseList" class="form-control" autofocus="autofocus" placeholder="${o.placeholder}">
         <datalist id="chooseList">${option}</datalist>
@@ -130,8 +170,9 @@ export function choose(items:string[], options :any = {}):Promise<string> {
       dialog.hide();
       return false;
     };
+    dialog.hideOnSubmit();
     dialog.onHide(() => {
-      if (options.editable) {
+      if (o.editable) {
         resolve((<HTMLInputElement>dialog.body.querySelector('input')).value);
       } else {
         resolve(items[(<HTMLSelectElement>dialog.body.querySelector('select')).selectedIndex]);
@@ -142,25 +183,30 @@ export function choose(items:string[], options :any = {}):Promise<string> {
   });
 }
 
-export function areyousure(msg: string = '', options :any = {}):Promise<boolean> {
-  var o = {
-    title : 'Are you sure?',
+export interface IAreYouSureOptions {
+  title?: string;
+  button?: string;
+}
+
+export function areyousure(msg: string = '', options: IAreYouSureOptions | string = {}): Promise<boolean> {
+  const o = {
+    title: 'Are you sure?',
     button: `<i class="fa fa-trash" aria-hidden="true"></i> Delete`
   };
   if (typeof options === 'string') {
-    options = { title: options};
+    options = {title: options};
   }
   mixin(o, options);
 
   return new Promise((resolve) => {
-    var dialog = generateDialog(o.title, 'Cancel');
+    const dialog = generateDialog(o.title, 'Cancel');
     dialog.body.innerHTML = msg;
     $(`<button class="btn btn-danger">${o.button}</button>`).appendTo(dialog.footer);
-    var clicked = false;
-    $(dialog.footer).find('button.btn-primary').on('click', function() {
+    let clicked = false;
+    $(dialog.footer).find('button.btn-primary').on('click', function () {
       dialog.hide();
     });
-    $(dialog.footer).find('button.btn-danger').on('click', function() {
+    $(dialog.footer).find('button.btn-danger').on('click', function () {
       clicked = true;
       dialog.hide();
     });
