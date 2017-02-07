@@ -24,7 +24,7 @@ export interface IHeaderLink {
   /**
    * Action that should be performed on click (instead of href)
    */
-  action: () => any;
+  action: (event: MouseEvent) => any;
 
   /**
    * The href of the link
@@ -36,7 +36,7 @@ export interface IHeaderLink {
  * Header link extends the header link with a  flag for disabling the logo
  */
 export class AppHeaderLink implements IHeaderLink {
-  constructor(public name = 'Phovea', public readonly action = () => false, public readonly href: string = '#', public addLogo:boolean = true) {
+  constructor(public name = 'Phovea', public readonly action = (event: MouseEvent) => false, public readonly href: string = '#', public addLogo:boolean = true) {
   }
 }
 
@@ -47,7 +47,7 @@ export class AppHeaderLink implements IHeaderLink {
  * @param href
  * @returns {HTMLElement}
  */
-function createLi(name: string, action: () => any, href: string = '#') {
+function createLi(name: string, action: (event: MouseEvent) => any, href: string = '#') {
   const li = <HTMLElement>document.createElement('li');
   li.innerHTML = `<a href="${href}">${name}</a>`;
   if (action) {
@@ -236,13 +236,13 @@ export class AppHeader {
     }
   }
 
-  addMainMenu(name: string, action: () => any, href = '#') {
+  addMainMenu(name: string, action: (event: MouseEvent) => any, href = '#') {
     const li = createLi(name, action, href);
     this.mainMenu.appendChild(li);
     return li;
   }
 
-  addRightMenu(name: string, action: () => any, href = '#') {
+  addRightMenu(name: string, action: (event: MouseEvent) => any, href = '#') {
     const li = createLi(name, action, href);
     this.rightMenu.insertBefore(li, this.rightMenu.firstChild);
     return li;
