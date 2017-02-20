@@ -245,13 +245,6 @@ export class AppHeader {
     this.toggleAboutLink(true); // always visible
     this.toggleReportBugLink(this.options.showReportBugLink);
 
-    // request last deployment data
-    Promise.resolve(getAPIJSON(`/last_deployment`, {})).then((msg) => {
-      if (msg.timestamp) {
-        this.aboutDialog.querySelector('.lastDeployment span').textContent = new Date(msg.timestamp).toUTCString();
-      }
-    });
-
     this.options.mainMenu.forEach((l) => this.addMainMenu(l.name, l.action, l.href));
     this.options.rightMenu.forEach((l) => this.addRightMenu(l.name, l.action, l.href));
   }
@@ -320,6 +313,16 @@ export class AppHeader {
   private toggleAboutLink(isVisible: boolean) {
     const link = <HTMLElement>this.parent.querySelector('*[data-header="aboutLink"]');
     AppHeader.setVisibility(link, isVisible);
+    if(isVisible) {
+      link.addEventListener('click', () => {
+        // request last deployment data
+        Promise.resolve(getAPIJSON(`/last_deployment`, {})).then((msg) => {
+          if (msg.timestamp) {
+            this.aboutDialog.querySelector('.lastDeployment span').textContent = new Date(msg.timestamp).toUTCString();
+          }
+        });
+      });
+    }
   }
 }
 
