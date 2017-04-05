@@ -9,7 +9,7 @@ import {mixin} from 'phovea_core/src';
 
 export class Dialog {
   private readonly $dialog: JQuery;
-  private bakKeyDownListener = null; // temporal for restoring an old keydown listener
+  private bakKeyDownListener: (ev: KeyboardEvent) => any = null; // temporal for restoring an old keydown listener
   static openDialogs: number = 0;
 
   constructor(title: string, primaryBtnText = 'OK') {
