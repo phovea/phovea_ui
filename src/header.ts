@@ -300,6 +300,16 @@ export class AppHeader {
   private toggleAboutLink(isVisible: boolean) {
     const link = <HTMLElement>this.parent.querySelector('*[data-header="aboutLink"]');
     AppHeader.setVisibility(link, isVisible);
+    if(isVisible) {
+      link.addEventListener('click', () => {
+        // request last deployment data
+        Promise.resolve(getAPIJSON(`/last_deployment`, {})).then((msg) => {
+          if (msg.timestamp) {
+            this.aboutDialog.querySelector('.lastDeployment span').textContent = new Date(msg.timestamp).toUTCString();
+          }
+        });
+      });
+    }
   }
 }
 

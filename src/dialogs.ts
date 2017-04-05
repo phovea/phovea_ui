@@ -10,6 +10,7 @@ import {mixin} from 'phovea_core/src';
 export class Dialog {
   private readonly $dialog: JQuery;
   private bakKeyDownListener: (ev: KeyboardEvent) => any = null; // temporal for restoring an old keydown listener
+  static openDialogs: number = 0;
 
   constructor(title: string, primaryBtnText = 'OK') {
     const dialog = document.createElement('div');
@@ -42,6 +43,8 @@ export class Dialog {
         this.hide();
       }
     };
+
+    ++Dialog.openDialogs;
     return this.$dialog.modal('show');
   }
 
@@ -72,6 +75,9 @@ export class Dialog {
   }
 
   destroy() {
+    if(--Dialog.openDialogs > 0) {
+      $('body').addClass('modal-open');
+    }
     return this.$dialog.remove();
   }
 }

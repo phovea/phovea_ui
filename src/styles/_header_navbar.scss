@@ -7,6 +7,11 @@ nav.navbar-inverse {
   border: none;
   border-bottom: 2px solid;
 
+  .navbar-header {
+    display: flex;
+    align-items: stretch;
+  }
+
   .navbar-nav > li > a,
   .navbar-brand {
     height: auto;
@@ -24,6 +29,8 @@ nav.navbar-inverse {
     background: transparent url('#{$boostrapAssetDir}/caleydo_c.svg') no-repeat 0.6em 45%;
     background-size: 20px;
     background-origin: border-box;
+    display: flex;
+    align-items: center;
   }
 }
 
