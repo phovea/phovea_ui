@@ -1,28 +1,30 @@
 language: node_js
-
 node_js:
 - 6
-
 addons:
   firefox: 49.0.1
-
 before_install:
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
 - if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi
-
 script: npm run dist
-
-deploy:
-  provider: releases
-  api_key:
-    secure: TK9/P34Bi3WuppiDrBCwVcn41yCBwmILaU8hXTBzUPbT7TbeFIwsC6/4CtH85Z+ZrUve4S5pTmWRNf2dQDxWw3uYu7+bJuemV2J1LHG76mognj+TNEiYxfLQUt3Gql4W7C7FcI4Rlx5/uMN9wY1wro8TWUBMwT6jjSrUWIvK3GXoojd5bHvJx07XpjWl9wCon4D0ruZiFoM2mdeP23lbc2GckETi32oEKswnQXxkMACmxbPzoWbvkxH4aK8Bt2Rj2sl2TbPhVkN6DAkHGkGAvLI+2/aRfG27+oo3OKsaDjbuGABct8TfZccJ970CbQ8kbnCjYxstvqkg1JWjF0W67sX/flBZZOEUA5l0OLWo6HqMGMxm7/lEQhIdPMsRmvXL+HVOxkMrB2dda58QzxVwiZp+rRqUaeabPZp8Kl5xodGrVxsBvxe6zAbJ5jCtCSumG6+kLyKI00/kYlghqQNrgUw0ZsYJlQ34h3lo/24QpaeyDpQoCkGWQgtgqiXGpeKSu7bCnOqIqAy3nbT9Utwj7K8gIasTG5idosEAz/THMampNbGDuyxxc340sYGNMg9Bhm1g2ILWRdtV470p5hwBtIDTKi3/PAizEO26+Wh0zI47Sg3ao57avcbCsTmzbZUeA5J4bojmchhJCHX8su9cSCGh/2fJA/1eBIgEvOQ8LNE=
-  file: dist/phovea_ui.tar.gz
-  on:
-    tags: true
-
 notifications:
   slack:
-    secure: E8/1UIdHSczUbN+6i6gd1d5LM4vmLdwLQ30tpyjvnM0wvfDce76oPxLJAy240WJ5ybXRZUtNrttpVpt4tEXCy8aLFCmxD7s77rVloH+q1J8R/ptTFWZGhFGEujk1awEmVbzcWxJkV9/JENQaeGBKxwv8/EQwWwEkAb7p/+AJb9owmH88b3wUZUGHBWtbMiyyaF4Rm1Wg1stJB8Z1Ga7PRF4cqufTgcDdsCPVv9gAY+VxOIGqX/Vfuc9UWpUH8vq8lHUE7Inn5QS78kuFfSgLWga3H6Mu/Gko1XNlWk0QWWQBUvEZ6ZC6Wuo68KzvUjJHDTnx8WyfHue2JNHIslcX+eJq2WHLeEgM24VeNkILCGo/H/60NGHiSjrIv/Y9h6bQ9FDjo6TUyE4nbdPYN1RN9FQ5UbI9Y4Gi753H9mqnHWlEywBOzHxdZCAuz9Wh03CCF/blsvJ+Obbyo6Jrfe+g44jyi9kQdBNQ78qG6v4EXws8FiYao6x3PpgIwFix42Cpr+soAh5FpA3C1zHSAyZZpXF65/lrDl5yPNofK7Wy0B9bw+0I6Z/u7ZKFNVZXvYPGYvtUVcsALGBdmYc61+LCta36Po0KZseWVAlJj6QnOJDYzv0wvV/zsuf9A5KpYFGiqV9Q7zmtiO5FYF5sBy+lE7O9tHVO4O18IRndhRQgxhs=
+    secure: swXevuYceCEhiruSkITXiRPO0LBJ4eNxZwTJAUYC6BdCNvp/x35HMCLz7Z7jJ7LxsMGzHce/xa+AMrJpc0Y/n1p+LsVgMwtJ4OJ3SloH+wfTxpkD5UuyPFP1R0WYxW88s/8PAh7ax5osY9vUq/6r15xDcNFCTgcjBJ7DZEIWlIwh7BLYkzq71w5lQ5oJvl0dRCDMdI7o4HksKJV/7h14etilvCz4JQDnl6hcph4sGP7Z9Bf0A0DzNIjcHcFaEk6cyruWvmpRgnSPosksYDItvWpE2mWSEzEvhetBhH0IH1xxtfoq3A0aqPnPtT1hzVgIcbTNvlFoZRjFHHe5QHuTPLarzBFCnZS3yTCfSQ/nF6pmPODjTaUozKY2uZXtMI8+TBd9FxkYbYFKsoJvHENbXK5Ndwj7fmsqRdShlFzeGiN6DMDs2uLH4BzGwkbG5vRsiReQ4Qhl4Xv8q5JS3j17/SCB8sRYqa3X7eDsF11Jyf1SJ1XfP0ZrF1FITOyCCz1/9Qu7k4y2HUjR8KoxX2xoFHX6EdlbbLH6b/v6Esn3CEA58s/SOxL0s6SDpUPpf9tULVE/NzLKwp616cx8kIX7ZbIrscqepo81Y04FN7Wv1fQkE8qRPVVaWmND8vADekDvTC1L9oIjbJG7AAUMB/GgFCRpMRtLjX7ZRp/JH/Usl5A=
     on_success: change
     on_failure: always
+deploy:
+  - provider: releases
+    api_key:
+      secure: Qgwbt2RuvlEFcWWbe0bUWqrml8uxhPafnZOIoS4Ff9ducp/ELMpgq+ZgImAwAOJip6bf3/Zzvh+fxMBzixFLFIMEwgr43vu93Q5GopOLLt53FeWE14Zgiy7c39qxPM6Sphmxbh0o51/3pLEDxKpiLn/vBAUfU87iCBxa8sey4/e+VXxTV7yWXBXqNcGSCen60OCVMEKp71hlfvGMaBC2uo+oaEaUj/FR0DLC/1xK2rJ4wE3+zcikudH7/DZ0y0zr1Kh2iuQcEEMfIyK10LynrO18MJvQsTntvDR/5cP5j4wFKauBLpIF5iR8u9R2hLGamp+3hJzGJ8jmTSntfbpdVdEEQpdFI77W8lgw+Bwmw5puOci8cNETjSxXNTCpMj+nUuqjQG8MvoXTnhWX3mPtj87kwBfxZXTH6juCEeuHuESf5qjonaZPgZ1Y2nifA5dG9DgYTgT33O69SFzrPPaThJqJNaToKkg27wmwrToN/NflyC2lOY43ykRtT13JNZ2+TDj4T6rUdLrlWge6rrUSiumYfZD8bZLZfkAzFxTVSERb+4wqK6O8xDwrXpVU92dSKmG0GjcKa375aIpEibEzc8e8Gog3kLziMdk8XXR3ADO9KLD4pzMLXIYWS79lf+2haGOBQwG/MDdB4FqwkNizGkRf0XutbcfOkdgIkhkaj4c=
+    file: dist/phovea_ui.tar.gz
+    on:
+      tags: true
+      repo: phovea/phovea_ui
+  - provider: npm
+    email: samuel.gratzl@jku.at
+    api_key:
+      secure: a6dt3tb8TSJke47zysFk9ZAUY3JDs+Xf7T1XieZSSII0oEgzvOtXzljZHDhxntvjPmVno4WkLRJw+bSg0EimZ9A9zcjhgvE+YLEZteQBafJankOrDhXnOMJuvjequayFyH8kk0pWUsyfUpzBYDVw0uN6mvDxvsqc6Qsrw8rAo+GtG+BOXtm4SEuo5JKmT7Mze44EjLowCbk55YgG4vvvOY7nn/1U3vPAr5g8QyEvD8TpxXdnePA4jpn2yP4efnH+EPSTiMlxlDPWfFbewK5HXb+WKuhOqabsLL0FRe7sU4osY5D8jV2hwWF8LL8Irm3DYdOZPEaKv/xWG2zi5sEbox475gN5jSwq0d4n6CK1CuIzwsa15QvS2Almpw//YGd77WNMKNhQmKczWxmRQo5Whpvzz01nU3Y1xLu6LP2M8WfcoFQ1DHED8YoxV3v/nRJNzNcp06Mcg8yUhnS8n/1vkNZ1nXJnWk1lyFh/LI9Nw6WWvLONArScp2ibpRt7954ukoZmcVFl0s3cbD1zJHt439Hc/lvzKF5BVgKbNquNuUcKfHU5CXmzkzgpbJbwOiI2JiHVdLTPXty72qyJ0lCwAN6Qeb2jsHT3UJUcvFKBDLyBVzNpbDFU0eTIpcMhQTdA+F66MJRBOt6JLO8mgW78awRgFqUFLGkACRobbV6FzRU=
+    on:
+      tags: true
+      repo: phovea/phovea_ui
