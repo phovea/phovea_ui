@@ -5,12 +5,11 @@
 /// <reference types="bootstrap" />
 import './_bootstrap';
 import * as $ from 'jquery';
-import {mixin} from 'phovea_core/src';
+import {mixin, randomId} from 'phovea_core/src';
 
 export class Dialog {
   private readonly $dialog: JQuery;
-  private bakKeyDownListener: (ev: KeyboardEvent) => any = null; // temporal for restoring an old keydown listener
-  static openDialogs: number = 0;
+  private bakKeyDownListener = null; // temporal for restoring an old keydown listener
 
   constructor(title: string, primaryBtnText = 'OK') {
     const dialog = document.createElement('div');
@@ -43,8 +42,6 @@ export class Dialog {
         this.hide();
       }
     };
-
-    ++Dialog.openDialogs;
     return this.$dialog.modal('show');
   }
 
@@ -75,10 +72,26 @@ export class Dialog {
   }
 
   destroy() {
-    if(--Dialog.openDialogs > 0) {
-      $('body').addClass('modal-open');
-    }
     return this.$dialog.remove();
+  }
+}
+
+export class FormDialog extends Dialog {
+  constructor(title: string, primaryBtnText = 'OK', private readonly formId = 'form' + randomId(5)) {
+    super(title, primaryBtnText);
+
+    this.body.innerHTML = `<form id="${formId}"></form>`;
+    const b = this.footer.querySelector('button');
+    b.setAttribute('type', 'submit');
+    b.setAttribute('form', formId);
+  }
+
+  get form() {
+    return this.body.querySelector('form');
+  }
+
+  getFormData() {
+    return new FormData(this.form);
   }
 }
 
