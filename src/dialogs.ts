@@ -66,7 +66,7 @@ export class Dialog {
     this.$dialog.on('hidden.bs.modal', callback);
   }
 
-  onSubmit(callback: () => void) {
+  onSubmit(callback: () => any) {
     return this.$dialog.find('.modal-footer > button').on('click', callback);
   }
 
@@ -100,7 +100,7 @@ export class FormDialog extends Dialog {
     return new FormData(this.form);
   }
 
-  onSubmit(callback: () => void) {
+  onSubmit(callback: () => boolean) {
     return this.$dialog.find('.modal-body > form').on('submit', callback);
   }
 }
