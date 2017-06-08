@@ -8,7 +8,7 @@ import * as $ from 'jquery';
 import {mixin, randomId} from 'phovea_core/src';
 
 export class Dialog {
-  private readonly $dialog: JQuery;
+  protected readonly $dialog: JQuery;
   private bakKeyDownListener: (ev: KeyboardEvent) => any = null; // temporal for restoring an old keydown listener
   static openDialogs: number = 0;
 
@@ -98,6 +98,10 @@ export class FormDialog extends Dialog {
 
   getFormData() {
     return new FormData(this.form);
+  }
+
+  onSubmit(callback: () => void) {
+    return this.$dialog.find('.modal-body > form').on('submit', callback);
   }
 }
 
