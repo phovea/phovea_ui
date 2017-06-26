@@ -303,7 +303,7 @@ export class AppHeader {
           title.innerHTML = metaData.name;
           content.innerHTML = `<p>${metaData.description}</p>
             <p>
-            <strong>Version</strong>: $\{metaData.version}
+            <strong>Version</strong>: ${metaData.version}
             </p>
             ${metaData.screenshot? `<img src="${metaData.screenshot}" class="center-block img-responsive img-thumbnail"/>` : ''}`;
         });
