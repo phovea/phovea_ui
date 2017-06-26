@@ -84,6 +84,10 @@ nav.navbar-inverse {
 
 // aboutDialog dialog that opens from a link in the header
 #headerAboutDialog {
+  .modal-title {
+    text-transform: capitalize;
+  }
+
   .caleydoInfo {
     margin-top: 15px;
     display: flex;
