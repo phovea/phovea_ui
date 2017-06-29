@@ -11,6 +11,7 @@ import {getAPIJSON} from 'phovea_core/src/ajax';
 import {mixin} from 'phovea_core/src/index';
 import * as $ from 'jquery';
 import buildBuildInfo from './buildInfo';
+import getMetaData from './metaData';
 
 /**
  * Defines a header link
@@ -227,13 +228,6 @@ export class AppHeader {
 
     this.options.mainMenu.forEach((l) => this.addMainMenu(l.name, l.action, l.href));
     this.options.rightMenu.forEach((l) => this.addRightMenu(l.name, l.action, l.href));
-
-    // TODO just on demand
-    // request last deployment data
-    const msg: any = await Promise.resolve(getAPIJSON(`/last_deployment`, {}));
-    if (msg.timestamp) {
-      this.aboutDialog.querySelector('.lastDeployment span').textContent = new Date(msg.timestamp).toUTCString();
-    }
   }
 
   addMainMenu(name: string, action: (event: MouseEvent) => any, href = '#') {
@@ -303,10 +297,15 @@ export class AppHeader {
     if(isVisible) {
       link.addEventListener('click', () => {
         // request last deployment data
-        Promise.resolve(getAPIJSON(`/last_deployment`, {})).then((msg) => {
-          if (msg.timestamp) {
-            this.aboutDialog.querySelector('.lastDeployment span').textContent = new Date(msg.timestamp).toUTCString();
-          }
+        const content = <HTMLElement>this.aboutDialog.querySelector('.metaData');
+        const title = <HTMLElement>this.aboutDialog.parentElement.querySelector('.modal-title');
+        getMetaData().then((metaData) => {
+          title.innerHTML = metaData.name;
+          content.innerHTML = `<p>${metaData.description}</p>
+            <p>
+            <strong>Version</strong>: ${metaData.version}
+            </p>
+            ${metaData.screenshot? `<img src="${metaData.screenshot}" class="center-block img-responsive img-thumbnail"/>` : ''}`;
         });
       });
     }
