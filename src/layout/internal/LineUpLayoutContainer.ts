@@ -1,5 +1,5 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {EOrientation, ILayoutContainer, ISize} from './interfaces';
+import {EOrientation, ILayoutContainer, ISize} from '../interfaces';
 
 export default class LineUpLayoutContainer extends AParentLayoutContainer {
   readonly minChildCount = 0;

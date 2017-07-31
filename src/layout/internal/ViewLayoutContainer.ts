@@ -1,4 +1,4 @@
-import {ILayoutContainer, ILayoutParentContainer, ISize, IView} from './interfaces';
+import {ILayoutContainer, ILayoutParentContainer, ISize, IView} from '../interfaces';
 import {ALayoutContainer} from './ALayoutContainer';
 
 export default class ViewLayoutContainer extends ALayoutContainer implements ILayoutContainer {

@@ -1,8 +1,8 @@
-import {ILayoutContainer, ILayoutParentContainer, ISize} from './interfaces';
+import {ILayoutContainer, ILayoutParentContainer, ISize} from '../interfaces';
 import {ALayoutContainer} from './ALayoutContainer';
 
 export abstract class AParentLayoutContainer extends ALayoutContainer implements ILayoutParentContainer {
-  private _parent: ILayoutParentContainer | null;
+  parent: ILayoutParentContainer | null;
   readonly node: HTMLElement;
   abstract readonly minChildCount: number;
   protected readonly _children: ILayoutContainer[] = [];
@@ -11,7 +11,7 @@ export abstract class AParentLayoutContainer extends ALayoutContainer implements
   constructor(document: Document, name: string) {
     super(document, name);
     this.node = document.createElement('main');
-    this.node.classList.add('phovea-layout', 'phovea-layout-root');
+    this.node.classList.add('phovea-layout');
   }
 
   forEach(callback: (child: ILayoutContainer, index: number) => void) {
@@ -48,19 +48,6 @@ export abstract class AParentLayoutContainer extends ALayoutContainer implements
 
   abstract get minSize(): ISize;
 
-  get parent() {
-    return this._parent;
-  }
-
-  set parent(parent: ILayoutParentContainer|null) {
-    this._parent = parent;
-    if (!parent) {
-      this.node.classList.add('phovea-layout-root');
-    } else {
-      this.node.classList.remove('phovea-layout-root');
-    }
-  }
-
   push(child: ILayoutContainer) {
     if (child.parent) {
       child.parent.remove(child);
@@ -73,6 +60,15 @@ export abstract class AParentLayoutContainer extends ALayoutContainer implements
   remove(child: ILayoutContainer) {
     child.parent = null;
     this._children.splice(this._children.indexOf(child), 1);
+    if (this.minChildCount > this.length && this.parent) {
+      if (this.length > 0) {
+        //remove and inline my children (just one since the remove will be called again
+        this.parent.push(this._children[0]);
+      } else {
+        //remove me
+        this.destroy();
+      }
+    }
     return true;
   }
 

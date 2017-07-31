@@ -1,46 +1,51 @@
 import {EOrientation, ILayoutContainer, isView, IView} from './interfaces';
-import ViewLayoutContainer, {HTMLView} from './ViewLayoutContainer';
-import SplitLayoutContainer from './SplitLayoutContainer';
-import LineUpLayoutContainer from './LineUpLayoutContainer';
-import TabbingLayoutContainer from './TabbingLayoutContainer';
+import ViewLayoutContainer, {HTMLView} from './internal/ViewLayoutContainer';
+import SplitLayoutContainer from './internal/SplitLayoutContainer';
+import LineUpLayoutContainer from './internal/LineUpLayoutContainer';
+import TabbingLayoutContainer from './internal/TabbingLayoutContainer';
+import RootLayoutContainer from './internal/RootLayoutContainer';
 
 
-interface IBuildAble {
-  build(doc?: Document);
+declare type IBuildAbleOrViewLike = ABuilder | HTMLElement | IView | string;
+
+function toBuilder(view: IBuildAbleOrViewLike): ABuilder {
+  if (view instanceof ABuilder) {
+    return view;
+  }
+  return new ViewBuilder(<HTMLElement | IView | string>view);
 }
 
-declare type IBuildAbleOrViewLike = IBuildAble|HTMLElement|IView|string;
-
-abstract class ABuilder implements IBuildAble {
-  protected _name: string = 'Container';
-  protected readonly children: IBuildAble[] = [];
-
-
-  constructor(children: IBuildAbleOrViewLike[]) {
-    children.forEach((c) => this.push(c));
-  }
+abstract class ABuilder {
+  protected _name: string = 'View';
 
   name(name: string) {
     this._name = name;
     return this;
   }
 
+  abstract build(root: RootLayoutContainer, doc: Document): ILayoutContainer;
+}
+
+abstract class AParentBuilder extends ABuilder {
+  protected readonly children: ABuilder[] = [];
+
+  constructor(children: IBuildAbleOrViewLike[]) {
+    super();
+    this._name = 'Container';
+    children.forEach((c) => this.push(c));
+  }
+
   push(view: IBuildAbleOrViewLike) {
-    if (typeof (<IBuildAble>view).build !== 'function') {
-      view = new ViewBuilder(<HTMLElement|IView|string>view);
-    }
-    this.children.push(<IBuildAble>view);
+    this.children.push(toBuilder(view));
     return this;
   }
 
-  protected buildChildren(doc: Document): ILayoutContainer[] {
-    return this.children.map((c) => c.build(doc));
+  protected buildChildren(root: RootLayoutContainer, doc: Document): ILayoutContainer[] {
+    return this.children.map((c) => c.build(root, doc));
   }
-
-  abstract build(doc?: Document): ILayoutContainer;
 }
 
-class SplitBuilder extends ABuilder {
+class SplitBuilder extends AParentBuilder {
   private _ratio: number = 0.5;
 
   constructor(private readonly orientation: EOrientation, ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike) {
@@ -53,8 +58,8 @@ class SplitBuilder extends ABuilder {
     return this;
   }
 
-  build(doc = document) {
-    const built = this.buildChildren(doc);
+  build(root: RootLayoutContainer, doc = document) {
+    const built = this.buildChildren(root, doc);
     console.assert(built.length >= 2);
     const r = new SplitLayoutContainer(doc, this._name, this.orientation, this._ratio, built[0], built[1]);
     built.slice(2).forEach((c) => r.push(c));
@@ -62,38 +67,31 @@ class SplitBuilder extends ABuilder {
   }
 }
 
-class LineUpBuilder extends ABuilder {
+class LineUpBuilder extends AParentBuilder {
 
   constructor(private readonly orientation: EOrientation, children: IBuildAbleOrViewLike[]) {
     super(children);
   }
 
-  build(doc = document) {
-    const built = this.buildChildren(doc);
+  build(root: RootLayoutContainer, doc = document) {
+    const built = this.buildChildren(root, doc);
     return new LineUpLayoutContainer(doc, this._name, this.orientation, ...built);
   }
 }
 
-class TabbingBuilder extends ABuilder {
-  build(doc = document) {
-    const built = this.buildChildren(doc);
+class TabbingBuilder extends AParentBuilder {
+  build(root: RootLayoutContainer, doc) {
+    const built = this.buildChildren(root, doc);
     return new TabbingLayoutContainer(doc, this._name, ...built);
   }
 }
 
-export class ViewBuilder implements IBuildAble {
-  protected _name: string = 'View';
-
+export class ViewBuilder extends ABuilder {
   constructor(private readonly view: string | IView | HTMLElement) {
-
+    super();
   }
 
-  name(name: string) {
-    this._name = name;
-    return this;
-  }
-
-  build(doc: Document = document): ILayoutContainer {
+  build(root: RootLayoutContainer, doc: Document): ILayoutContainer {
     if (typeof this.view === 'string') {
       //HTML
       const d = doc.createElement('article');
@@ -128,7 +126,13 @@ export function tabbing(...children: IBuildAbleOrViewLike[]): TabbingBuilder {
   return new TabbingBuilder(children);
 }
 
-
 export function view(view: string | IView | HTMLElement): ViewBuilder {
   return new ViewBuilder(view);
+}
+
+export function root(child: IBuildAbleOrViewLike, doc = document): ILayoutContainer {
+  const b = toBuilder(child);
+  const r = new RootLayoutContainer(doc);
+  r.setRoot(b.build(r, doc));
+  return r;
 }

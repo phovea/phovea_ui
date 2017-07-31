@@ -1,5 +1,5 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {EOrientation, ILayoutContainer, ISize} from './interfaces';
+import {EOrientation, ILayoutContainer, ISize} from '../interfaces';
 
 
 export default class SplitLayoutContainer extends AParentLayoutContainer {
@@ -25,8 +25,8 @@ export default class SplitLayoutContainer extends AParentLayoutContainer {
     });
 
     this.push(child1);
-    this._ratios.push(ratio);
     this.push(child2);
+    this.setRatio(0, ratio);
   }
 
   private isSeparator(elem: HTMLElement) {
@@ -37,20 +37,31 @@ export default class SplitLayoutContainer extends AParentLayoutContainer {
     const mouseMove = (evt: MouseEvent) => {
       const ratio = this.orientation === EOrientation.HORIZONTAL ? evt.x / this.node.offsetWidth : evt.y / this.node.offsetHeight;
       this.setRatio(index, ratio);
+      evt.stopPropagation();
+      evt.preventDefault();
     };
     const disable = (evt: MouseEvent) => {
+      if (evt.target !== evt.currentTarget && evt.type === 'mouseleave') {
+        return;
+      }
       this.node.removeEventListener('mousemove', mouseMove);
-      this.node.removeEventListener('mouseout', disable);
+      this.node.removeEventListener('mouseup', disable);
       this.node.removeEventListener('mouseleave', disable);
     };
     this.node.addEventListener('mousemove', mouseMove);
-    this.node.addEventListener('mouseout', mouseMove);
-    this.node.addEventListener('mouseleave', mouseMove);
+    this.node.addEventListener('mouseup', disable);
+    this.node.addEventListener('mouseleave', disable);
   }
 
   setRatio(index: number, ratio: number) {
-    //TODO
-    console.log(index, ratio);
+    this._ratios[index] = ratio;
+    this.updateRatios();
+  }
+
+  private updateRatios() {
+    const sum = this._ratios.reduce((a, r) => a + r, 0);
+    const act = this._ratios.concat([1 - sum]).map((r) => Math.round(r * 100));
+    this.forEach((c, i) => c.node.parentElement.style.flex = `${act[i]} ${act[i]} auto`);
   }
 
   get ratios() {

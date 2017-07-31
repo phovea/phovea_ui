@@ -1,5 +1,5 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {ILayoutContainer, ISize} from './interfaces';
+import {ILayoutContainer, ISize} from '../interfaces';
 
 
 export default class TabbingLayoutContainer extends AParentLayoutContainer {
