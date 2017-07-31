@@ -4,43 +4,46 @@ import SplitLayoutContainer from './SplitLayoutContainer';
 import LineUpLayoutContainer from './LineUpLayoutContainer';
 import TabbingLayoutContainer from './TabbingLayoutContainer';
 
-type IBuildAble = (ABuilder | string | IView | HTMLElement);
 
-abstract class ABuilder {
-  constructor(protected readonly children: IBuildAble[]) {
+interface IBuildAble {
+  build(doc?: Document);
+}
 
+declare type IBuildAbleOrViewLike = IBuildAble|HTMLElement|IView|string;
+
+abstract class ABuilder implements IBuildAble {
+  protected _name: string = 'Container';
+  protected readonly children: IBuildAble[] = [];
+
+
+  constructor(children: IBuildAbleOrViewLike[]) {
+    children.forEach((c) => this.push(c));
   }
 
-  push(view: IBuildAble) {
-    this.children.push(view);
+  name(name: string) {
+    this._name = name;
+    return this;
+  }
+
+  push(view: IBuildAbleOrViewLike) {
+    if (typeof (<IBuildAble>view).build !== 'function') {
+      view = new ViewBuilder(<HTMLElement|IView|string>view);
+    }
+    this.children.push(<IBuildAble>view);
     return this;
   }
 
   protected buildChildren(doc: Document): ILayoutContainer[] {
-    return this.children.map((c) => {
-      if (typeof c === 'string') {
-        const node = doc.createElement('article');
-        node.innerHTML = c;
-        return new ViewLayoutContainer(new HTMLView(node));
-      }
-      if (c instanceof ABuilder) {
-        return c.build(doc);
-      }
-      if (isView(<IView>c)) {
-        return new ViewLayoutContainer(<IView>c);
-      }
-      //HTMLElement only option remaining
-      return new ViewLayoutContainer(new HTMLView(<HTMLElement>c));
-    });
+    return this.children.map((c) => c.build(doc));
   }
 
   abstract build(doc?: Document): ILayoutContainer;
 }
 
-export class SplitBuilder extends ABuilder {
+class SplitBuilder extends ABuilder {
   private _ratio: number = 0.5;
 
-  constructor(private readonly orientation: EOrientation, ratio: number, left: IBuildAble, right: IBuildAble) {
+  constructor(private readonly orientation: EOrientation, ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike) {
     super([left, right]);
     this._ratio = ratio;
   }
@@ -53,48 +56,79 @@ export class SplitBuilder extends ABuilder {
   build(doc = document) {
     const built = this.buildChildren(doc);
     console.assert(built.length >= 2);
-    const r = new SplitLayoutContainer(doc, this.orientation, this._ratio, built[0], built[1]);
+    const r = new SplitLayoutContainer(doc, this._name, this.orientation, this._ratio, built[0], built[1]);
     built.slice(2).forEach((c) => r.push(c));
     return r;
   }
 }
 
-export class LineUpBuilder extends ABuilder {
+class LineUpBuilder extends ABuilder {
 
-  constructor(private readonly orientation: EOrientation, children: IBuildAble[]) {
+  constructor(private readonly orientation: EOrientation, children: IBuildAbleOrViewLike[]) {
     super(children);
   }
 
   build(doc = document) {
     const built = this.buildChildren(doc);
-    return new LineUpLayoutContainer(doc, this.orientation, ...built);
+    return new LineUpLayoutContainer(doc, this._name, this.orientation, ...built);
   }
 }
 
-export class TabbingBuilder extends ABuilder {
+class TabbingBuilder extends ABuilder {
   build(doc = document) {
     const built = this.buildChildren(doc);
-    return new TabbingLayoutContainer(doc, ...built);
+    return new TabbingLayoutContainer(doc, this._name, ...built);
   }
 }
 
-export function horizontalSplit(ratio: number, left: IBuildAble, right: IBuildAble): SplitBuilder {
+export class ViewBuilder implements IBuildAble {
+  protected _name: string = 'View';
+
+  constructor(private readonly view: string | IView | HTMLElement) {
+
+  }
+
+  name(name: string) {
+    this._name = name;
+    return this;
+  }
+
+  build(doc: Document = document): ILayoutContainer {
+    if (typeof this.view === 'string') {
+      //HTML
+      const d = doc.createElement('article');
+      d.innerHTML = this.view;
+      return new ViewLayoutContainer(this._name, new HTMLView(d));
+    }
+    if (isView(<IView>this.view)) {
+      return new ViewLayoutContainer(this._name, <IView>this.view);
+    }
+    //HTMLElement
+    return new ViewLayoutContainer(this._name, new HTMLView(<HTMLElement>this.view));
+  }
+}
+
+export function horizontalSplit(ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike): SplitBuilder {
   return new SplitBuilder(EOrientation.HORIZONTAL, ratio, left, right);
 }
 
-export function verticalSplit(ratio: number, left: IBuildAble, right: IBuildAble): SplitBuilder {
+export function verticalSplit(ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike): SplitBuilder {
   return new SplitBuilder(EOrientation.VERTICAL, ratio, left, right);
 }
 
-export function horizontalLineUp(...children: IBuildAble[]): LineUpBuilder {
+export function horizontalLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder {
   return new LineUpBuilder(EOrientation.HORIZONTAL, children);
 }
 
-export function verticalLineUp(...children: IBuildAble[]): LineUpBuilder {
+export function verticalLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder {
   return new LineUpBuilder(EOrientation.VERTICAL, children);
 }
 
-export function tabbing(...children: IBuildAble[]): TabbingBuilder {
+export function tabbing(...children: IBuildAbleOrViewLike[]): TabbingBuilder {
   return new TabbingBuilder(children);
 }
 
+
+export function view(view: string | IView | HTMLElement): ViewBuilder {
+  return new ViewBuilder(view);
+}

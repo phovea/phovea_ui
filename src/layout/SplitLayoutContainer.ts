@@ -11,8 +11,8 @@ export default class SplitLayoutContainer extends AParentLayoutContainer {
 
   private readonly _ratios: number[] = [];
 
-  constructor(document: Document, private readonly orientation: EOrientation, ratio: number, child1: ILayoutContainer, child2: ILayoutContainer) {
-    super(document);
+  constructor(document: Document, name: string, private readonly orientation: EOrientation, ratio: number, child1: ILayoutContainer, child2: ILayoutContainer) {
+    super(document, name);
     console.assert(orientation != null);
     this.node.dataset.layout = 'split';
     this.node.dataset.orientation = orientation === EOrientation.HORIZONTAL ? 'h' : 'v';
@@ -48,15 +48,28 @@ export default class SplitLayoutContainer extends AParentLayoutContainer {
     if (this.length > 0) {
       this.node.insertAdjacentHTML('beforeend', SplitLayoutContainer.SEPARATOR);
     }
-    this.node.appendChild(child.node);
+    this.node.appendChild(wrap(child));
     return super.push(child);
   }
 
   remove(child: ILayoutContainer) {
+    const wrapper = child.node.parentElement;
     //in case of the first one use the next one since the next child is going to be the first one
-    const separator = child.node.previousElementSibling || child.node.nextElementSibling;
+    const separator = wrapper.previousElementSibling || wrapper.nextElementSibling;
     separator.remove();
-    child.node.remove();
+    wrapper.remove();
     return super.remove(child);
   }
+
+  protected updateChildName(child: ILayoutContainer, name: string) {
+    //update header
+    child.node.parentElement.firstElementChild.textContent = name;
+  }
+}
+
+function wrap(child: ILayoutContainer) {
+  const s = child.node.ownerDocument.createElement('section');
+  s.innerHTML = `<header>${child.name}</header><main></main>`;
+  s.lastElementChild.appendChild(child.node);
+  return s;
 }

@@ -13,6 +13,8 @@ export interface ILayoutContainer extends IEventHandler {
 
   readonly minSize: ISize;
 
+  name: string;
+
   resized(): void;
 
   destroy(): void;
@@ -32,7 +34,6 @@ export interface ILayoutParentContainer extends ILayoutContainer, Iterable<ILayo
   remove(child: ILayoutContainer): boolean;
 
   readonly minChildCount: number;
-
 }
 
 export interface IView {

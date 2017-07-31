@@ -1,22 +1,37 @@
 import {ILayoutContainer, ILayoutParentContainer, ISize} from './interfaces';
-import {EventHandler} from 'phovea_core/src/event';
+import {EventHandler, IEvent} from 'phovea_core/src/event';
 
 export abstract class AParentLayoutContainer extends EventHandler implements ILayoutParentContainer {
-  parent: ILayoutParentContainer | null;
+  private _parent: ILayoutParentContainer | null;
   readonly node: HTMLElement;
   abstract readonly minChildCount: number;
   protected readonly _children: ILayoutContainer[] = [];
   private _visible: boolean;
+  private _name: string = 'Container';
 
-  constructor(document: Document) {
+  private onNameChanged = (event: IEvent, oldName: string, newName: string) => this.updateChildName(<ILayoutContainer>event.target, newName);
+
+  constructor(document: Document, name: string) {
     super();
     console.assert(document != null);
+    this._name = name;
     this.node = document.createElement('section');
-    this.node.classList.add('phovea-layout');
+    this.node.classList.add('phovea-layout', 'phovea-layout-root');
   }
 
   forEach(callback: (child: ILayoutContainer, index: number) => void) {
     this._children.forEach(callback);
+  }
+
+  get name() {
+    return this._name;
+  }
+
+  set name(name: string) {
+    if (this._name === name) {
+      return;
+    }
+    this.fire('nameChanged', this._name, this._name = name);
   }
 
   get children() {
@@ -49,17 +64,36 @@ export abstract class AParentLayoutContainer extends EventHandler implements ILa
 
   abstract get minSize(): ISize;
 
+  get parent() {
+    return this._parent;
+  }
+
+  set parent(parent: ILayoutParentContainer|null) {
+    this._parent = parent;
+    if (!parent) {
+      this.node.classList.add('phovea-layout-root');
+    } else {
+      this.node.classList.remove('phovea-layout-root');
+    }
+  }
+
+  protected updateChildName(child: ILayoutContainer, name: string) {
+    //hook
+  }
+
   push(child: ILayoutContainer) {
     if (child.parent) {
       child.parent.remove(child);
     }
     child.parent = this;
+    child.on('nameChanged', this.onNameChanged);
     this._children.push(child);
     return true;
   }
 
   remove(child: ILayoutContainer) {
     child.parent = null;
+    child.off('nameChanged', this.onNameChanged);
     this._children.splice(this._children.indexOf(child), 1);
     return true;
   }

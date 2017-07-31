@@ -4,8 +4,8 @@ import {EOrientation, ILayoutContainer, ISize} from './interfaces';
 export default class LineUpLayoutContainer extends AParentLayoutContainer {
   readonly minChildCount = 0;
 
-  constructor(document: Document, private readonly orientation: EOrientation, ...children: ILayoutContainer[]) {
-    super(document);
+  constructor(document: Document, name: string, private readonly orientation: EOrientation, ...children: ILayoutContainer[]) {
+    super(document, name);
     console.assert(orientation != null);
 
     this.node.dataset.layout = 'lineup';
@@ -30,14 +30,24 @@ export default class LineUpLayoutContainer extends AParentLayoutContainer {
     }
   }
   push(child: ILayoutContainer) {
-    const r = super.push(child);
-    this.node.appendChild(child.node);
-    return r;
+   this.node.appendChild(wrap(child));
+    return super.push(child);
   }
 
   remove(child: ILayoutContainer) {
-    child.parent = null;
-    child.node.remove();
-    return true;
+    child.node.parentElement.remove();
+    return super.remove(child);
   }
+
+  protected updateChildName(child: ILayoutContainer, name: string) {
+    //update header
+    child.node.parentElement.firstElementChild.textContent = name;
+  }
+}
+
+function wrap(child: ILayoutContainer) {
+  const s = child.node.ownerDocument.createElement('section');
+  s.innerHTML = `<header>${child.name}</header><main></main>`;
+  s.lastElementChild.appendChild(child.node);
+  return s;
 }

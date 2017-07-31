@@ -6,8 +6,8 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer {
   readonly minChildCount = 0;
   private _active: ILayoutContainer | null = null;
 
-  constructor(document: Document, ...children: ILayoutContainer[]) {
-    super(document);
+  constructor(document: Document, name: string, ...children: ILayoutContainer[]) {
+    super(document, name);
     this.node.dataset.layout = 'tabbing';
     this.node.innerHTML = `<header></header><main></main>`;
     children.forEach((d) => this.push(d));
@@ -35,19 +35,25 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer {
 
   push(child: ILayoutContainer) {
     const r = super.push(child);
+    child.visible = child === this.active;
+    this.header.insertAdjacentHTML('beforeend', `<section>${child.name}</section>`);
+    this.header.lastElementChild.addEventListener('click', () => {
+      this.active = child;
+    });
+    this.main.appendChild(child.node);
+
     if (this.active === null) {
       this.active = child;
     }
-    child.visible = child === this.active;
-    this.main.appendChild(child.node);
     return r;
   }
 
   remove(child: ILayoutContainer) {
+    const index = this._children.indexOf(child);
     if (this.active === child) {
-      const index = this._children.indexOf(child);
-      this.active = this.length === 1 ? null : (index === 0 ? this._children[1] : this._children[index - 1]);
+      this.active = this.length === 1 ? null : (index === 0 ? this._children[1] : this._children[index - 1]!);
     }
+    this.header.children[index]!.remove();
     child.node.remove();
     return super.remove(child);
   }
@@ -63,9 +69,11 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer {
   private activeChanged(oldActive: ILayoutContainer | null, newActive: ILayoutContainer | null) {
     if (oldActive) {
       oldActive.node.classList.remove('active');
+      oldActive.visible = false;
     }
     if (newActive) {
       newActive.node.classList.add('active');
+      newActive.visible = this.visible;
     }
   }
 
