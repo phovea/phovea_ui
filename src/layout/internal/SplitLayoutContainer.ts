@@ -87,18 +87,23 @@ export default class SplitLayoutContainer extends AParentLayoutContainer {
   }
 
   push(child: ILayoutContainer) {
-    if (this.length > 0) {
+    const r = super.push(child);
+    if (this.length > 1) {
       this.node.insertAdjacentHTML('beforeend', SplitLayoutContainer.SEPARATOR);
     }
     this.node.appendChild(wrap(child));
-    return super.push(child);
+    return r;
   }
 
   remove(child: ILayoutContainer) {
     const wrapper = child.node.parentElement;
     //in case of the first one use the next one since the next child is going to be the first one
     const separator = wrapper.previousElementSibling || wrapper.nextElementSibling;
-    separator.remove();
+    if (separator) {
+      separator.remove();
+    }
+    child.node.remove();
+    child.header.remove();
     wrapper.remove();
     return super.remove(child);
   }

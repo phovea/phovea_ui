@@ -29,9 +29,11 @@ export default class LineUpLayoutContainer extends AParentLayoutContainer {
       }
     }
   }
+
   push(child: ILayoutContainer) {
-   this.node.appendChild(wrap(child));
-    return super.push(child);
+    const r = super.push(child);
+    this.node.appendChild(wrap(child));
+    return r;
   }
 
   remove(child: ILayoutContainer) {

@@ -7,9 +7,14 @@
 
   flex: 1 1 auto;
   display: flex;
-  flex-direction: row;
+  align-items: stretch;
+  flex-direction: column;
 
-  > * {
+  > header {
+    flex: 0 0 auto;
+    background-color: $phovea_layout_view_header;
+  }
+  > main {
     flex: 1 1 auto;
   }
 }

@@ -15,6 +15,7 @@ export abstract class ALayoutContainer extends EventHandler {
         <span>${this.name}</span>`;
     this.header.firstElementChild.addEventListener('click', (evt) => {
       evt.preventDefault();
+      evt.stopPropagation();
       this.destroy();
     });
   }

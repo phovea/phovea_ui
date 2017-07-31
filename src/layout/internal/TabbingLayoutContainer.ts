@@ -18,7 +18,7 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer {
   }
 
   set active(child: ILayoutContainer) {
-    console.assert(this._children.indexOf(child) >= 0);
+    console.assert(!child || this._children.indexOf(child) >= 0);
     if (this._active === child) {
       return;
     }
