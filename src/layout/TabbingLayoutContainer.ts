@@ -68,10 +68,14 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer {
 
   private activeChanged(oldActive: ILayoutContainer | null, newActive: ILayoutContainer | null) {
     if (oldActive) {
+      const index = this._children.indexOf(oldActive);
+      this.header.children[index]!.classList.remove('active');
       oldActive.node.classList.remove('active');
       oldActive.visible = false;
     }
     if (newActive) {
+      const index = this._children.indexOf(newActive);
+      this.header.children[index]!.classList.add('active');
       newActive.node.classList.add('active');
       newActive.visible = this.visible;
     }

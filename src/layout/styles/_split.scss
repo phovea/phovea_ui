@@ -1,0 +1,75 @@
+@import './vars';
+
+&[data-layout=split] {
+  display: flex;
+  align-items: stretch;
+
+  &[data-orientation=h] {
+    flex-direction: row;
+
+    > [data-layout=separator] {
+      cursor: ew-resize;
+
+      &::before {
+        width: 100%;
+        height: 20px;
+        border-left: 1px solid $phovea_layout_separator_hints;
+        border-right: 1px solid $phovea_layout_separator_hints;
+      }
+    }
+  }
+
+  &[data-orientation=v] {
+    flex-direction: column;
+
+    > [data-layout=separator] {
+      cursor: ns-resize;
+      flex-direction: column;
+
+      &::before {
+        width: 20px;
+        height: 100%;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+      }
+    }
+  }
+
+  > * {
+    flex: 1 1 auto;
+  }
+
+  > [data-layout=separator] {
+    flex: 0 0 5px;
+    background: $phovea_layout_separator_color;
+    display: flex;
+    align-items: center;
+
+    &::before {
+      content: '';
+      margin: 1px;
+    }
+  }
+}
+
+&[data-layout=lineup] {
+  &[data-orientation=h] {
+    > * {
+      display: inline-block;
+    }
+    > *[data-layout=split] {
+      display: inline-flex;
+    }
+  }
+
+  &[data-orientation=v] {
+
+  }
+}
+
+&[data-layout=lineup],
+&[data-layout=split] {
+  > section > header {
+    background-color: $phovea_layout_view_header;
+  }
+}
