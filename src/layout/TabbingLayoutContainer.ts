@@ -10,7 +10,6 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer {
     super(document, name);
     this.node.dataset.layout = 'tabbing';
     this.header.dataset.layout= 'tabbing';
-    this.header.innerHTML=`<div>${name}</div>`;
     children.forEach((d) => this.push(d));
   }
 
@@ -24,10 +23,6 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer {
       return;
     }
     this.activeChanged(this._active, this._active = child);
-  }
-
-  protected updateName(name: string) {
-    this.header.firstElementChild.textContent = name;
   }
 
   push(child: ILayoutContainer) {

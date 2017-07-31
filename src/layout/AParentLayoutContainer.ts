@@ -1,45 +1,21 @@
 import {ILayoutContainer, ILayoutParentContainer, ISize} from './interfaces';
-import {EventHandler, IEvent} from 'phovea_core/src/event';
+import {ALayoutContainer} from './ALayoutContainer';
 
-export abstract class AParentLayoutContainer extends EventHandler implements ILayoutParentContainer {
+export abstract class AParentLayoutContainer extends ALayoutContainer implements ILayoutParentContainer {
   private _parent: ILayoutParentContainer | null;
   readonly node: HTMLElement;
   abstract readonly minChildCount: number;
   protected readonly _children: ILayoutContainer[] = [];
   private _visible: boolean;
-  private _name: string = 'Container';
-
-  readonly header: HTMLElement;
 
   constructor(document: Document, name: string) {
-    super();
-    console.assert(document != null);
-    this._name = name;
+    super(document, name);
     this.node = document.createElement('main');
     this.node.classList.add('phovea-layout', 'phovea-layout-root');
-
-    this.header = document.createElement('header');
-    this.header.innerText = name;
   }
 
   forEach(callback: (child: ILayoutContainer, index: number) => void) {
     this._children.forEach(callback);
-  }
-
-  get name() {
-    return this._name;
-  }
-
-  set name(name: string) {
-    if (this._name === name) {
-      return;
-    }
-    this._name = name;
-    this.updateName(name);
-  }
-
-  protected updateName(name: string) {
-    this.header.innerText = name;
   }
 
   get children() {
@@ -105,6 +81,9 @@ export abstract class AParentLayoutContainer extends EventHandler implements ILa
   }
 
   destroy() {
+    if (this.parent) {
+      this.parent.remove(this);
+    }
     this.forEach((d) => d.destroy());
   }
 }

@@ -1,14 +1,11 @@
 import {ILayoutContainer, ILayoutParentContainer, ISize, IView} from './interfaces';
-import {EventHandler} from 'phovea_core/src/event';
+import {ALayoutContainer} from './ALayoutContainer';
 
-export default class ViewLayoutContainer extends EventHandler implements ILayoutContainer {
+export default class ViewLayoutContainer extends ALayoutContainer implements ILayoutContainer {
   parent: ILayoutParentContainer | null;
-  private _name: string;
-  readonly header: HTMLElement;
 
   constructor(name: string, public readonly view: IView) {
-    super();
-    this._name = name;
+    super(view.node.ownerDocument, name);
     const min = this.minSize;
     if (min[0] > 0) {
       view.node.style.minWidth = `${min[0]}px`;
@@ -16,20 +13,6 @@ export default class ViewLayoutContainer extends EventHandler implements ILayout
     if (min[1] > 0) {
       view.node.style.minHeight = `${min[1]}px`;
     }
-    this.header = view.node.ownerDocument.createElement('header');
-    this.header.innerText = this.name;
-  }
-
-  get name() {
-    return this._name;
-  }
-
-  set name(name: string) {
-    if (this._name === name) {
-      return;
-    }
-    this._name = name;
-    this.header.innerText = this.name;
   }
 
   get visible() {
@@ -53,13 +36,16 @@ export default class ViewLayoutContainer extends EventHandler implements ILayout
   }
 
   destroy() {
+    if (this.parent) {
+      this.parent.remove(this);
+    }
     this.view.destroy();
   }
 }
 
 export class HTMLView implements IView {
   readonly minSize: ISize = [0, 0];
-  visible: boolean =  true;
+  visible: boolean = true;
 
   constructor(public readonly node: HTMLElement) {
 
