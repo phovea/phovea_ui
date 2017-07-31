@@ -19,7 +19,7 @@
 
 header[data-layout=tabbing] {
   flex: 0 0 auto;
-  border-bottom: 1px solid $phovea_layout_view_header;
+  border-bottom: 1px solid $phovea_layout_active_tab_header;
 
   > :first-child {
     display: inline-block;

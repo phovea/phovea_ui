@@ -2,7 +2,6 @@ import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {EOrientation, ILayoutContainer, ISize} from './interfaces';
 
 
-
 export default class SplitLayoutContainer extends AParentLayoutContainer {
   private static readonly SEPARATOR = `<div data-layout="separator"/>`;
   private static readonly SEPARATOR_WIDTH = 5;
@@ -17,9 +16,41 @@ export default class SplitLayoutContainer extends AParentLayoutContainer {
     this.node.dataset.layout = 'split';
     this.node.dataset.orientation = orientation === EOrientation.HORIZONTAL ? 'h' : 'v';
 
+    this.node.addEventListener('mousedown', (evt) => {
+      if (this.isSeparator(<HTMLElement>evt.target)) {
+        //dragging
+        const index = Math.floor(Array.from(this.node.children).indexOf(<HTMLElement>evt.target) / 2);
+        this.enableDragging(index);
+      }
+    });
+
     this.push(child1);
     this._ratios.push(ratio);
     this.push(child2);
+  }
+
+  private isSeparator(elem: HTMLElement) {
+    return elem.parentElement === this.node && elem.dataset.layout === 'separator';
+  }
+
+  private enableDragging(index: number) {
+    const mouseMove = (evt: MouseEvent) => {
+      const ratio = this.orientation === EOrientation.HORIZONTAL ? evt.x / this.node.offsetWidth : evt.y / this.node.offsetHeight;
+      this.setRatio(index, ratio);
+    };
+    const disable = (evt: MouseEvent) => {
+      this.node.removeEventListener('mousemove', mouseMove);
+      this.node.removeEventListener('mouseout', disable);
+      this.node.removeEventListener('mouseleave', disable);
+    };
+    this.node.addEventListener('mousemove', mouseMove);
+    this.node.addEventListener('mouseout', mouseMove);
+    this.node.addEventListener('mouseleave', mouseMove);
+  }
+
+  setRatio(index: number, ratio: number) {
+    //TODO
+    console.log(index, ratio);
   }
 
   get ratios() {

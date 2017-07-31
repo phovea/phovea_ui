@@ -49,6 +49,10 @@
       content: '';
       margin: 1px;
     }
+
+    &:hover {
+      background: darken($phovea_layout_separator_color, 20%);
+    }
   }
 }
 
