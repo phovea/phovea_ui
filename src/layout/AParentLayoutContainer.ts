@@ -9,14 +9,17 @@ export abstract class AParentLayoutContainer extends EventHandler implements ILa
   private _visible: boolean;
   private _name: string = 'Container';
 
-  private onNameChanged = (event: IEvent, oldName: string, newName: string) => this.updateChildName(<ILayoutContainer>event.target, newName);
+  readonly header: HTMLElement;
 
   constructor(document: Document, name: string) {
     super();
     console.assert(document != null);
     this._name = name;
-    this.node = document.createElement('section');
+    this.node = document.createElement('main');
     this.node.classList.add('phovea-layout', 'phovea-layout-root');
+
+    this.header = document.createElement('header');
+    this.header.innerText = name;
   }
 
   forEach(callback: (child: ILayoutContainer, index: number) => void) {
@@ -31,7 +34,12 @@ export abstract class AParentLayoutContainer extends EventHandler implements ILa
     if (this._name === name) {
       return;
     }
-    this.fire('nameChanged', this._name, this._name = name);
+    this._name = name;
+    this.updateName(name);
+  }
+
+  protected updateName(name: string) {
+    this.header.innerText = name;
   }
 
   get children() {
@@ -77,23 +85,17 @@ export abstract class AParentLayoutContainer extends EventHandler implements ILa
     }
   }
 
-  protected updateChildName(child: ILayoutContainer, name: string) {
-    //hook
-  }
-
   push(child: ILayoutContainer) {
     if (child.parent) {
       child.parent.remove(child);
     }
     child.parent = this;
-    child.on('nameChanged', this.onNameChanged);
     this._children.push(child);
     return true;
   }
 
   remove(child: ILayoutContainer) {
     child.parent = null;
-    child.off('nameChanged', this.onNameChanged);
     this._children.splice(this._children.indexOf(child), 1);
     return true;
   }

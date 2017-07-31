@@ -10,6 +10,7 @@ export enum EOrientation {
 export interface ILayoutContainer extends IEventHandler {
   parent: ILayoutParentContainer | null;
   readonly node: HTMLElement;
+  readonly header: HTMLElement;
 
   readonly minSize: ISize;
 

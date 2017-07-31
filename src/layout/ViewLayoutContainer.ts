@@ -4,6 +4,7 @@ import {EventHandler} from 'phovea_core/src/event';
 export default class ViewLayoutContainer extends EventHandler implements ILayoutContainer {
   parent: ILayoutParentContainer | null;
   private _name: string;
+  readonly header: HTMLElement;
 
   constructor(name: string, public readonly view: IView) {
     super();
@@ -15,6 +16,8 @@ export default class ViewLayoutContainer extends EventHandler implements ILayout
     if (min[1] > 0) {
       view.node.style.minHeight = `${min[1]}px`;
     }
+    this.header = view.node.ownerDocument.createElement('header');
+    this.header.innerText = this.name;
   }
 
   get name() {
@@ -25,7 +28,8 @@ export default class ViewLayoutContainer extends EventHandler implements ILayout
     if (this._name === name) {
       return;
     }
-    this.fire('nameChanged', this._name, this._name = name);
+    this._name = name;
+    this.header.innerText = this.name;
   }
 
   get visible() {

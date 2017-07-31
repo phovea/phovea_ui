@@ -38,16 +38,11 @@ export default class LineUpLayoutContainer extends AParentLayoutContainer {
     child.node.parentElement.remove();
     return super.remove(child);
   }
-
-  protected updateChildName(child: ILayoutContainer, name: string) {
-    //update header
-    child.node.parentElement.firstElementChild.textContent = name;
-  }
 }
 
 function wrap(child: ILayoutContainer) {
   const s = child.node.ownerDocument.createElement('section');
-  s.innerHTML = `<header>${child.name}</header><main></main>`;
-  s.lastElementChild.appendChild(child.node);
+  s.appendChild(child.header);
+  s.appendChild(child.node);
   return s;
 }

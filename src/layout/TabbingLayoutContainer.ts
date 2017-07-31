@@ -9,16 +9,9 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer {
   constructor(document: Document, name: string, ...children: ILayoutContainer[]) {
     super(document, name);
     this.node.dataset.layout = 'tabbing';
-    this.node.innerHTML = `<header></header><main></main>`;
+    this.header.dataset.layout= 'tabbing';
+    this.header.innerHTML=`<div>${name}</div>`;
     children.forEach((d) => this.push(d));
-  }
-
-  private get header() {
-    return <HTMLElement>this.node.firstElementChild;
-  }
-
-  private get main() {
-    return <HTMLElement>this.node.lastElementChild;
   }
 
   get active() {
@@ -33,14 +26,18 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer {
     this.activeChanged(this._active, this._active = child);
   }
 
+  protected updateName(name: string) {
+    this.header.firstElementChild.textContent = name;
+  }
+
   push(child: ILayoutContainer) {
     const r = super.push(child);
     child.visible = child === this.active;
-    this.header.insertAdjacentHTML('beforeend', `<section>${child.name}</section>`);
+    this.header.appendChild(child.header);
     this.header.lastElementChild.addEventListener('click', () => {
       this.active = child;
     });
-    this.main.appendChild(child.node);
+    this.node.appendChild(child.node);
 
     if (this.active === null) {
       this.active = child;
@@ -49,11 +46,11 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer {
   }
 
   remove(child: ILayoutContainer) {
-    const index = this._children.indexOf(child);
     if (this.active === child) {
+      const index = this._children.indexOf(child);
       this.active = this.length === 1 ? null : (index === 0 ? this._children[1] : this._children[index - 1]!);
     }
-    this.header.children[index]!.remove();
+    child.header.remove();
     child.node.remove();
     return super.remove(child);
   }
@@ -68,14 +65,12 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer {
 
   private activeChanged(oldActive: ILayoutContainer | null, newActive: ILayoutContainer | null) {
     if (oldActive) {
-      const index = this._children.indexOf(oldActive);
-      this.header.children[index]!.classList.remove('active');
+      oldActive.header.classList.remove('active');
       oldActive.node.classList.remove('active');
       oldActive.visible = false;
     }
     if (newActive) {
-      const index = this._children.indexOf(newActive);
-      this.header.children[index]!.classList.add('active');
+      newActive.header.classList.add('active');
       newActive.node.classList.add('active');
       newActive.visible = this.visible;
     }
