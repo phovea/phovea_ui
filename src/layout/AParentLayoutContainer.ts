@@ -1,6 +1,7 @@
 import {ILayoutContainer, ILayoutParentContainer, ISize} from './interfaces';
+import {EventHandler} from 'phovea_core/src/event';
 
-export abstract class AParentLayoutContainer implements ILayoutParentContainer {
+export abstract class AParentLayoutContainer extends EventHandler implements ILayoutParentContainer {
   parent: ILayoutParentContainer | null;
   readonly node: HTMLElement;
   abstract readonly minChildCount: number;
@@ -8,8 +9,10 @@ export abstract class AParentLayoutContainer implements ILayoutParentContainer {
   private _visible: boolean;
 
   constructor(document: Document) {
-    console.assert(document);
+    super();
+    console.assert(document != null);
     this.node = document.createElement('section');
+    this.node.classList.add('phovea-layout');
   }
 
   forEach(callback: (child: ILayoutContainer, index: number) => void) {
@@ -51,14 +54,12 @@ export abstract class AParentLayoutContainer implements ILayoutParentContainer {
       child.parent.remove(child);
     }
     child.parent = this;
-    this.node.appendChild(child.node);
     this._children.push(child);
     return true;
   }
 
   remove(child: ILayoutContainer) {
     child.parent = null;
-    this.node.removeChild(child.node);
     this._children.splice(this._children.indexOf(child), 1);
     return true;
   }

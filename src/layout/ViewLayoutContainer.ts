@@ -1,10 +1,18 @@
-import {ILayoutContainer, ILayoutParentContainer, IView} from './interfaces';
+import {ILayoutContainer, ILayoutParentContainer, ISize, IView} from './interfaces';
+import {EventHandler} from 'phovea_core/src/event';
 
-export default class ViewLayoutContainer implements ILayoutContainer {
+export default class ViewLayoutContainer extends EventHandler implements ILayoutContainer {
   parent: ILayoutParentContainer | null;
 
   constructor(public readonly view: IView) {
-
+    super();
+    const min = this.minSize;
+    if (min[0] > 0) {
+      view.node.style.minWidth = `${min[0]}px`;
+    }
+    if (min[1] > 0) {
+      view.node.style.minHeight = `${min[1]}px`;
+    }
   }
 
   get visible() {
@@ -29,5 +37,22 @@ export default class ViewLayoutContainer implements ILayoutContainer {
 
   destroy() {
     this.view.destroy();
+  }
+}
+
+export class HTMLView implements IView {
+  readonly minSize: ISize = [0, 0];
+  visible: boolean =  true;
+
+  constructor(public readonly node: HTMLElement) {
+
+  }
+
+  destroy() {
+    //nothing to do
+  }
+
+  resized() {
+    //nothing to do
   }
 }

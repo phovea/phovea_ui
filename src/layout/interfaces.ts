@@ -1,7 +1,13 @@
+import {IEventHandler} from 'phovea_core/src/event';
 
 export declare type ISize = [number, number];
 
-export interface ILayoutContainer {
+export enum EOrientation {
+  HORIZONTAL,
+  VERTICAL
+}
+
+export interface ILayoutContainer extends IEventHandler {
   parent: ILayoutParentContainer | null;
   readonly node: HTMLElement;
 
@@ -19,7 +25,7 @@ export interface ILayoutParentContainer extends ILayoutContainer, Iterable<ILayo
 
   readonly length: number;
 
-  forEach(callback: (child: ILayoutContainer, index: number)=>void): void;
+  forEach(callback: (child: ILayoutContainer, index: number) => void): void;
 
   push(child: ILayoutContainer): boolean;
 
@@ -38,4 +44,11 @@ export interface IView {
   destroy(): void;
 
   resized(): void;
+}
+
+export function isView(view: IView & object) {
+  const base = typeof view.visible === 'boolean' && typeof Array.isArray(view.minSize) && typeof view.destroy === 'function' && typeof view.resized === 'function' && view.hasOwnProperty('node');
+  // ILayoutContainer
+  const not = view.hasOwnProperty('parent');
+  return base && !not;
 }

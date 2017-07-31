@@ -1,0 +1,65 @@
+
+.phovea-layout {
+  .hidden {
+    display: none;
+  }
+  &[data-layout=tabbing] {
+    display: flex;
+    flex-direction: row;
+
+    > header {
+      flex: 0 0 auto;
+    }
+    > main {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: row;
+
+      > * {
+        flex: 1 1 auto;
+      }
+
+      > *:not(.active) {
+        display: none;
+      }
+    }
+  }
+
+  &[data-layout=split] {
+    display: flex;
+    align-items: stretch;
+
+    &[data-orientation=h] {
+      flex-direction: row;
+    }
+
+    &[data-orientation=v] {
+      flex-direction: column;
+    }
+
+    > * {
+      flex: 1 1 auto;
+    }
+
+    > [data-layout=separator] {
+      flex: 0 0 5px;
+      background: #e1e1e1;
+
+    }
+  }
+
+  &[data-layout=lineup] {
+    &[data-orientation=h] {
+      > * {
+        display: inline-block;
+      }
+      > *[data-layout=split] {
+        display: inline-flex;
+      }
+    }
+
+    &[data-orientation=v] {
+
+    }
+  }
+}

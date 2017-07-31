@@ -9,7 +9,16 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer {
   constructor(document: Document, ...children: ILayoutContainer[]) {
     super(document);
     this.node.dataset.layout = 'tabbing';
+    this.node.innerHTML = `<header></header><main></main>`;
     children.forEach((d) => this.push(d));
+  }
+
+  private get header() {
+    return <HTMLElement>this.node.firstElementChild;
+  }
+
+  private get main() {
+    return <HTMLElement>this.node.lastElementChild;
   }
 
   get active() {
@@ -30,6 +39,7 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer {
       this.active = child;
     }
     child.visible = child === this.active;
+    this.main.appendChild(child.node);
     return r;
   }
 
@@ -38,6 +48,7 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer {
       const index = this._children.indexOf(child);
       this.active = this.length === 1 ? null : (index === 0 ? this._children[1] : this._children[index - 1]);
     }
+    child.node.remove();
     return super.remove(child);
   }
 
@@ -51,10 +62,10 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer {
 
   private activeChanged(oldActive: ILayoutContainer | null, newActive: ILayoutContainer | null) {
     if (oldActive) {
-      oldActive.visible = false;
+      oldActive.node.classList.remove('active');
     }
     if (newActive) {
-      newActive.visible = true;
+      newActive.node.classList.add('active');
     }
   }
 
