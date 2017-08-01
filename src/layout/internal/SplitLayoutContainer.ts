@@ -41,7 +41,7 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
   }
 
   get hideAbleHeader() {
-    return !this.options.closeAble;
+    return this.options.fixed;
   }
 
   private isSeparator(elem: HTMLElement) {

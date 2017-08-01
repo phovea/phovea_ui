@@ -3,7 +3,7 @@ import {ILayoutDump} from 'phovea_ui/src/layout/interfaces';
 
 export interface ILayoutContainerOption {
   name: string;
-  readonly closeAble: boolean;
+  readonly fixed: boolean;
 }
 
 export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends EventHandler {
@@ -16,7 +16,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     this.options = Object.assign(this.defaultOptions(), options);
     this.header = document.createElement('header');
     this.header.innerHTML = `
-        <button type="button" class="close${!this.options.closeAble ? ' hidden' : ''}" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <button type="button" class="close${this.options.fixed ? ' hidden' : ''}" aria-label="Close"><span aria-hidden="true">×</span></button>
         <span>${this.name}</span>`;
     this.header.firstElementChild.addEventListener('click', (evt) => {
       evt.preventDefault();
@@ -32,7 +32,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
   protected defaultOptions(): T {
     return <any>{
       name: 'View',
-      closeAble: true,
+      fixed: true,
       hideAbleHeader: false
     };
   }
@@ -59,14 +59,14 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     return {
       type: '',
       name: this.name,
-      closeAble: this.options.closeAble
+      fixed: this.options.fixed
     };
   }
 
   static restoreOptions(dump: ILayoutDump): Partial<ILayoutContainerOption> {
     return {
       name: dump.name,
-      closeAble: dump.closeAble
+      fixed: dump.fixed
     };
   }
 }

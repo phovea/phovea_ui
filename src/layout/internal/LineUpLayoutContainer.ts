@@ -24,7 +24,7 @@ export default class LineUpLayoutContainer extends AParentLayoutContainer<ILineU
   }
 
   get hideAbleHeader() {
-    return !this.options.closeAble;
+    return this.options.fixed;
   }
 
   get minSize() {

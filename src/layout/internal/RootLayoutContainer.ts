@@ -9,7 +9,7 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
   constructor(document: Document) {
     super(document, {
       name: '',
-      closeAble: false
+      fixed: true
     });
     this.node.dataset.layout = 'root';
   }

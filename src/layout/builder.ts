@@ -18,7 +18,7 @@ function toBuilder(view: IBuildAbleOrViewLike): ABuilder {
 
 abstract class ABuilder {
   protected _name: string = 'View';
-  protected _closeAble: boolean = true;
+  protected _fixed: boolean = true;
 
   name(name: string) {
     this._name = name;
@@ -30,14 +30,14 @@ abstract class ABuilder {
    * @return {ABuilder}
    */
   fixed() {
-    this._closeAble = false;
+    this._fixed = true;
     return this;
   }
 
   protected buildOptions(): Partial<ILayoutContainerOption> {
     return {
       name: this._name,
-      closeAble: this._closeAble
+      fixed: this._fixed
     };
   }
 
