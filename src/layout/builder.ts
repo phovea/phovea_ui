@@ -2,7 +2,7 @@ import {EOrientation, ILayoutContainer, ILayoutDump, isView, IView} from './inte
 import ViewLayoutContainer, {HTMLView} from './internal/ViewLayoutContainer';
 import SplitLayoutContainer, {ISplitLayoutContainerOptions} from './internal/SplitLayoutContainer';
 import LineUpLayoutContainer, {ILineUpLayoutContainerOptions} from './internal/LineUpLayoutContainer';
-import TabbingLayoutContainer from './internal/TabbingLayoutContainer';
+import TabbingLayoutContainer, {ITabbingLayoutContainerOptions} from './internal/TabbingLayoutContainer';
 import RootLayoutContainer from './internal/RootLayoutContainer';
 import {ILayoutContainerOption} from 'phovea_ui/src/layout/internal/ALayoutContainer';
 
@@ -18,7 +18,7 @@ function toBuilder(view: IBuildAbleOrViewLike): ABuilder {
 
 abstract class ABuilder {
   protected _name: string = 'View';
-  protected _fixed: boolean = true;
+  protected _fixed: boolean = false;
 
   name(name: string) {
     this._name = name;
@@ -114,13 +114,26 @@ class LineUpBuilder extends AParentBuilder {
 }
 
 class TabbingBuilder extends AParentBuilder {
+  private _active: number|null = null;
+
   push(view: IBuildAbleOrViewLike) {
     return super.push(view);
   }
 
+  active(view: IBuildAbleOrViewLike) {
+    this._active = this.children.length;
+    return super.push(view);
+  }
+
+  protected buildOptions(): Partial<ITabbingLayoutContainerOptions> {
+    return Object.assign({
+      active: this._active
+    }, super.buildOptions());
+  }
+
   build(root: RootLayoutContainer, doc) {
     const built = this.buildChildren(root, doc);
-    return new TabbingLayoutContainer(doc, this._name, ...built);
+    return new TabbingLayoutContainer(doc, this.buildOptions(), ...built);
   }
 }
 

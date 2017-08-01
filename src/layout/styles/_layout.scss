@@ -3,12 +3,7 @@
     display: none;
   }
 
-  header {
-    > button.close {
-      margin: 0 3px;
-    }
-  }
-
+  @import './header';
   @import './root';
   @import './tabbing';
   @import './split';

@@ -23,6 +23,11 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
       evt.stopPropagation();
       this.destroy();
     });
+    if (!this.options.fixed) {
+      //draggable
+      this.header.draggable = true;
+      //TODO
+    }
   }
 
   get hideAbleHeader() {
@@ -32,7 +37,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
   protected defaultOptions(): T {
     return <any>{
       name: 'View',
-      fixed: true,
+      fixed: false,
       hideAbleHeader: false
     };
   }

@@ -1,0 +1,13 @@
+
+header {
+  &[draggable] {
+    cursor: pointer;
+    cursor: -moz-grab;
+    cursor: -webkit-grab; // indicate grab able
+  }
+
+  > button.close {
+    margin: 0 3px;
+    cursor: pointer;
+  }
+}
