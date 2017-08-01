@@ -1,6 +1,7 @@
 import {EventHandler} from 'phovea_core/src/event';
 import {ILayoutDump} from 'phovea_ui/src/layout/interfaces';
-import {uniqueId, dragAble} from 'phovea_core/src';
+import {dragAble, uniqueId} from 'phovea_core/src';
+import {AParentLayoutContainer} from './AParentLayoutContainer';
 
 export interface ILayoutContainerOption {
   name: string;
@@ -8,7 +9,8 @@ export interface ILayoutContainerOption {
 }
 
 export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends EventHandler {
-  static readonly MIME_TYPE =  'text/x-phovea-layout-container';
+  parent: AParentLayoutContainer<any> | null = null;
+  static readonly MIME_TYPE = 'text/x-phovea-layout-container';
 
   protected readonly options: T;
   readonly header: HTMLElement;
@@ -34,14 +36,14 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     //drag
     if (!this.options.fixed) {
       dragAble(this.header, () => {
-      return {
-        effectAllowed: 'move',
-        data: {
-          'text/plain': this.name,
-          [ALayoutContainer.MIME_TYPE]: String(this.id)
-        }
-      };
-    }, true);
+        return {
+          effectAllowed: 'move',
+          data: {
+            'text/plain': this.name,
+            [ALayoutContainer.MIME_TYPE]: String(this.id)
+          }
+        };
+      }, true);
     }
   }
 
@@ -91,7 +93,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
   }
 
   find(id: number) {
-    return this.id === id ? this: null;
+    return this.id === id ? this : null;
   }
 }
 

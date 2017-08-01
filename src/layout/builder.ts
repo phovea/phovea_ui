@@ -1,4 +1,4 @@
-import {EOrientation, ILayoutContainer, ILayoutDump, isView, IView} from './interfaces';
+import {EOrientation, ILayoutContainer, ILayoutDump, IView} from './interfaces';
 import ViewLayoutContainer, {HTMLView} from './internal/ViewLayoutContainer';
 import SplitLayoutContainer, {ISplitLayoutContainerOptions} from './internal/SplitLayoutContainer';
 import LineUpLayoutContainer, {ILineUpLayoutContainerOptions} from './internal/LineUpLayoutContainer';
@@ -114,7 +114,7 @@ class LineUpBuilder extends AParentBuilder {
 }
 
 class TabbingBuilder extends AParentBuilder {
-  private _active: number|null = null;
+  private _active: number | null = null;
 
   push(view: IBuildAbleOrViewLike) {
     return super.push(view);
@@ -194,7 +194,7 @@ export function restore(dump: ILayoutDump, restoreView: (referenceId: number) =>
     case 'tabbing':
       return TabbingLayoutContainer.restore(dump, restorer, doc);
     case 'view':
-      return ViewLayoutContainer.restore(dump, restorer, restoreView, doc);
+      return ViewLayoutContainer.restore(dump, restoreView, doc);
     default:
       throw new Error(`invalid type: ${dump.type}`);
   }

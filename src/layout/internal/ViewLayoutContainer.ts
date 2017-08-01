@@ -1,10 +1,8 @@
-import {ILayoutContainer, ILayoutDump, ILayoutParentContainer, ISize, IView} from '../interfaces';
+import {ILayoutContainer, ILayoutDump, ISize, IView} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
 export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContainerOption> implements ILayoutContainer {
-  parent: ILayoutParentContainer | null = null;
-
-  constructor( public readonly view: IView, options: Partial<ILayoutContainerOption>) {
+  constructor(public readonly view: IView, options: Partial<ILayoutContainerOption>) {
     super(view.node.ownerDocument, options);
     const min = this.minSize;
     if (min[0] > 0) {
@@ -56,7 +54,7 @@ export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContain
   }
 
 
-  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump)=>ILayoutContainer, restoreView: (referenceId: number)=>IView, doc: Document) {
+  static restore(dump: ILayoutDump, restoreView: (referenceId: number) => IView, doc: Document) {
     const view = dump.html ? new HTMLView(dump.html, doc) : restoreView(dump.view);
     return new ViewLayoutContainer(view, ALayoutContainer.restoreOptions(dump));
   }

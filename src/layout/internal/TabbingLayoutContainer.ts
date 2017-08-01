@@ -128,7 +128,7 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
     });
   }
 
-  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump)=>ILayoutContainer, doc: Document) {
+  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump) => ILayoutContainer, doc: Document) {
     const r = new TabbingLayoutContainer(doc, ALayoutContainer.restoreOptions(dump));
     dump.children.forEach((d) => r.push(restore(d)));
     if (r.active != null) {

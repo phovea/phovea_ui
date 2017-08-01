@@ -27,13 +27,14 @@ export interface ILayoutContainer extends IEventHandler, IHasUniqueId {
 
   persist(): ILayoutDump;
 
-  find(id: number): ILayoutContainer|null;
+  find(id: number): ILayoutContainer | null;
 }
 
 export interface ILayoutDump {
   type: string;
   name: string;
   children?: ILayoutDump[];
+
   [key: string]: any;
 }
 

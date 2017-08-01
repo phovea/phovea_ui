@@ -108,7 +108,7 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
 
   push(child: ILayoutContainer, index: number = -1, ratio: number = 0) {
     const r = super.push(child);
-    if (index < 0 || index >= (this._children.length -1)) {
+    if (index < 0 || index >= (this._children.length - 1)) {
       this._ratios.push(ratio);
     } else {
       //assume we are in the replace mode and compute the missing ratio
@@ -120,7 +120,7 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
 
   protected addedChild(child: ILayoutContainer, index: number) {
     super.addedChild(child, index);
-    if (index < 0 || index >= (this.length -1)) {
+    if (index < 0 || index >= (this.length - 1)) {
       //+1 since we already changed the children
       this.node.appendChild(wrap(child));
     } else if (index === 0) {
@@ -147,7 +147,7 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
     const ratio = this._ratios[index];
     this.takeDownChild(child);
     this.setupChild(replacement);
-    this._children.splice(index, 1 ,replacement);
+    this._children.splice(index, 1, replacement);
     this.addedChild(replacement, index);
     this.updateRatios();
     return true;
@@ -182,7 +182,7 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
     });
   }
 
-  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump)=>ILayoutContainer, doc: Document) {
+  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump) => ILayoutContainer, doc: Document) {
     console.assert(dump.children.length >= 2);
     const ratios = dump.ratios;
     const options = Object.assign(ALayoutContainer.restoreOptions(dump), {

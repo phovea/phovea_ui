@@ -46,7 +46,7 @@ export default class LineUpLayoutContainer extends AParentLayoutContainer<ILineU
 
   protected addedChild(child: ILayoutContainer, index: number) {
     super.addedChild(child, index);
-    if (index < 0 || index >= (this._children.length -1)) {
+    if (index < 0 || index >= (this._children.length - 1)) {
       //+1 since we already chanded the children
       this.node.appendChild(wrap(child));
     } else {
@@ -66,7 +66,7 @@ export default class LineUpLayoutContainer extends AParentLayoutContainer<ILineU
     });
   }
 
-  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump)=>ILayoutContainer, doc: Document) {
+  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump) => ILayoutContainer, doc: Document) {
     const options = Object.assign(ALayoutContainer.restoreOptions(dump), {
       orientation: EOrientation[<string>dump.orientation]
     });

@@ -49,7 +49,7 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     });
   }
 
-  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump)=>ILayoutContainer, doc: Document) {
+  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump) => ILayoutContainer, doc: Document) {
     const r = new RootLayoutContainer(doc);
     if (dump.children && dump.children.length > 0) {
       r.setRoot(restore(dump.children[0]));
