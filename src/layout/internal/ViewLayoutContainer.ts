@@ -2,8 +2,15 @@ import {ILayoutContainer, ILayoutDump, ISize, IView} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
 export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContainerOption> implements ILayoutContainer {
+
+  readonly node: HTMLElement;
+
   constructor(public readonly view: IView, options: Partial<ILayoutContainerOption>) {
     super(view.node.ownerDocument, options);
+    this.node = view.node.ownerDocument.createElement('article');
+    this.node.dataset.layout = 'view';
+    this.node.appendChild(view.node);
+
     const min = this.minSize;
     if (min[0] > 0) {
       view.node.style.minWidth = `${min[0]}px`;
@@ -23,10 +30,6 @@ export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContain
 
   get minSize() {
     return this.view.minSize;
-  }
-
-  get node() {
-    return this.view.node;
   }
 
   resized() {
@@ -67,7 +70,7 @@ export class HTMLView implements IView {
 
   constructor(html: string, doc: Document) {
     //HTML
-    this.node = doc.createElement('article');
+    this.node = doc.createElement('div');
     this.node.innerHTML = html;
   }
 
