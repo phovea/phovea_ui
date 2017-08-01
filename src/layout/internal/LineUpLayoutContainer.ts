@@ -44,22 +44,26 @@ export default class LineUpLayoutContainer extends AParentLayoutContainer<ILineU
     }
   }
 
-  push(child: ILayoutContainer) {
-    const r = super.push(child);
-    this.node.appendChild(wrap(child));
-    return r;
+  protected addedChild(child: ILayoutContainer, index: number) {
+    super.addedChild(child, index);
+    if (index < 0 || index >= (this._children.length -1)) {
+      //+1 since we already chanded the children
+      this.node.appendChild(wrap(child));
+    } else {
+      this.node.insertBefore(wrap(child), this.node.children[index]);
+    }
   }
 
-  remove(child: ILayoutContainer) {
-    child.node.parentElement.remove();
-    return super.remove(child);
+  protected takeDownChild(child: ILayoutContainer) {
+    this.node.removeChild(child.node.parentElement);
+    super.takeDownChild(child);
   }
 
   persist() {
     return Object.assign(super.persist(), {
       type: 'lineup',
       orientation: EOrientation[this.options.orientation]
-      });
+    });
   }
 
   static restore(dump: ILayoutDump, restore: (dump: ILayoutDump)=>ILayoutContainer, doc: Document) {

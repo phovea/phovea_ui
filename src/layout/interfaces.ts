@@ -46,6 +46,8 @@ export interface ILayoutParentContainer extends ILayoutContainer, Iterable<ILayo
 
   push(child: ILayoutContainer): boolean;
 
+  replace(child: ILayoutContainer, replacement: ILayoutContainer): boolean;
+
   remove(child: ILayoutContainer): boolean;
 
   readonly minChildCount: number;

@@ -54,29 +54,44 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
     this.activeChanged(this._active, this._active = child);
   }
 
-  push(child: ILayoutContainer) {
-    const r = super.push(child);
+  protected addedChild(child: ILayoutContainer, index: number) {
+    super.addedChild(child, index);
     child.visible = child === this.active;
-    this.header.appendChild(child.header);
-    this.header.lastElementChild.addEventListener('click', () => {
+
+    child.header.onclick = () => {
       this.active = child;
-    });
-    this.node.appendChild(child.node);
+    };
+    if (index < 0 || index >= this.length - 1) {
+      this.header.appendChild(child.header);
+      this.node.appendChild(child.node);
+    } else {
+      this.header.insertBefore(child.header, this._children[index + 1].header);
+      this.node.insertBefore(child.node, this._children[index + 1].node);
+    }
 
     if (this.active === null) {
       this.active = child;
     }
-    return r;
   }
 
-  remove(child: ILayoutContainer) {
+  replace(child: ILayoutContainer, replacement: ILayoutContainer) {
+    const wasActive = child === this.active;
+    super.replace(child, replacement);
+    if (wasActive) {
+      this.active = replacement;
+    }
+    return true;
+  }
+
+  protected takeDownChild(child: ILayoutContainer) {
     if (this.active === child) {
       const index = this._children.indexOf(child);
       this.active = this.length === 1 ? null : (index === 0 ? this._children[1] : this._children[index - 1]!);
     }
-    child.header.remove();
-    child.node.remove();
-    return super.remove(child);
+    child.header.onclick = null;
+    this.header.removeChild(child.header);
+    this.node.removeChild(child.node);
+    super.takeDownChild(child);
   }
 
   get minSize() {

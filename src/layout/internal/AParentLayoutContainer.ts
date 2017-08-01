@@ -56,28 +56,56 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
 
   abstract get minSize(): ISize;
 
-  push(child: ILayoutContainer) {
+  push(child: ILayoutContainer, index: number = -1) {
+    this.setupChild(child);
+    if (index >= this._children.length || index < 0) {
+      index = this._children.length;
+      this._children.push(child);
+    } else {
+      this._children.splice(index, 0, child);
+    }
+    this.addedChild(child, index);
+    return true;
+  }
+
+  protected setupChild(child: ILayoutContainer) {
     if (child.parent) {
       child.parent.remove(child);
     }
     child.parent = this;
-    this._children.push(child);
+  }
+
+  protected addedChild(_child: ILayoutContainer, index: number) {
+    //hook
+  }
+
+  replace(child: ILayoutContainer, replacement: ILayoutContainer) {
+    const index = this._children.indexOf(child);
+    console.assert(index >= 0);
+
+    this.takeDownChild(child);
+    this.setupChild(replacement);
+    this._children.splice(index, 1 ,replacement);
+    this.addedChild(replacement, index);
     return true;
   }
 
   remove(child: ILayoutContainer) {
-    child.parent = null;
+    this.takeDownChild(child);
     this._children.splice(this._children.indexOf(child), 1);
     if (this.minChildCount > this.length && this.parent) {
-      if (this.length > 0) {
+      if (this.length > 1) {
         //remove and inline my children (just one since the remove will be called again
-        this.parent.push(this._children[0]);
+        this.parent.push(this._children[1]);
       } else {
-        //remove me
-        this.destroy();
+        this.parent.replace(this, this._children[0]);
       }
     }
     return true;
+  }
+
+  protected takeDownChild(child: ILayoutContainer) {
+    child.parent = null;
   }
 
   resized() {

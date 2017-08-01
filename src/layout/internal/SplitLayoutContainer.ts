@@ -30,8 +30,8 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
       }
     });
 
-    this.push(child1, ratio);
-    this.push(child2, 1 - ratio);
+    this.push(child1, -1, ratio);
+    this.push(child2, -1, 1 - ratio);
   }
 
   defaultOptions() {
@@ -106,18 +106,54 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
     }
   }
 
-  push(child: ILayoutContainer, ratio: number = 0) {
+  push(child: ILayoutContainer, index: number = -1, ratio: number = 0) {
     const r = super.push(child);
-    if (this.length > 1) {
-      this.node.insertAdjacentHTML('beforeend', SplitLayoutContainer.SEPARATOR);
+    if (index < 0 || index >= (this._children.length -1)) {
+      this._ratios.push(ratio);
+    } else {
+      //assume we are in the replace mode and compute the missing ratio
+      this._ratios.splice(index, 0, ratio);
     }
-    this.node.appendChild(wrap(child));
-    this._ratios.push(ratio);
     this.updateRatios();
     return r;
   }
 
-  remove(child: ILayoutContainer) {
+  protected addedChild(child: ILayoutContainer, index: number) {
+    super.addedChild(child, index);
+    if (index < 0 || index >= (this.length -1)) {
+      //+1 since we already changed the children
+      this.node.appendChild(wrap(child));
+    } else if (index === 0) {
+      //assume we are in the replace mode
+      this.node.insertBefore(wrap(child), this.node.firstChild);
+    } else {
+      //assume we are in the repalce mode -> consider separator
+      this.node.insertBefore(wrap(child), this._children[index + 1].node.previousSibling);
+    }
+    if (this.length > 1) {
+      this.node.insertAdjacentHTML('beforeend', SplitLayoutContainer.SEPARATOR);
+      const separator = this.node.lastElementChild;
+      if (index > 0) {
+        this.node.insertBefore(separator, child.node.parentElement);
+      } else {
+        this.node.insertBefore(separator, child.node.parentElement.nextSibling);
+      }
+    }
+  }
+
+  replace(child: ILayoutContainer, replacement: ILayoutContainer) {
+    const index = this._children.indexOf(child);
+    console.assert(index >= 0);
+    const ratio = this._ratios[index];
+    this.takeDownChild(child);
+    this.setupChild(replacement);
+    this._children.splice(index, 1 ,replacement);
+    this.addedChild(replacement, index);
+    this.updateRatios();
+    return true;
+  }
+
+  protected takeDownChild(child: ILayoutContainer) {
     const wrapper = child.node.parentElement;
     //in case of the first one use the next one since the next child is going to be the first one
     const separator = wrapper.previousElementSibling || wrapper.nextElementSibling;
@@ -127,6 +163,10 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
     child.node.remove();
     child.header.remove();
     wrapper.remove();
+    super.takeDownChild(child);
+  }
+
+  remove(child: ILayoutContainer) {
     const index = this._children.indexOf(child);
     this._ratios.splice(index, 1);
     const r = super.remove(child);

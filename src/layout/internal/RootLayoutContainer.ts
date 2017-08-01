@@ -26,20 +26,21 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     return this._children[0].minSize;
   }
 
-  push(child: ILayoutContainer) {
-    const r = super.push(child);
+  protected addedChild(child: ILayoutContainer, index: number) {
+    super.addedChild(child, index);
     if (child instanceof TabbingLayoutContainer) {
       //need the header
       this.node.appendChild(child.header);
     }
     this.node.appendChild(child.node);
-    return r;
   }
 
-  remove(child: ILayoutContainer) {
-    child.header.remove();
-    child.node.remove();
-    return super.remove(child);
+  protected takeDownChild(child: ILayoutContainer) {
+    if (child instanceof TabbingLayoutContainer) {
+      this.node.removeChild(child.header);
+    }
+    this.node.removeChild(child.node);
+    super.takeDownChild(child);
   }
 
   persist() {
