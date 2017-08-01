@@ -1,4 +1,4 @@
-import {ILayoutContainer, ILayoutParentContainer, ISize} from '../interfaces';
+import {ILayoutContainer, ILayoutDump, ILayoutParentContainer, ISize} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
 export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> extends ALayoutContainer<T> implements ILayoutParentContainer {
@@ -81,6 +81,12 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
       this.parent.remove(this);
     }
     this.forEach((d) => d.destroy());
+  }
+
+  persist(): ILayoutDump {
+    return Object.assign(super.persist(), {
+      children: this._children.map((d) => d.persist())
+    });
   }
 }
 

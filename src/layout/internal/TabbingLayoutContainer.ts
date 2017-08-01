@@ -1,17 +1,30 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {ILayoutContainer, ISize} from '../interfaces';
-import {ILayoutContainerOption} from 'phovea_ui/src/layout/internal/ALayoutContainer';
+import {ILayoutContainer, ILayoutDump, ISize} from '../interfaces';
+import {ALayoutContainer, ILayoutContainerOption} from 'phovea_ui/src/layout/internal/ALayoutContainer';
 
 
-export default class TabbingLayoutContainer extends AParentLayoutContainer<ILayoutContainerOption> {
+export interface ITabbingLayoutContainerOptions extends ILayoutContainerOption {
+  readonly active: number;
+}
+
+export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayoutContainerOptions> {
   readonly minChildCount = 0;
   private _active: ILayoutContainer | null = null;
 
-  constructor(document: Document, options: Partial<ILayoutContainerOption>, ...children: ILayoutContainer[]) {
+  constructor(document: Document, options: Partial<ITabbingLayoutContainerOptions>, ...children: ILayoutContainer[]) {
     super(document, options);
     this.node.dataset.layout = 'tabbing';
-    this.header.dataset.layout= 'tabbing';
+    this.header.dataset.layout = 'tabbing';
     children.forEach((d) => this.push(d));
+    if (this.options.active != null && this.length >= this.options.active) {
+      this.active = this._children[this.options.active];
+    }
+  }
+
+  protected defaultOptions(): ITabbingLayoutContainerOptions {
+    return Object.assign(super.defaultOptions(), {
+      active: null
+    });
   }
 
   get active() {
@@ -76,5 +89,21 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ILayo
     if (this.active) {
       this.active.visible = visible;
     }
+  }
+
+  persist() {
+    return Object.assign(super.persist(), {
+      type: 'tabbing',
+      active: this._active ? this._children.indexOf(this._active) : null
+    });
+  }
+
+  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump)=>ILayoutContainer, doc: Document) {
+    const r = new TabbingLayoutContainer(doc, ALayoutContainer.restoreOptions(dump));
+    dump.children.forEach((d) => r.push(restore(d)));
+    if (r.active != null) {
+      r.active = r.children[<number>dump.active];
+    }
+    return r;
   }
 }

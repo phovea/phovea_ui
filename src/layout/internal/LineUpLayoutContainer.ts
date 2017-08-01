@@ -1,6 +1,6 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {EOrientation, ILayoutContainer, ISize} from '../interfaces';
-import {ILayoutContainerOption} from 'phovea_ui/src/layout/internal/ALayoutContainer';
+import {EOrientation, ILayoutContainer, ILayoutDump, ISize} from '../interfaces';
+import {ALayoutContainer, ILayoutContainerOption} from 'phovea_ui/src/layout/internal/ALayoutContainer';
 
 export interface ILineUpLayoutContainerOptions extends ILayoutContainerOption {
   readonly orientation: EOrientation;
@@ -18,9 +18,13 @@ export default class LineUpLayoutContainer extends AParentLayoutContainer<ILineU
   }
 
   defaultOptions() {
-    return Object.assign({
+    return Object.assign(super.defaultOptions(), {
       orientation: EOrientation.HORIZONTAL
-    }, super.defaultOptions());
+    });
+  }
+
+  get hideAbleHeader() {
+    return !this.options.closeAble;
   }
 
   get minSize() {
@@ -50,11 +54,29 @@ export default class LineUpLayoutContainer extends AParentLayoutContainer<ILineU
     child.node.parentElement.remove();
     return super.remove(child);
   }
+
+  persist() {
+    return Object.assign(super.persist(), {
+      type: 'lineup',
+      orientation: EOrientation[this.options.orientation]
+      });
+  }
+
+  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump)=>ILayoutContainer, doc: Document) {
+    const options = Object.assign(ALayoutContainer.restoreOptions(dump), {
+      orientation: EOrientation[<string>dump.orientation]
+    });
+    const r = new LineUpLayoutContainer(doc, options);
+    dump.children.forEach((d) => r.push(restore(d)));
+    return r;
+  }
 }
 
 function wrap(child: ILayoutContainer) {
   const s = child.node.ownerDocument.createElement('section');
-  s.appendChild(child.header);
+  if (!child.hideAbleHeader) {
+    s.appendChild(child.header);
+  }
   s.appendChild(child.node);
   return s;
 }

@@ -1,4 +1,4 @@
-import {EOrientation, ILayoutContainer, isView, IView} from './interfaces';
+import {EOrientation, ILayoutContainer, ILayoutDump, isView, IView} from './interfaces';
 import ViewLayoutContainer, {HTMLView} from './internal/ViewLayoutContainer';
 import SplitLayoutContainer, {ISplitLayoutContainerOptions} from './internal/SplitLayoutContainer';
 import LineUpLayoutContainer, {ILineUpLayoutContainerOptions} from './internal/LineUpLayoutContainer';
@@ -7,13 +7,13 @@ import RootLayoutContainer from './internal/RootLayoutContainer';
 import {ILayoutContainerOption} from 'phovea_ui/src/layout/internal/ALayoutContainer';
 
 
-declare type IBuildAbleOrViewLike = ABuilder | HTMLElement | IView | string;
+declare type IBuildAbleOrViewLike = ABuilder | IView | string;
 
 function toBuilder(view: IBuildAbleOrViewLike): ABuilder {
   if (view instanceof ABuilder) {
     return view;
   }
-  return new ViewBuilder(<HTMLElement | IView | string>view);
+  return new ViewBuilder(<IView | string>view);
 }
 
 abstract class ABuilder {
@@ -34,7 +34,7 @@ abstract class ABuilder {
     return this;
   }
 
-  protected buildOptions(): ILayoutContainerOption {
+  protected buildOptions(): Partial<ILayoutContainerOption> {
     return {
       name: this._name,
       closeAble: this._closeAble
@@ -53,7 +53,7 @@ abstract class AParentBuilder extends ABuilder {
     children.forEach((c) => this.push(c));
   }
 
-  push(view: IBuildAbleOrViewLike) {
+  protected push(view: IBuildAbleOrViewLike) {
     this.children.push(toBuilder(view));
     return this;
   }
@@ -76,7 +76,7 @@ class SplitBuilder extends AParentBuilder {
     return this;
   }
 
-  protected buildOptions(): ISplitLayoutContainerOptions {
+  protected buildOptions(): Partial<ISplitLayoutContainerOptions> {
     return Object.assign({
       orientation: this.orientation
     }, super.buildOptions());
@@ -97,7 +97,11 @@ class LineUpBuilder extends AParentBuilder {
     super(children);
   }
 
-  protected buildOptions(): ILineUpLayoutContainerOptions {
+  push(view: IBuildAbleOrViewLike) {
+    return super.push(view);
+  }
+
+  protected buildOptions(): Partial<ILineUpLayoutContainerOptions> {
     return Object.assign({
       orientation: this.orientation
     }, super.buildOptions());
@@ -110,6 +114,10 @@ class LineUpBuilder extends AParentBuilder {
 }
 
 class TabbingBuilder extends AParentBuilder {
+  push(view: IBuildAbleOrViewLike) {
+    return super.push(view);
+  }
+
   build(root: RootLayoutContainer, doc) {
     const built = this.buildChildren(root, doc);
     return new TabbingLayoutContainer(doc, this._name, ...built);
@@ -124,16 +132,9 @@ export class ViewBuilder extends ABuilder {
   build(root: RootLayoutContainer, doc: Document): ILayoutContainer {
     const options = this.buildOptions();
     if (typeof this.view === 'string') {
-      //HTML
-      const d = doc.createElement('article');
-      d.innerHTML = this.view;
-      return new ViewLayoutContainer(new HTMLView(d), options);
+      return new ViewLayoutContainer(new HTMLView(this.view, doc), options);
     }
-    if (isView(<IView>this.view)) {
-      return new ViewLayoutContainer(<IView>this.view, options);
-    }
-    //HTMLElement
-    return new ViewLayoutContainer(new HTMLView(<HTMLElement>this.view), options);
+    return new ViewLayoutContainer(<IView>this.view, options);
   }
 }
 
@@ -166,4 +167,22 @@ export function root(child: IBuildAbleOrViewLike, doc = document): ILayoutContai
   const r = new RootLayoutContainer(doc);
   r.setRoot(b.build(r, doc));
   return r;
+}
+
+export function restore(dump: ILayoutDump, restoreView: (referenceId: number) => IView, doc = document): ILayoutContainer {
+  const restorer = (d: ILayoutDump) => restore(d, restoreView, doc);
+  switch (dump.type) {
+    case 'root':
+      return RootLayoutContainer.restore(dump, restorer, doc);
+    case 'split':
+      return SplitLayoutContainer.restore(dump, restorer, doc);
+    case 'lineup':
+      return LineUpLayoutContainer.restore(dump, restorer, doc);
+    case 'tabbing':
+      return TabbingLayoutContainer.restore(dump, restorer, doc);
+    case 'view':
+      return ViewLayoutContainer.restore(dump, restorer, restoreView, doc);
+    default:
+      throw new Error(`invalid type: ${dump.type}`);
+  }
 }

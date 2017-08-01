@@ -1,7 +1,7 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {ILayoutContainer} from '../interfaces';
+import {ILayoutContainer, ILayoutDump} from '../interfaces';
 import TabbingLayoutContainer from './TabbingLayoutContainer';
-import {ILayoutContainerOption} from './ALayoutContainer';
+import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
 export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutContainerOption> {
   readonly minChildCount = 0;
@@ -16,6 +16,10 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
 
   setRoot(root: ILayoutContainer) {
     this.push(root);
+  }
+
+  getRoot(root: ILayoutContainer) {
+    return this._children[0];
   }
 
   get minSize() {
@@ -36,5 +40,20 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     child.header.remove();
     child.node.remove();
     return super.remove(child);
+  }
+
+  persist() {
+    return Object.assign(super.persist(), {
+      type: 'root'
+    });
+  }
+
+  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump)=>ILayoutContainer, doc: Document) {
+    const r = new RootLayoutContainer(doc);
+    if (dump.children && dump.children.length > 0) {
+      r.setRoot(restore(dump.children[0]));
+      dump.children.slice(1).forEach((d) => r.push(restore(d)));
+    }
+    return r;
   }
 }

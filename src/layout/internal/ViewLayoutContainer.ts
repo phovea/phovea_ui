@@ -1,4 +1,4 @@
-import {ILayoutContainer, ILayoutParentContainer, ISize, IView} from '../interfaces';
+import {ILayoutContainer, ILayoutDump, ILayoutParentContainer, ISize, IView} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
 export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContainerOption> implements ILayoutContainer {
@@ -41,14 +41,36 @@ export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContain
     }
     this.view.destroy();
   }
+
+
+  persist() {
+    const r: ILayoutDump = Object.assign(super.persist(), {
+      type: 'view'
+    });
+    if (this.view instanceof HTMLView) {
+      r.html = this.view.node.innerHTML;
+    } else {
+      r.view = this.view.dumpReference();
+    }
+    return r;
+  }
+
+
+  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump)=>ILayoutContainer, restoreView: (referenceId: number)=>IView, doc: Document) {
+    const view = dump.html ? new HTMLView(dump.html, doc) : restoreView(dump.view);
+    return new ViewLayoutContainer(view, ALayoutContainer.restoreOptions(dump));
+  }
 }
 
 export class HTMLView implements IView {
   readonly minSize: ISize = [0, 0];
   visible: boolean = true;
+  readonly node: HTMLElement;
 
-  constructor(public readonly node: HTMLElement) {
-
+  constructor(html: string, doc: Document) {
+    //HTML
+    this.node = doc.createElement('article');
+    this.node.innerHTML = html;
   }
 
   destroy() {
@@ -58,4 +80,8 @@ export class HTMLView implements IView {
   resized() {
     //nothing to do
   }
+
+  dumpReference() {
+    return -1;
+  };
 }

@@ -1,4 +1,5 @@
 import {IEventHandler} from 'phovea_core/src/event';
+import {IPersistable} from 'phovea_core/src';
 
 export declare type ISize = [number, number];
 
@@ -21,6 +22,17 @@ export interface ILayoutContainer extends IEventHandler {
   destroy(): void;
 
   visible: boolean;
+
+  readonly hideAbleHeader: boolean;
+
+  persist(): ILayoutDump;
+}
+
+export interface ILayoutDump {
+  type: string;
+  name: string;
+  children?: ILayoutDump[];
+  [key: string]: any;
 }
 
 export interface ILayoutParentContainer extends ILayoutContainer, Iterable<ILayoutContainer> {
@@ -46,6 +58,8 @@ export interface IView {
   destroy(): void;
 
   resized(): void;
+
+  dumpReference(): number;
 }
 
 export function isView(view: IView & object) {

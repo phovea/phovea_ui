@@ -1,4 +1,5 @@
 import {EventHandler} from 'phovea_core/src/event';
+import {ILayoutDump} from 'phovea_ui/src/layout/interfaces';
 
 export interface ILayoutContainerOption {
   name: string;
@@ -24,10 +25,15 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     });
   }
 
+  get hideAbleHeader() {
+    return false;
+  }
+
   protected defaultOptions(): T {
     return <any>{
       name: 'View',
-      closeAble: true
+      closeAble: true,
+      hideAbleHeader: false
     };
   }
 
@@ -47,6 +53,21 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
 
   protected updateName(name: string) {
     this.header.children[1].textContent = name;
+  }
+
+  persist(): ILayoutDump {
+    return {
+      type: '',
+      name: this.name,
+      closeAble: this.options.closeAble
+    };
+  }
+
+  static restoreOptions(dump: ILayoutDump): Partial<ILayoutContainerOption> {
+    return {
+      name: dump.name,
+      closeAble: dump.closeAble
+    };
   }
 }
 
