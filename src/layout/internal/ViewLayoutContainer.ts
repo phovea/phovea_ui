@@ -1,5 +1,6 @@
 import {ILayoutContainer, ILayoutDump, ISize, IView} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
+import {dropViews} from './utils';
 
 export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContainerOption> implements ILayoutContainer {
 
@@ -18,8 +19,9 @@ export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContain
     if (min[1] > 0) {
       view.node.style.minHeight = `${min[1]}px`;
     }
-  }
 
+    dropViews(this.node, this);
+  }
   get visible() {
     return this.view.visible;
   }

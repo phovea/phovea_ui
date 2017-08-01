@@ -1,5 +1,5 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {EOrientation, ILayoutContainer, ILayoutDump, ISize} from '../interfaces';
+import {EOrientation, IDropArea, ILayoutContainer, ILayoutDump, ISize} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
 
@@ -16,9 +16,9 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
 
   private readonly _ratios: number[] = [];
 
-  constructor(document: Document, options: Partial<ISplitLayoutContainerOptions>, ratio: number, child1: ILayoutContainer, child2: ILayoutContainer) {
+  constructor(document: Document, options: Partial<ISplitLayoutContainerOptions>, ratio?: number, child1?: ILayoutContainer, child2?: ILayoutContainer) {
     super(document, options);
-    console.assert(ratio >= 0 && ratio <= 1);
+    console.assert(ratio === undefined || (ratio >= 0 && ratio <= 1));
     this.node.dataset.layout = 'split';
     this.node.dataset.orientation = this.options.orientation === EOrientation.HORIZONTAL ? 'h' : 'v';
 
@@ -30,8 +30,11 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
       }
     });
 
-    this.push(child1, -1, ratio);
-    this.push(child2, -1, 1 - ratio);
+    if (ratio !== undefined) {
+      console.assert(child1 != null && child2 != null);
+      this.push(child1, -1, ratio);
+      this.push(child2, -1, 1 - ratio);
+    }
   }
 
   defaultOptions() {
@@ -42,6 +45,16 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
 
   get hideAbleHeader() {
     return this.options.fixed;
+  }
+
+  canDrop(area: IDropArea) {
+    return this.options.orientation === EOrientation.HORIZONTAL ? (area === 'left' || area === 'right') : (area === 'top' || area === 'bottom');
+  }
+
+  place(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea) {
+    console.assert(area !== 'center');
+    const index = this._children.indexOf(reference) + (area === 'right' || area === 'bottom' ? 1 : 0);
+    return this.push(child, index, 0.5);
   }
 
   private isSeparator(elem: HTMLElement) {

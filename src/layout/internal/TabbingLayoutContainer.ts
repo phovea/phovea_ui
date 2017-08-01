@@ -1,5 +1,5 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {ILayoutContainer, ILayoutDump, ISize} from '../interfaces';
+import {IDropArea, ILayoutContainer, ILayoutDump, ISize} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {dropAble} from 'phovea_core/src';
 
@@ -33,8 +33,17 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
       //not a child already
       this.push(toMove);
       return true;
-    }, true);
+    }, null, true);
   }
+
+  canDrop(area: IDropArea) {
+    return area === 'center';
+  }
+
+  place(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea) {
+    console.assert(area === 'center');
+    return this.push(child);
+  };
 
   protected defaultOptions(): ITabbingLayoutContainerOptions {
     return Object.assign(super.defaultOptions(), {

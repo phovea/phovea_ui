@@ -1,5 +1,5 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {EOrientation, ILayoutContainer, ILayoutDump, ISize} from '../interfaces';
+import {EOrientation, IDropArea, ILayoutContainer, ILayoutDump, ISize} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
 export interface ILineUpLayoutContainerOptions extends ILayoutContainerOption {
@@ -15,6 +15,16 @@ export default class LineUpLayoutContainer extends AParentLayoutContainer<ILineU
     this.node.dataset.layout = 'lineup';
     this.node.dataset.orientation = this.options.orientation === EOrientation.HORIZONTAL ? 'h' : 'v';
     children.forEach((d) => this.push(d));
+  }
+
+  canDrop(area: IDropArea) {
+    return this.options.orientation === EOrientation.HORIZONTAL ? (area === 'left' || area === 'right') : (area === 'top' || area === 'bottom');
+  }
+
+  place(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea) {
+    console.assert(area !== 'center');
+    const index = this._children.indexOf(reference) + (area === 'right' || area === 'bottom' ? 1 : 0);
+    return this.push(child, index);
   }
 
   defaultOptions() {

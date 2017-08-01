@@ -1,4 +1,4 @@
-import {ILayoutContainer, ILayoutDump, ILayoutParentContainer, ISize} from '../interfaces';
+import {IDropArea, ILayoutContainer, ILayoutDump, ILayoutParentContainer, ISize} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
 export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> extends ALayoutContainer<T> implements ILayoutParentContainer {
@@ -11,6 +11,10 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     super(document, options);
     this.node = document.createElement('main');
     this.node.classList.add('phovea-layout');
+  }
+
+  canDrop(area: IDropArea) {
+    return false;
   }
 
   get root(): ILayoutParentContainer {
@@ -66,6 +70,8 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     this.addedChild(child, index);
     return true;
   }
+
+  abstract place(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea): boolean;
 
   protected setupChild(child: ILayoutContainer) {
     if (child.parent) {

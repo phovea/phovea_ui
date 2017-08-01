@@ -1,5 +1,5 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {ILayoutContainer, ILayoutDump} from '../interfaces';
+import {IDropArea, ILayoutContainer, ILayoutDump} from '../interfaces';
 import TabbingLayoutContainer from './TabbingLayoutContainer';
 import {ILayoutContainerOption} from './ALayoutContainer';
 
@@ -33,6 +33,10 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
       this.node.appendChild(child.header);
     }
     this.node.appendChild(child.node);
+  }
+
+  place(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea) {
+    return this.push(child);
   }
 
   protected takeDownChild(child: ILayoutContainer) {
