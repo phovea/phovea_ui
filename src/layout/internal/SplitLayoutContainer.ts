@@ -83,17 +83,35 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
 
   setRatio(index: number, ratio: number) {
     console.assert(ratio >= 0 && ratio <= 1);
-    const old = this._ratios[index];
-    const others = this._ratios.reduce((a, r) => a + r, -old);
-    const factor = (others + (old - ratio)) / others;
-    this._ratios.forEach((r, i) => this._ratios[i] = r * factor);
-    this._ratios[index] = ratio;
+
+    if (index === 0 || index === (this.length - 2)) {
+      if (index === (this.length - 2)) {
+        // easier to manipulate the last then the 2nd last
+        index += 1;
+        ratio = 1 - ratio;
+      }
+      //corner cases
+      const old = this._ratios[index];
+      const others = this._ratios.reduce((a, r) => a + r, -old);
+      const factor = (others + (old - ratio)) / others;
+      this._ratios.forEach((r, i) => this._ratios[i] = r * factor);
+      this._ratios[index] = ratio;
+      this.updateRatios();
+      return;
+    }
+    //we want that the left sum is our ratio
+    const before = this._ratios.slice(0, index + 1).reduce((a, r) => a + r, 0);
+    const factorBefore = ratio / before;
+    const after = this._ratios.slice(index + 1).reduce((a, r) => a + r, 0);
+    const factorAfter = (1-ratio) / after;
+    this._ratios.forEach((r, i) => this._ratios[i] = r * (i <= index ? factorBefore : factorAfter));
     this.updateRatios();
   }
 
   private updateRatios() {
     const sum = this._ratios.reduce((a, r) => a + r, 0);
-    const act = this._ratios.map((r) => Math.round((r / sum) * 100));
+    this._ratios.forEach((r, i) => this._ratios[i] = r / sum); //normalize
+    const act = this._ratios.map((r) => Math.round(r * 100));
     this.forEach((c, i) => c.node.parentElement.style.flex = `${act[i]} ${act[i]} auto`);
   }
 
@@ -140,8 +158,8 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
       //assume we are in the replace mode
       this.node.insertBefore(wrap(child), this.node.firstChild);
     } else {
-      //assume we are in the repalce mode -> consider separator
-      this.node.insertBefore(wrap(child), this._children[index + 1].node.previousSibling);
+      //assume we are in the replace mode -> consider separator
+      this.node.insertBefore(wrap(child), this._children[index + 1].node.parentElement.previousSibling);
     }
     if (this.length > 1) {
       this.node.insertAdjacentHTML('beforeend', SplitLayoutContainer.SEPARATOR);

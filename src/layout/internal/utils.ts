@@ -25,14 +25,14 @@ function determineDropArea(x: number, y: number): IDropArea {
   return 'center';
 }
 
-export function dropViews(node: HTMLElement, reference: ALayoutContainer<any>&ILayoutContainer) {
+export function dropViews(node: HTMLElement, reference: ALayoutContainer<any> & ILayoutContainer) {
   node.dataset.drop = 'center';
   dropAble(node, [ALayoutContainer.MIME_TYPE], (result, e) => {
     const area = determineDropArea(e.offsetX / node.offsetWidth, e.offsetY / node.offsetHeight);
     const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
     console.assert(reference.parent != null);
     const item = reference.parent.root.find(id);
-    if (item === <any>this || item === null) {
+    if (item === reference || item === null) {
       return false;
     }
     return dropLogic(item, reference, area);
@@ -41,38 +41,44 @@ export function dropViews(node: HTMLElement, reference: ALayoutContainer<any>&IL
   }, true);
 }
 
-function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any>&ILayoutContainer, area: IDropArea) {
+function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & ILayoutContainer, area: IDropArea) {
   const parent = reference.parent;
   const canDirectly = parent.canDrop(area);
-    if (canDirectly) {
-      if (parent.children.indexOf(item) < 0) {
-        return parent.place(item, reference, area); //tod
-      }
-      return false; //already a child
+  if (canDirectly) {
+    if (parent.children.indexOf(item) < 0) {
+      return parent.place(item, reference, area); //tod
     }
-    if (area === 'center') {
-      //replace myself with a tab container
-      const p = new TabbingLayoutContainer(item.node.ownerDocument, {
-        name: `${reference.name}, ${item.name}, ...`
-      });
-      parent.replace(reference, p);
-      p.push(reference);
-      p.push(item);
-      p.active = item;
-      return true;
-    }
-    //replace myself with a split container
-    const p = new SplitLayoutContainer(item.node.ownerDocument, {
-      orientation: (area === 'left' || area === 'right') ? EOrientation.HORIZONTAL : EOrientation.VERTICAL,
-      name: (area === 'left' || area === 'top') ? `${item.name}|${reference.name}` : `${reference.name}|${item.name}`
+    return false; //already a child
+  }
+  if (area === 'center') {
+    //replace myself with a tab container
+    const p = new TabbingLayoutContainer(item.node.ownerDocument, {
+      name: `${reference.name}, ${item.name}, ...`
     });
     parent.replace(reference, p);
-    if (area === 'left' || area === 'top') {
-      p.push(item, -1, 0.5);
-      p.push(reference, -1, 0.5);
-    } else {
-      p.push(reference, -1, 0.5);
-      p.push(item, -1, 0.5);
-    }
+    p.push(reference);
+    p.push(item);
+    p.active = item;
     return true;
+  }
+
+  //corner case if I'm the child of a tabbing, tab that and not me
+  if (parent instanceof TabbingLayoutContainer) {
+    return dropLogic(item, parent, area);
+  }
+
+  //replace myself with a split container
+  const p = new SplitLayoutContainer(item.node.ownerDocument, {
+    orientation: (area === 'left' || area === 'right') ? EOrientation.HORIZONTAL : EOrientation.VERTICAL,
+    name: (area === 'left' || area === 'top') ? `${item.name}|${reference.name}` : `${reference.name}|${item.name}`
+  });
+  parent.replace(reference, p);
+  if (area === 'left' || area === 'top') {
+    p.push(item, -1, 0.5);
+    p.push(reference, -1, 0.5);
+  } else {
+    p.push(reference, -1, 0.5);
+    p.push(item, -1, 0.5);
+  }
+  return true;
 }
