@@ -22,6 +22,7 @@ export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContain
 
     dropViews(this.node, this);
   }
+
   get visible() {
     return this.view.visible;
   }

@@ -103,7 +103,7 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
     const before = this._ratios.slice(0, index + 1).reduce((a, r) => a + r, 0);
     const factorBefore = ratio / before;
     const after = this._ratios.slice(index + 1).reduce((a, r) => a + r, 0);
-    const factorAfter = (1-ratio) / after;
+    const factorAfter = (1 - ratio) / after;
     this._ratios.forEach((r, i) => this._ratios[i] = r * (i <= index ? factorBefore : factorAfter));
     this.updateRatios();
   }

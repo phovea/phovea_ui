@@ -8,7 +8,7 @@ export enum EOrientation {
   VERTICAL
 }
 
-export type IDropArea = 'center'|'left'|'right'|'top'|'bottom';
+export type IDropArea = 'center' | 'left' | 'right' | 'top' | 'bottom';
 
 export interface ILayoutContainer extends IEventHandler, IHasUniqueId {
   parent: ILayoutParentContainer | null;
