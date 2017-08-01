@@ -1,5 +1,6 @@
 import {EventHandler} from 'phovea_core/src/event';
 import {ILayoutDump} from 'phovea_ui/src/layout/interfaces';
+import {uniqueId, dragAble} from 'phovea_core/src';
 
 export interface ILayoutContainerOption {
   name: string;
@@ -7,8 +8,12 @@ export interface ILayoutContainerOption {
 }
 
 export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends EventHandler {
+  private static readonly MIME_TYPE =  'text/x-phovea-layout-container';
+
   protected readonly options: T;
   readonly header: HTMLElement;
+
+  readonly id = uniqueId(ALayoutContainer.MIME_TYPE);
 
   constructor(document: Document, options: Partial<T>) {
     super();
@@ -18,15 +23,25 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     this.header.innerHTML = `
         <button type="button" class="close${this.options.fixed ? ' hidden' : ''}" aria-label="Close"><span aria-hidden="true">×</span></button>
         <span>${this.name}</span>`;
+
+    //remove
     this.header.firstElementChild.addEventListener('click', (evt) => {
       evt.preventDefault();
       evt.stopPropagation();
       this.destroy();
     });
+
+    //drag
     if (!this.options.fixed) {
-      //draggable
-      this.header.draggable = true;
-      //TODO
+      dragAble(this.header, () => {
+      return {
+        effectAllowed: 'move',
+        data: {
+          'text/plain': this.name,
+          [ALayoutContainer.MIME_TYPE]: String(this.id)
+        }
+      };
+    }, true);
     }
   }
 

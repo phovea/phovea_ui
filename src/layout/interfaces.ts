@@ -1,5 +1,5 @@
 import {IEventHandler} from 'phovea_core/src/event';
-import {IPersistable} from 'phovea_core/src';
+import {IHasUniqueId} from 'phovea_core/src/idtype';
 
 export declare type ISize = [number, number];
 
@@ -8,7 +8,7 @@ export enum EOrientation {
   VERTICAL
 }
 
-export interface ILayoutContainer extends IEventHandler {
+export interface ILayoutContainer extends IEventHandler, IHasUniqueId {
   parent: ILayoutParentContainer | null;
   readonly node: HTMLElement;
   readonly header: HTMLElement;
