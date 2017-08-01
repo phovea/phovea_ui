@@ -1,12 +1,16 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {ILayoutContainer} from '../interfaces';
 import TabbingLayoutContainer from './TabbingLayoutContainer';
+import {ILayoutContainerOption} from './ALayoutContainer';
 
-export default class RootLayoutContainer extends AParentLayoutContainer {
+export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutContainerOption> {
   readonly minChildCount = 0;
 
   constructor(document: Document) {
-    super(document, '');
+    super(document, {
+      name: '',
+      closeAble: false
+    });
     this.node.dataset.layout = 'root';
   }
 

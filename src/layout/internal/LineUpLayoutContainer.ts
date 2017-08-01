@@ -13,7 +13,7 @@ export default class LineUpLayoutContainer extends AParentLayoutContainer<ILineU
     super(document, options);
 
     this.node.dataset.layout = 'lineup';
-    this.node.dataset.orientation = orientation === EOrientation.HORIZONTAL ? 'h' : 'v';
+    this.node.dataset.orientation = this.options.orientation === EOrientation.HORIZONTAL ? 'h' : 'v';
     children.forEach((d) => this.push(d));
   }
 

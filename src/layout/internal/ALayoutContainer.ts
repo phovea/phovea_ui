@@ -1,12 +1,11 @@
 import {EventHandler} from 'phovea_core/src/event';
-import extend = hbs.Utils.extend;
 
 export interface ILayoutContainerOption {
   name: string;
   readonly closeAble: boolean;
 }
 
-export abstract class ALayoutContainer<T extends ILayoutContainerOption = ILayoutContainerOption> extends EventHandler {
+export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends EventHandler {
   protected readonly options: T;
   readonly header: HTMLElement;
 

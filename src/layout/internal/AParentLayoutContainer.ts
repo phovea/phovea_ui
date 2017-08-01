@@ -1,7 +1,7 @@
 import {ILayoutContainer, ILayoutParentContainer, ISize} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
-export abstract class AParentLayoutContainer<T extends ILayoutContainerOption = ILayoutContainerOption> extends ALayoutContainer<T> implements ILayoutParentContainer {
+export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> extends ALayoutContainer<T> implements ILayoutParentContainer {
   parent: ILayoutParentContainer | null;
   readonly node: HTMLElement;
   abstract readonly minChildCount: number;

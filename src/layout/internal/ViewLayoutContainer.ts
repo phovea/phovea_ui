@@ -1,7 +1,7 @@
 import {ILayoutContainer, ILayoutParentContainer, ISize, IView} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
-export default class ViewLayoutContainer extends ALayoutContainer implements ILayoutContainer {
+export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContainerOption> implements ILayoutContainer {
   parent: ILayoutParentContainer | null;
 
   constructor( public readonly view: IView, options: Partial<ILayoutContainerOption>) {

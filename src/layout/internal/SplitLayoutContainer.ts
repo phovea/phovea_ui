@@ -19,7 +19,7 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
   constructor(document: Document, options: Partial<ISplitLayoutContainerOptions>, ratio: number, child1: ILayoutContainer, child2: ILayoutContainer) {
     super(document, options);
     this.node.dataset.layout = 'split';
-    this.node.dataset.orientation = orientation === EOrientation.HORIZONTAL ? 'h' : 'v';
+    this.node.dataset.orientation = this.options.orientation === EOrientation.HORIZONTAL ? 'h' : 'v';
 
     this.node.addEventListener('mousedown', (evt) => {
       if (this.isSeparator(<HTMLElement>evt.target)) {

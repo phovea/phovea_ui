@@ -3,7 +3,7 @@ import {ILayoutContainer, ISize} from '../interfaces';
 import {ILayoutContainerOption} from 'phovea_ui/src/layout/internal/ALayoutContainer';
 
 
-export default class TabbingLayoutContainer extends AParentLayoutContainer {
+export default class TabbingLayoutContainer extends AParentLayoutContainer<ILayoutContainerOption> {
   readonly minChildCount = 0;
   private _active: ILayoutContainer | null = null;
 
