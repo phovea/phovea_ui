@@ -8,7 +8,7 @@ export interface ILayoutContainerOption {
 }
 
 export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends EventHandler {
-  private static readonly MIME_TYPE =  'text/x-phovea-layout-container';
+  static readonly MIME_TYPE =  'text/x-phovea-layout-container';
 
   protected readonly options: T;
   readonly header: HTMLElement;

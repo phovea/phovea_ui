@@ -2,7 +2,7 @@ import {ILayoutContainer, ILayoutDump, ILayoutParentContainer, ISize} from '../i
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
 export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> extends ALayoutContainer<T> implements ILayoutParentContainer {
-  parent: ILayoutParentContainer | null;
+  parent: ILayoutParentContainer | null = null;
   readonly node: HTMLElement;
   abstract readonly minChildCount: number;
   protected readonly _children: ILayoutContainer[] = [];
@@ -12,6 +12,14 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     super(document, options);
     this.node = document.createElement('main');
     this.node.classList.add('phovea-layout');
+  }
+
+  get root(): ILayoutParentContainer {
+    let p: ILayoutParentContainer = this;
+    while(p.parent !== null) {
+      p = p.parent;
+    }
+    return p;
   }
 
   forEach(callback: (child: ILayoutContainer, index: number) => void) {

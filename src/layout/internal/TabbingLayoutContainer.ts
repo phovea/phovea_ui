@@ -1,6 +1,7 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {ILayoutContainer, ILayoutDump, ISize} from '../interfaces';
-import {ALayoutContainer, ILayoutContainerOption} from 'phovea_ui/src/layout/internal/ALayoutContainer';
+import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
+import {dropAble} from 'phovea_core/src';
 
 
 export interface ITabbingLayoutContainerOptions extends ILayoutContainerOption {
@@ -19,6 +20,20 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
     if (this.options.active != null && this.length >= this.options.active) {
       this.active = this._children[this.options.active];
     }
+
+    dropAble(this.header, [ALayoutContainer.MIME_TYPE], (result) => {
+      const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
+      console.assert(id >= 0);
+      //find id and move it here
+      const root = this.root;
+      const toMove = root.find(id);
+      if (toMove === null || this._children.indexOf(toMove) >= 0) {
+        return false;
+      }
+      //not a child already
+      this.push(toMove);
+      return true;
+    }, true);
   }
 
   protected defaultOptions(): ITabbingLayoutContainerOptions {

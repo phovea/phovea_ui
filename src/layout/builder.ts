@@ -4,7 +4,7 @@ import SplitLayoutContainer, {ISplitLayoutContainerOptions} from './internal/Spl
 import LineUpLayoutContainer, {ILineUpLayoutContainerOptions} from './internal/LineUpLayoutContainer';
 import TabbingLayoutContainer, {ITabbingLayoutContainerOptions} from './internal/TabbingLayoutContainer';
 import RootLayoutContainer from './internal/RootLayoutContainer';
-import {ILayoutContainerOption} from 'phovea_ui/src/layout/internal/ALayoutContainer';
+import {ILayoutContainerOption} from './internal/ALayoutContainer';
 
 
 declare type IBuildAbleOrViewLike = ABuilder | IView | string;

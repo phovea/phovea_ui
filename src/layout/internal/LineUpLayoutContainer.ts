@@ -1,6 +1,6 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {EOrientation, ILayoutContainer, ILayoutDump, ISize} from '../interfaces';
-import {ALayoutContainer, ILayoutContainerOption} from 'phovea_ui/src/layout/internal/ALayoutContainer';
+import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
 export interface ILineUpLayoutContainerOptions extends ILayoutContainerOption {
   readonly orientation: EOrientation;

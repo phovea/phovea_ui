@@ -2,7 +2,7 @@ import {ILayoutContainer, ILayoutDump, ILayoutParentContainer, ISize, IView} fro
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
 export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContainerOption> implements ILayoutContainer {
-  parent: ILayoutParentContainer | null;
+  parent: ILayoutParentContainer | null = null;
 
   constructor( public readonly view: IView, options: Partial<ILayoutContainerOption>) {
     super(view.node.ownerDocument, options);
