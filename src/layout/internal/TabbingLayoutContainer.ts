@@ -1,13 +1,14 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {ILayoutContainer, ISize} from '../interfaces';
+import {ILayoutContainerOption} from 'phovea_ui/src/layout/internal/ALayoutContainer';
 
 
 export default class TabbingLayoutContainer extends AParentLayoutContainer {
   readonly minChildCount = 0;
   private _active: ILayoutContainer | null = null;
 
-  constructor(document: Document, name: string, ...children: ILayoutContainer[]) {
-    super(document, name);
+  constructor(document: Document, options: Partial<ILayoutContainerOption>, ...children: ILayoutContainer[]) {
+    super(document, options);
     this.node.dataset.layout = 'tabbing';
     this.header.dataset.layout= 'tabbing';
     children.forEach((d) => this.push(d));

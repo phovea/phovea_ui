@@ -1,21 +1,31 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {EOrientation, ILayoutContainer, ISize} from '../interfaces';
+import {ILayoutContainerOption} from 'phovea_ui/src/layout/internal/ALayoutContainer';
 
-export default class LineUpLayoutContainer extends AParentLayoutContainer {
+export interface ILineUpLayoutContainerOptions extends ILayoutContainerOption {
+  readonly orientation: EOrientation;
+}
+
+export default class LineUpLayoutContainer extends AParentLayoutContainer<ILineUpLayoutContainerOptions> {
   readonly minChildCount = 0;
 
-  constructor(document: Document, name: string, private readonly orientation: EOrientation, ...children: ILayoutContainer[]) {
-    super(document, name);
-    console.assert(orientation != null);
+  constructor(document: Document, options: Partial<ILineUpLayoutContainerOptions>, ...children: ILayoutContainer[]) {
+    super(document, options);
 
     this.node.dataset.layout = 'lineup';
     this.node.dataset.orientation = orientation === EOrientation.HORIZONTAL ? 'h' : 'v';
     children.forEach((d) => this.push(d));
   }
 
+  defaultOptions() {
+    return Object.assign({
+      orientation: EOrientation.HORIZONTAL
+    }, super.defaultOptions());
+  }
+
   get minSize() {
     console.assert(this.length > 1);
-    switch (this.orientation) {
+    switch (this.options.orientation) {
       case EOrientation.HORIZONTAL:
         return <ISize>this._children.reduce((a, c) => {
           const cmin = c.minSize;

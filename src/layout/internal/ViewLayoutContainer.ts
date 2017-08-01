@@ -1,11 +1,11 @@
 import {ILayoutContainer, ILayoutParentContainer, ISize, IView} from '../interfaces';
-import {ALayoutContainer} from './ALayoutContainer';
+import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
 export default class ViewLayoutContainer extends ALayoutContainer implements ILayoutContainer {
   parent: ILayoutParentContainer | null;
 
-  constructor(name: string, public readonly view: IView) {
-    super(view.node.ownerDocument, name);
+  constructor( public readonly view: IView, options: Partial<ILayoutContainerOption>) {
+    super(view.node.ownerDocument, options);
     const min = this.minSize;
     if (min[0] > 0) {
       view.node.style.minWidth = `${min[0]}px`;

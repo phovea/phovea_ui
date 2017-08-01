@@ -1,9 +1,10 @@
 import {EOrientation, ILayoutContainer, isView, IView} from './interfaces';
 import ViewLayoutContainer, {HTMLView} from './internal/ViewLayoutContainer';
-import SplitLayoutContainer from './internal/SplitLayoutContainer';
-import LineUpLayoutContainer from './internal/LineUpLayoutContainer';
+import SplitLayoutContainer, {ISplitLayoutContainerOptions} from './internal/SplitLayoutContainer';
+import LineUpLayoutContainer, {ILineUpLayoutContainerOptions} from './internal/LineUpLayoutContainer';
 import TabbingLayoutContainer from './internal/TabbingLayoutContainer';
 import RootLayoutContainer from './internal/RootLayoutContainer';
+import {ILayoutContainerOption} from 'phovea_ui/src/layout/internal/ALayoutContainer';
 
 
 declare type IBuildAbleOrViewLike = ABuilder | HTMLElement | IView | string;
@@ -17,10 +18,27 @@ function toBuilder(view: IBuildAbleOrViewLike): ABuilder {
 
 abstract class ABuilder {
   protected _name: string = 'View';
+  protected _closeAble: boolean = true;
 
   name(name: string) {
     this._name = name;
     return this;
+  }
+
+  /**
+   * if set then is the view not closeable
+   * @return {ABuilder}
+   */
+  fixed() {
+    this._closeAble = false;
+    return this;
+  }
+
+  protected buildOptions(): ILayoutContainerOption {
+    return {
+      name: this._name,
+      closeAble: this._closeAble
+    };
   }
 
   abstract build(root: RootLayoutContainer, doc: Document): ILayoutContainer;
@@ -58,10 +76,16 @@ class SplitBuilder extends AParentBuilder {
     return this;
   }
 
+  protected buildOptions(): ISplitLayoutContainerOptions {
+    return Object.assign({
+      orientation: this.orientation
+    }, super.buildOptions());
+  }
+
   build(root: RootLayoutContainer, doc = document) {
     const built = this.buildChildren(root, doc);
     console.assert(built.length >= 2);
-    const r = new SplitLayoutContainer(doc, this._name, this.orientation, this._ratio, built[0], built[1]);
+    const r = new SplitLayoutContainer(doc, this.buildOptions(), this._ratio, built[0], built[1]);
     built.slice(2).forEach((c) => r.push(c));
     return r;
   }
@@ -73,9 +97,15 @@ class LineUpBuilder extends AParentBuilder {
     super(children);
   }
 
+  protected buildOptions(): ILineUpLayoutContainerOptions {
+    return Object.assign({
+      orientation: this.orientation
+    }, super.buildOptions());
+  }
+
   build(root: RootLayoutContainer, doc = document) {
     const built = this.buildChildren(root, doc);
-    return new LineUpLayoutContainer(doc, this._name, this.orientation, ...built);
+    return new LineUpLayoutContainer(doc, this.buildOptions(), ...built);
   }
 }
 
@@ -92,17 +122,18 @@ export class ViewBuilder extends ABuilder {
   }
 
   build(root: RootLayoutContainer, doc: Document): ILayoutContainer {
+    const options = this.buildOptions();
     if (typeof this.view === 'string') {
       //HTML
       const d = doc.createElement('article');
       d.innerHTML = this.view;
-      return new ViewLayoutContainer(this._name, new HTMLView(d));
+      return new ViewLayoutContainer(new HTMLView(d), options);
     }
     if (isView(<IView>this.view)) {
-      return new ViewLayoutContainer(this._name, <IView>this.view);
+      return new ViewLayoutContainer(<IView>this.view, options);
     }
     //HTMLElement
-    return new ViewLayoutContainer(this._name, new HTMLView(<HTMLElement>this.view));
+    return new ViewLayoutContainer(new HTMLView(<HTMLElement>this.view), options);
   }
 }
 

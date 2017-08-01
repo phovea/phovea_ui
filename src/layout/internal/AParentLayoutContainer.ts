@@ -1,15 +1,15 @@
 import {ILayoutContainer, ILayoutParentContainer, ISize} from '../interfaces';
-import {ALayoutContainer} from './ALayoutContainer';
+import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
-export abstract class AParentLayoutContainer extends ALayoutContainer implements ILayoutParentContainer {
+export abstract class AParentLayoutContainer<T extends ILayoutContainerOption = ILayoutContainerOption> extends ALayoutContainer<T> implements ILayoutParentContainer {
   parent: ILayoutParentContainer | null;
   readonly node: HTMLElement;
   abstract readonly minChildCount: number;
   protected readonly _children: ILayoutContainer[] = [];
   private _visible: boolean;
 
-  constructor(document: Document, name: string) {
-    super(document, name);
+  constructor(document: Document, options: Partial<T>) {
+    super(document, options);
     this.node = document.createElement('main');
     this.node.classList.add('phovea-layout');
   }

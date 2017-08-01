@@ -1,17 +1,22 @@
 import {EventHandler} from 'phovea_core/src/event';
+import extend = hbs.Utils.extend;
 
-export abstract class ALayoutContainer extends EventHandler {
-  private _name: string;
+export interface ILayoutContainerOption {
+  name: string;
+  readonly closeAble: boolean;
+}
+
+export abstract class ALayoutContainer<T extends ILayoutContainerOption = ILayoutContainerOption> extends EventHandler {
+  protected readonly options: T;
   readonly header: HTMLElement;
 
-  constructor(document: Document, name: string) {
+  constructor(document: Document, options: Partial<T>) {
     super();
     console.assert(document != null);
-    console.assert(name != null);
-    this._name = name;
+    this.options = Object.assign(this.defaultOptions(), options);
     this.header = document.createElement('header');
     this.header.innerHTML = `
-        <button type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <button type="button" class="close${!this.options.closeAble ? ' hidden' : ''}" aria-label="Close"><span aria-hidden="true">×</span></button>
         <span>${this.name}</span>`;
     this.header.firstElementChild.addEventListener('click', (evt) => {
       evt.preventDefault();
@@ -20,17 +25,24 @@ export abstract class ALayoutContainer extends EventHandler {
     });
   }
 
+  protected defaultOptions(): T {
+    return <any>{
+      name: 'View',
+      closeAble: true
+    };
+  }
+
   abstract destroy(): void;
 
   get name() {
-    return this._name;
+    return this.options.name;
   }
 
   set name(name: string) {
-    if (this._name === name) {
+    if (this.options.name === name) {
       return;
     }
-    this._name = name;
+    this.options.name = name;
     this.updateName(name);
   }
 

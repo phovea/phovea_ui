@@ -1,8 +1,14 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {EOrientation, ILayoutContainer, ISize} from '../interfaces';
+import {ILayoutContainerOption} from 'phovea_ui/src/layout/internal/ALayoutContainer';
 
 
-export default class SplitLayoutContainer extends AParentLayoutContainer {
+export interface ISplitLayoutContainerOptions extends ILayoutContainerOption {
+  readonly orientation: EOrientation;
+}
+
+
+export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitLayoutContainerOptions> {
   private static readonly SEPARATOR = `<div data-layout="separator"/>`;
   private static readonly SEPARATOR_WIDTH = 5;
 
@@ -10,9 +16,8 @@ export default class SplitLayoutContainer extends AParentLayoutContainer {
 
   private readonly _ratios: number[] = [];
 
-  constructor(document: Document, name: string, private readonly orientation: EOrientation, ratio: number, child1: ILayoutContainer, child2: ILayoutContainer) {
-    super(document, name);
-    console.assert(orientation != null);
+  constructor(document: Document, options: Partial<ISplitLayoutContainerOptions>, ratio: number, child1: ILayoutContainer, child2: ILayoutContainer) {
+    super(document, options);
     this.node.dataset.layout = 'split';
     this.node.dataset.orientation = orientation === EOrientation.HORIZONTAL ? 'h' : 'v';
 
@@ -29,13 +34,19 @@ export default class SplitLayoutContainer extends AParentLayoutContainer {
     this.setRatio(0, ratio);
   }
 
+  defaultOptions() {
+    return Object.assign({
+      orientation: EOrientation.HORIZONTAL
+    }, super.defaultOptions());
+  }
+
   private isSeparator(elem: HTMLElement) {
     return elem.parentElement === this.node && elem.dataset.layout === 'separator';
   }
 
   private enableDragging(index: number) {
     const mouseMove = (evt: MouseEvent) => {
-      const ratio = this.orientation === EOrientation.HORIZONTAL ? evt.x / this.node.offsetWidth : evt.y / this.node.offsetHeight;
+      const ratio = this.options.orientation === EOrientation.HORIZONTAL ? evt.x / this.node.offsetWidth : evt.y / this.node.offsetHeight;
       this.setRatio(index, ratio);
       evt.stopPropagation();
       evt.preventDefault();
@@ -71,7 +82,7 @@ export default class SplitLayoutContainer extends AParentLayoutContainer {
   get minSize() {
     console.assert(this.length > 1);
     const padding = (this.length - 1) * SplitLayoutContainer.SEPARATOR_WIDTH;
-    switch(this.orientation) {
+    switch(this.options.orientation) {
       case EOrientation.HORIZONTAL:
         return <ISize>this._children.reduce((a, c) => {
           const cmin = c.minSize;
