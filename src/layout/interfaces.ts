@@ -26,6 +26,8 @@ export interface ILayoutContainer extends IEventHandler, IHasUniqueId {
   readonly hideAbleHeader: boolean;
 
   persist(): ILayoutDump;
+
+  find(id: number): ILayoutContainer|null;
 }
 
 export interface ILayoutDump {

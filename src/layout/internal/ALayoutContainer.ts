@@ -89,6 +89,10 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
       fixed: dump.fixed
     };
   }
+
+  find(id: number) {
+    return this.id === id ? this: null;
+  }
 }
 
 export default ALayoutContainer;

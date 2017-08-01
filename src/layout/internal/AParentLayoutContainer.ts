@@ -88,6 +88,19 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
       children: this._children.map((d) => d.persist())
     });
   }
+
+  find(id: number) {
+    if (this.id === id) {
+      return this;
+    }
+    for (const child of this._children) {
+      const r = child.find(id);
+      if (r != null) {
+        return r;
+      }
+    }
+    return null;
+  };
 }
 
 export default AParentLayoutContainer;
