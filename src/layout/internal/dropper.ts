@@ -5,8 +5,8 @@ import {ALayoutContainer} from './ALayoutContainer';
 import {ILayoutContainer} from 'phovea_ui/src/layout';
 import TabbingLayoutContainer from './TabbingLayoutContainer';
 import SplitLayoutContainer from './SplitLayoutContainer';
-import {EOrientation, IDropArea} from '../interfaces';
 import {dropAble} from 'phovea_core/src/internal/dnd';
+import {EOrientation, IDropArea} from './interfaces';
 
 
 function determineDropArea(x: number, y: number): IDropArea {

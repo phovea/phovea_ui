@@ -1,4 +1,5 @@
-import {EOrientation, ILayoutContainer, ILayoutDump, IView} from './interfaces';
+import {ILayoutContainer, ILayoutDump, IView} from './interfaces';
+import {EOrientation} from './internal/interfaces';
 import ViewLayoutContainer, {HTMLView} from './internal/ViewLayoutContainer';
 import SplitLayoutContainer from './internal/SplitLayoutContainer';
 import LineUpLayoutContainer from './internal/LineUpLayoutContainer';
@@ -21,16 +22,21 @@ abstract class ABuilder {
   protected _name: string = 'View';
   protected _fixed: boolean = false;
 
-  name(name: string) {
+  /**
+   * specify the name of the view
+   * @param {string} name the new name
+   * @return {this} itself
+   */
+  name(name: string): this {
     this._name = name;
     return this;
   }
 
   /**
-   * if set then is the view not closeable
-   * @return {ABuilder}
+   * specify that the view cannot be closed
+   * @return {this} itself
    */
-  fixed() {
+  fixed(): this {
     this._fixed = true;
     return this;
   }
@@ -54,7 +60,7 @@ abstract class AParentBuilder extends ABuilder {
     children.forEach((c) => this.push(c));
   }
 
-  protected push(view: IBuildAbleOrViewLike) {
+  protected push(view: IBuildAbleOrViewLike): this {
     this.children.push(toBuilder(view));
     return this;
   }
@@ -72,6 +78,11 @@ class SplitBuilder extends AParentBuilder {
     this._ratio = ratio;
   }
 
+  /**
+   * set the ratio between the left and right view
+   * @param {number} ratio the new ratio
+   * @return {SplitBuilder} itself
+   */
   ratio(ratio: number) {
     this._ratio = ratio;
     return this;
@@ -98,6 +109,11 @@ class LineUpBuilder extends AParentBuilder {
     super(children);
   }
 
+  /**
+   * push another child
+   * @param {IBuildAbleOrViewLike} view the view to add
+   * @return {LineUpBuilder} itself
+   */
   push(view: IBuildAbleOrViewLike) {
     return super.push(view);
   }
@@ -117,10 +133,20 @@ class LineUpBuilder extends AParentBuilder {
 class TabbingBuilder extends AParentBuilder {
   private _active: number | null = null;
 
+  /**
+   * push another tab
+   * @param {IBuildAbleOrViewLike} view the tab
+   * @return {TabbingBuilder} itself
+   */
   push(view: IBuildAbleOrViewLike) {
     return super.push(view);
   }
 
+  /**
+   * adds another child and specify it should be the active one
+   * @param {IBuildAbleOrViewLike} view the active tab
+   * @return {AParentBuilder} itself
+   */
   active(view: IBuildAbleOrViewLike) {
     this._active = this.children.length;
     return super.push(view);
@@ -139,7 +165,7 @@ class TabbingBuilder extends AParentBuilder {
 }
 
 export class ViewBuilder extends ABuilder {
-  constructor(private readonly view: string | IView | HTMLElement) {
+  constructor(private readonly view: string | IView) {
     super();
   }
 
@@ -152,30 +178,71 @@ export class ViewBuilder extends ABuilder {
   }
 }
 
+/**
+ * builder for creating a horizontal split layout (moveable splitter)
+ * @param {number} ratio ratio between the two given elements
+ * @param {IBuildAbleOrViewLike} left left container
+ * @param {IBuildAbleOrViewLike} right right container
+ * @return {SplitBuilder} a split builder
+ */
 export function horizontalSplit(ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike): SplitBuilder {
   return new SplitBuilder(EOrientation.HORIZONTAL, ratio, left, right);
 }
 
+/**
+ * builder for creating a vertical split layout (moveable splitter)
+ * @param {number} ratio ratio between the two given elements
+ * @param {IBuildAbleOrViewLike} left left container
+ * @param {IBuildAbleOrViewLike} right right container
+ * @return {SplitBuilder} a split builder
+ */
 export function verticalSplit(ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike): SplitBuilder {
   return new SplitBuilder(EOrientation.VERTICAL, ratio, left, right);
 }
 
+/**
+ * builder for creating a horizontal lineup layout (each container has the same full size with scrollbars)
+ * @param {IBuildAbleOrViewLike} children the children of the layout
+ * @return {LineUpBuilder} a lineup builder
+ */
 export function horizontalLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder {
   return new LineUpBuilder(EOrientation.HORIZONTAL, children);
 }
 
+
+/**
+ * builder for creating a vertical lineup layout (each container has the same full size with scrollbars)
+ * @param {IBuildAbleOrViewLike} children the children of the layout
+ * @return {LineUpBuilder} a lineup builder
+ */
 export function verticalLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder {
   return new LineUpBuilder(EOrientation.VERTICAL, children);
 }
 
+/**
+ * builder for creating a tab layout
+ * @param {IBuildAbleOrViewLike} children the children of the layout
+ * @return {TabbingBuilder} a tabbing builder
+ */
 export function tabbing(...children: IBuildAbleOrViewLike[]): TabbingBuilder {
   return new TabbingBuilder(children);
 }
 
-export function view(view: string | IView | HTMLElement): ViewBuilder {
+/**
+ * builder for creating a view
+ * @param {string | IView} view possible view content
+ * @return {ViewBuilder} a view builder
+ */
+export function view(view: string | IView): ViewBuilder {
   return new ViewBuilder(view);
 }
 
+/**
+ * creates the root of a new layout
+ * @param {IBuildAbleOrViewLike} child the only child of the root
+ * @param {Document} doc root Document
+ * @return {ILayoutContainer} the root element
+ */
 export function root(child: IBuildAbleOrViewLike, doc = document): ILayoutContainer {
   const b = toBuilder(child);
   const r = new RootLayoutContainer(doc);
@@ -183,6 +250,13 @@ export function root(child: IBuildAbleOrViewLike, doc = document): ILayoutContai
   return r;
 }
 
+/**
+ * restores the given layout dump
+ * @param {ILayoutDump} dump the dump
+ * @param {(referenceId: number) => IView} restoreView lookup function for getting the underlying view given the dumped reference id
+ * @param {Document} doc root document
+ * @return {ILayoutContainer} the root element
+ */
 export function restore(dump: ILayoutDump, restoreView: (referenceId: number) => IView, doc = document): ILayoutContainer {
   const restorer = (d: ILayoutDump) => restore(d, restoreView, doc);
   switch (dump.type) {

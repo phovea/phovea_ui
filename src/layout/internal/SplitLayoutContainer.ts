@@ -1,4 +1,5 @@
-import {EOrientation, IDropArea, ILayoutContainer, ILayoutDump} from '../interfaces';
+import {ILayoutContainer, ILayoutDump} from '../interfaces';
+import {EOrientation, IDropArea} from './interfaces';
 import {ALayoutContainer} from './ALayoutContainer';
 import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} from './ASequentialLayoutContainer';
 
@@ -104,7 +105,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
     this.updateRatios();
   }
 
-  private squeeze(separator: HTMLElement, dir: 'left'|'right') {
+  private squeeze(separator: HTMLElement, dir: 'left' | 'right') {
     const index = Math.floor(Array.from(this.node.children).indexOf(separator) / 2);
     this.setRatio(index + (dir === 'right' ? 1 : 0), 0);
   }
@@ -116,7 +117,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
     this.forEach((c, i) => {
       const wrapper = c.node.parentElement.style;
       wrapper.flex = `${act[i]} ${act[i]} 0`;
-      wrapper.display = act[i] <= 1 ? 'none': null;
+      wrapper.display = act[i] <= 1 ? 'none' : null;
     });
   }
 
