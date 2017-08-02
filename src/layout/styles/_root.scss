@@ -1,11 +1,8 @@
 @import './vars';
 
 &[data-layout=root] {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-
   flex: 1 1 auto;
+
   display: flex;
   align-items: stretch;
   flex-direction: column;
@@ -16,5 +13,6 @@
   }
   > main {
     flex: 1 1 auto;
+    position: relative;
   }
 }

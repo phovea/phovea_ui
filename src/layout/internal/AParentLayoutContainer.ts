@@ -80,8 +80,8 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     child.parent = this;
   }
 
-  protected addedChild(_child: ILayoutContainer, index: number) {
-    //hook
+  protected addedChild(child: ILayoutContainer, _index: number) {
+    child.resized();
   }
 
   replace(child: ILayoutContainer, replacement: ILayoutContainer) {
@@ -102,8 +102,10 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
       if (this.length > 1) {
         //remove and inline my children (just one since the remove will be called again
         this.parent.push(this._children[1]);
-      } else {
+      } else if (this.length > 0) {
         this.parent.replace(this, this._children[0]);
+      } else {
+        this.parent.remove(this);
       }
     }
     return true;

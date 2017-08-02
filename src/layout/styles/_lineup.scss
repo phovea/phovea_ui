@@ -1,0 +1,34 @@
+@import './vars';
+
+&[data-layout=lineup] {
+  display: flex;
+  flex-wrap: nowrap;
+
+  &[data-orientation=h] {
+    overflow-x: auto;
+    flex-direction: row;
+  }
+
+  &[data-orientation=v] {
+    overflow-y: auto;
+    flex-direction: column;
+  }
+
+  > section {
+    display: flex;
+    flex: 0 0 100%;
+    flex-direction: column;
+
+    > header {
+      flex: 0 0 auto;
+      background-color: $phovea_layout_view_header;
+    }
+
+    > main,
+    > article {
+      flex: 1 1 auto;
+      position: relative;
+    }
+  }
+
+}

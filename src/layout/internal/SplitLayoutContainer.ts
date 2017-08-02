@@ -1,14 +1,9 @@
-import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {EOrientation, IDropArea, ILayoutContainer, ILayoutDump, ISize} from '../interfaces';
-import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
+import {EOrientation, IDropArea, ILayoutContainer, ILayoutDump} from '../interfaces';
+import {ALayoutContainer} from './ALayoutContainer';
+import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} from './ASequentialLayoutContainer';
 
 
-export interface ISplitLayoutContainerOptions extends ILayoutContainerOption {
-  readonly orientation: EOrientation;
-}
-
-
-export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitLayoutContainerOptions> {
+export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISequentialLayoutContainerOptions> {
   private static readonly SEPARATOR = `<div data-layout="separator"/>`;
   private static readonly SEPARATOR_WIDTH = 5;
 
@@ -16,11 +11,10 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
 
   private readonly _ratios: number[] = [];
 
-  constructor(document: Document, options: Partial<ISplitLayoutContainerOptions>, ratio?: number, child1?: ILayoutContainer, child2?: ILayoutContainer) {
+  constructor(document: Document, options: Partial<ISequentialLayoutContainerOptions>, ratio?: number, child1?: ILayoutContainer, child2?: ILayoutContainer) {
     super(document, options);
     console.assert(ratio === undefined || (ratio >= 0 && ratio <= 1));
     this.node.dataset.layout = 'split';
-    this.node.dataset.orientation = this.options.orientation === EOrientation.HORIZONTAL ? 'h' : 'v';
 
     this.node.addEventListener('mousedown', (evt) => {
       if (this.isSeparator(<HTMLElement>evt.target)) {
@@ -35,20 +29,6 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
       this.push(child1, -1, ratio);
       this.push(child2, -1, 1 - ratio);
     }
-  }
-
-  defaultOptions() {
-    return Object.assign(super.defaultOptions(), {
-      orientation: EOrientation.HORIZONTAL
-    });
-  }
-
-  get hideAbleHeader() {
-    return this.options.fixed;
-  }
-
-  canDrop(area: IDropArea) {
-    return this.options.orientation === EOrientation.HORIZONTAL ? (area === 'left' || area === 'right') : (area === 'top' || area === 'bottom');
   }
 
   place(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea) {
@@ -112,29 +92,15 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
     const sum = this._ratios.reduce((a, r) => a + r, 0);
     this._ratios.forEach((r, i) => this._ratios[i] = r / sum); //normalize
     const act = this._ratios.map((r) => Math.round(r * 100));
-    this.forEach((c, i) => c.node.parentElement.style.flex = `${act[i]} ${act[i]} auto`);
+    this.forEach((c, i) => c.node.parentElement.style.flex = `${act[i]} ${act[i]} 0`);
   }
 
   get ratios() {
     return this._ratios.slice();
   }
 
-  get minSize() {
-    console.assert(this.length > 1);
-    const padding = (this.length - 1) * SplitLayoutContainer.SEPARATOR_WIDTH;
-    switch (this.options.orientation) {
-      case EOrientation.HORIZONTAL:
-        return <ISize>this._children.reduce((a, c) => {
-          const cmin = c.minSize;
-          return [a[0] + cmin[0], Math.max(a[1], cmin[1])];
-        }, [padding, 0]);
-      case EOrientation.VERTICAL: {
-        return <ISize>this._children.reduce((a, c) => {
-          const cmin = c.minSize;
-          return [Math.max(a[0], cmin[0]), a[1] + cmin[1]];
-        }, [padding, 0]);
-      }
-    }
+  protected getPadding() {
+    return (this.length - 1) * SplitLayoutContainer.SEPARATOR_WIDTH;
   }
 
   push(child: ILayoutContainer, index: number = -1, ratio: number = 0) {
@@ -191,8 +157,6 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
     if (separator) {
       separator.remove();
     }
-    child.node.remove();
-    child.header.remove();
     wrapper.remove();
     super.takeDownChild(child);
   }
@@ -208,7 +172,6 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
   persist() {
     return Object.assign(super.persist(), {
       type: 'split',
-      orientation: EOrientation[this.options.orientation],
       ratios: this.ratios,
     });
   }
@@ -223,13 +186,4 @@ export default class SplitLayoutContainer extends AParentLayoutContainer<ISplitL
     dump.children.slice(2).forEach((d, i) => r.push(restore(d), ratios[i + 2]));
     return r;
   }
-}
-
-function wrap(child: ILayoutContainer) {
-  const s = child.node.ownerDocument.createElement('section');
-  if (!child.hideAbleHeader) {
-    s.appendChild(child.header);
-  }
-  s.appendChild(child.node);
-  return s;
 }

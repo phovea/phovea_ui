@@ -14,18 +14,14 @@ export interface ILayoutContainer extends IEventHandler, IHasUniqueId {
   parent: ILayoutParentContainer | null;
   readonly node: HTMLElement;
   readonly header: HTMLElement;
-
   readonly minSize: ISize;
-
+  readonly hideAbleHeader: boolean;
   name: string;
+  visible: boolean;
 
   resized(): void;
 
   destroy(): void;
-
-  visible: boolean;
-
-  readonly hideAbleHeader: boolean;
 
   persist(): ILayoutDump;
 
@@ -52,8 +48,6 @@ export interface ILayoutParentContainer extends ILayoutContainer, Iterable<ILayo
   replace(child: ILayoutContainer, replacement: ILayoutContainer): boolean;
 
   remove(child: ILayoutContainer): boolean;
-
-  readonly minChildCount: number;
 }
 
 export interface IView {
@@ -67,11 +61,4 @@ export interface IView {
   resized(): void;
 
   dumpReference(): number;
-}
-
-export function isView(view: IView & object) {
-  const base = typeof view.visible === 'boolean' && typeof Array.isArray(view.minSize) && typeof view.destroy === 'function' && typeof view.resized === 'function' && view.hasOwnProperty('node');
-  // ILayoutContainer
-  const not = view.hasOwnProperty('parent');
-  return base && !not;
 }

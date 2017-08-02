@@ -1,10 +1,11 @@
 import {EOrientation, ILayoutContainer, ILayoutDump, IView} from './interfaces';
 import ViewLayoutContainer, {HTMLView} from './internal/ViewLayoutContainer';
-import SplitLayoutContainer, {ISplitLayoutContainerOptions} from './internal/SplitLayoutContainer';
-import LineUpLayoutContainer, {ILineUpLayoutContainerOptions} from './internal/LineUpLayoutContainer';
+import SplitLayoutContainer from './internal/SplitLayoutContainer';
+import LineUpLayoutContainer from './internal/LineUpLayoutContainer';
 import TabbingLayoutContainer, {ITabbingLayoutContainerOptions} from './internal/TabbingLayoutContainer';
 import RootLayoutContainer from './internal/RootLayoutContainer';
 import {ILayoutContainerOption} from './internal/ALayoutContainer';
+import {ISequentialLayoutContainerOptions} from './internal/ASequentialLayoutContainer';
 
 
 declare type IBuildAbleOrViewLike = ABuilder | IView | string;
@@ -76,7 +77,7 @@ class SplitBuilder extends AParentBuilder {
     return this;
   }
 
-  protected buildOptions(): Partial<ISplitLayoutContainerOptions> {
+  protected buildOptions(): Partial<ISequentialLayoutContainerOptions> {
     return Object.assign({
       orientation: this.orientation
     }, super.buildOptions());
@@ -101,7 +102,7 @@ class LineUpBuilder extends AParentBuilder {
     return super.push(view);
   }
 
-  protected buildOptions(): Partial<ILineUpLayoutContainerOptions> {
+  protected buildOptions(): Partial<ISequentialLayoutContainerOptions> {
     return Object.assign({
       orientation: this.orientation
     }, super.buildOptions());
