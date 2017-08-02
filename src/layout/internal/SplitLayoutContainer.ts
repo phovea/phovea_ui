@@ -4,7 +4,7 @@ import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} fro
 
 
 export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISequentialLayoutContainerOptions> {
-  private static readonly SEPARATOR = `<div data-layout="separator"/>`;
+  private static readonly SEPARATOR = `<div data-layout="separator"><span title="Squeeze Left"></span><span title="Squeeze Right"></span></div>`;
   private static readonly SEPARATOR_WIDTH = 5;
 
   readonly minChildCount = 2;
@@ -64,8 +64,8 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
   setRatio(index: number, ratio: number) {
     console.assert(ratio >= 0 && ratio <= 1);
 
-    if (index === 0 || index === (this.length - 2)) {
-      if (index === (this.length - 2)) {
+    if (index === 0 || index >= (this.length - 2)) {
+      if (index > 0 && index === (this.length - 2)) {
         // easier to manipulate the last then the 2nd last
         index += 1;
         ratio = 1 - ratio;
@@ -73,26 +73,51 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
       //corner cases
       const old = this._ratios[index];
       const others = this._ratios.reduce((a, r) => a + r, -old);
-      const factor = (others + (old - ratio)) / others;
-      this._ratios.forEach((r, i) => this._ratios[i] = r * factor);
+      if (others > 0) {
+        const factor = (others + (old - ratio)) / others;
+        this._ratios.forEach((r, i) => this._ratios[i] = r * factor);
+      } else {
+        //even
+        this._ratios.forEach((r, i) => this._ratios[i] = (1 - ratio) / (this._ratios.length - 1));
+      }
       this._ratios[index] = ratio;
       this.updateRatios();
       return;
     }
     //we want that the left sum is our ratio
-    const before = this._ratios.slice(0, index + 1).reduce((a, r) => a + r, 0);
+    const left = this._ratios.slice(0, index + 1);
+    const before = left.reduce((a, r) => a + r, 0);
     const factorBefore = ratio / before;
-    const after = this._ratios.slice(index + 1).reduce((a, r) => a + r, 0);
+    if (factorBefore > 0) {
+      left.forEach((r, i) => this._ratios[i] = r * factorBefore);
+    } else {
+      left.forEach((r, i) => this._ratios[i] = (1 - ratio) / left.length);
+    }
+    const right = this._ratios.slice(index + 1);
+    const after = right.reduce((a, r) => a + r, 0);
     const factorAfter = (1 - ratio) / after;
-    this._ratios.forEach((r, i) => this._ratios[i] = r * (i <= index ? factorBefore : factorAfter));
+    if (factorAfter > 0) {
+      right.forEach((r, i) => this._ratios[i + index + 1] = r * factorAfter);
+    } else {
+      right.forEach((r, i) => this._ratios[i + index + 1] = ratio / right.length);
+    }
     this.updateRatios();
+  }
+
+  private squeeze(separator: HTMLElement, dir: 'left'|'right') {
+    const index = Math.floor(Array.from(this.node.children).indexOf(separator) / 2);
+    this.setRatio(index + (dir === 'right' ? 1 : 0), 0);
   }
 
   private updateRatios() {
     const sum = this._ratios.reduce((a, r) => a + r, 0);
     this._ratios.forEach((r, i) => this._ratios[i] = r / sum); //normalize
     const act = this._ratios.map((r) => Math.round(r * 100));
-    this.forEach((c, i) => c.node.parentElement.style.flex = `${act[i]} ${act[i]} 0`);
+    this.forEach((c, i) => {
+      const wrapper = c.node.parentElement.style;
+      wrapper.flex = `${act[i]} ${act[i]} 0`;
+      wrapper.display = act[i] <= 1 ? 'none': null;
+    });
   }
 
   get ratios() {
@@ -130,6 +155,16 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
     if (this.length > 1) {
       this.node.insertAdjacentHTML('beforeend', SplitLayoutContainer.SEPARATOR);
       const separator = this.node.lastElementChild;
+      separator.firstElementChild.addEventListener('click', (evt) => {
+        evt.preventDefault();
+        evt.stopPropagation();
+        this.squeeze(<HTMLElement>separator, 'left');
+      });
+      separator.lastElementChild.addEventListener('click', (evt) => {
+        evt.preventDefault();
+        evt.stopPropagation();
+        this.squeeze(<HTMLElement>separator, 'right');
+      });
       if (index > 0) {
         this.node.insertBefore(separator, child.node.parentElement);
       } else {

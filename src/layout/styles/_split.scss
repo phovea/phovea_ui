@@ -9,12 +9,21 @@
 
     > [data-layout=separator] {
       cursor: ew-resize;
+      flex-direction: column;
 
-      &::before {
-        width: 100%;
-        height: 20px;
-        border-left: 1px solid $phovea_layout_separator_hints;
-        border-right: 1px solid $phovea_layout_separator_hints;
+      span {
+        border-top-color: transparent !important;
+        border-bottom-color: transparent !important;
+
+        &:first-child {
+          //left
+          border-left: none;
+          margin-bottom: 10px;
+        }
+
+        &:last-child {
+          border-right: none;
+        }
       }
     }
   }
@@ -24,13 +33,21 @@
 
     > [data-layout=separator] {
       cursor: ns-resize;
-      flex-direction: column;
+      flex-direction: row;
 
-      &::before {
-        width: 20px;
-        height: 100%;
-        border-top: 1px solid black;
-        border-bottom: 1px solid black;
+      span {
+        border-left-color: transparent !important;
+        border-right-color: transparent !important;
+
+        &:first-child {
+          //left
+          border-top: none;
+          margin-right: 10px;
+        }
+
+        &:last-child {
+          border-bottom: none;
+        }
       }
     }
   }
@@ -57,14 +74,27 @@
     background: $phovea_layout_separator_color;
     display: flex;
     align-items: center;
-
-    &::before {
-      content: '';
-      margin: 1px;
-    }
+    justify-content: center;
 
     &:hover {
       background: darken($phovea_layout_separator_color, 20%);
+
+      span {
+        border-color: lighten($phovea_layout_separator_hints, 20%);
+      }
+    }
+
+    span {
+      display: block;
+      width: 0;
+      height: 0;
+      border: 5px solid $phovea_layout_separator_hints;
+
+      cursor: pointer;
+
+      &:hover {
+        border-color: white;
+      }
     }
   }
 }
