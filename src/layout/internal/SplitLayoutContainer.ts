@@ -104,7 +104,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
   }
 
   push(child: ILayoutContainer, index: number = -1, ratio: number = 0) {
-    const r = super.push(child);
+    const r = super.push(child, index);
     if (index < 0 || index >= (this._children.length - 1)) {
       this._ratios.push(ratio);
     } else {

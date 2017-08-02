@@ -67,6 +67,10 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
     return dropLogic(item, parent, area);
   }
 
+  if (parent === reference) {
+    //can't split my parent with my parent
+    return false;
+  }
   //replace myself with a split container
   const p = new SplitLayoutContainer(item.node.ownerDocument, {
     orientation: (area === 'left' || area === 'right') ? EOrientation.HORIZONTAL : EOrientation.VERTICAL,

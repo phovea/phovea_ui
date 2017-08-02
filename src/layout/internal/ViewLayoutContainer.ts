@@ -1,6 +1,6 @@
 import {ILayoutContainer, ILayoutDump, ISize, IView} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
-import {dropViews} from './utils';
+import {dropViews} from './dropper';
 
 export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContainerOption> implements ILayoutContainer {
 

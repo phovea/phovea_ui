@@ -8,13 +8,10 @@
   > * {
     flex: 1 1 auto;
     position: relative;
-    opacity: 1;
-    transition: opacity ease 0.5s;
   }
 
   > *:not(.active) {
     display: none;
-    opacity: 0;
   }
 }
 
