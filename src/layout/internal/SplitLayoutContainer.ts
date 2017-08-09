@@ -3,8 +3,14 @@ import {EOrientation, IDropArea} from './interfaces';
 import {ALayoutContainer} from './ALayoutContainer';
 import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} from './ASequentialLayoutContainer';
 
+export interface ISplitlLayoutContainerOptions extends ISequentialLayoutContainerOptions {
+  /**
+   * if true the user can't change the separator, i.e. it is fixed
+   */
+  readonly fixedLayout: boolean;
+}
 
-export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISequentialLayoutContainerOptions> {
+export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISplitlLayoutContainerOptions> {
   private static readonly SEPARATOR = `<div data-layout="separator"><span title="Squeeze Left"></span><span title="Squeeze Right"></span></div>`;
   private static readonly SEPARATOR_WIDTH = 5;
 
@@ -12,24 +18,32 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
 
   private readonly _ratios: number[] = [];
 
-  constructor(document: Document, options: Partial<ISequentialLayoutContainerOptions>, ratio?: number, child1?: ILayoutContainer, child2?: ILayoutContainer) {
+  constructor(document: Document, options: Partial<ISplitlLayoutContainerOptions>, ratio?: number, child1?: ILayoutContainer, child2?: ILayoutContainer) {
     super(document, options);
     console.assert(ratio === undefined || (ratio >= 0 && ratio <= 1));
     this.node.dataset.layout = 'split';
 
-    this.node.addEventListener('mousedown', (evt) => {
-      if (this.isSeparator(<HTMLElement>evt.target)) {
-        //dragging
-        const index = Math.floor(Array.from(this.node.children).indexOf(<HTMLElement>evt.target) / 2);
-        this.enableDragging(index);
-      }
-    });
+    if(!this.options.fixedLayout) {
+      this.node.addEventListener('mousedown', (evt) => {
+        if (this.isSeparator(<HTMLElement>evt.target)) {
+          //dragging
+          const index = Math.floor(Array.from(this.node.children).indexOf(<HTMLElement>evt.target) / 2);
+          this.enableDragging(index);
+        }
+      });
+    }
 
     if (ratio !== undefined) {
       console.assert(child1 != null && child2 != null);
       this.push(child1, -1, ratio);
       this.push(child2, -1, 1 - ratio);
     }
+  }
+
+  defaultOptions() {
+    return Object.assign(super.defaultOptions(), {
+      fixed: false
+    });
   }
 
   place(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea) {
@@ -156,16 +170,20 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
     if (this.length > 1) {
       this.node.insertAdjacentHTML('beforeend', SplitLayoutContainer.SEPARATOR);
       const separator = this.node.lastElementChild;
-      separator.firstElementChild.addEventListener('click', (evt) => {
-        evt.preventDefault();
-        evt.stopPropagation();
-        this.squeeze(<HTMLElement>separator, 'left');
-      });
-      separator.lastElementChild.addEventListener('click', (evt) => {
-        evt.preventDefault();
-        evt.stopPropagation();
-        this.squeeze(<HTMLElement>separator, 'right');
-      });
+      if(!this.options.fixedLayout) {
+        separator.firstElementChild.addEventListener('click', (evt) => {
+          evt.preventDefault();
+          evt.stopPropagation();
+          this.squeeze(<HTMLElement>separator, 'left');
+        });
+        separator.lastElementChild.addEventListener('click', (evt) => {
+          evt.preventDefault();
+          evt.stopPropagation();
+          this.squeeze(<HTMLElement>separator, 'right');
+        });
+      } else {
+        separator.classList.add('fixed');
+      }
       if (index > 0) {
         this.node.insertBefore(separator, child.node.parentElement);
       } else {
@@ -209,6 +227,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
     return Object.assign(super.persist(), {
       type: 'split',
       ratios: this.ratios,
+      fixedLayout: this.options.fixedLayout
     });
   }
 
@@ -216,7 +235,8 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
     console.assert(dump.children.length >= 2);
     const ratios = dump.ratios;
     const options = Object.assign(ALayoutContainer.restoreOptions(dump), {
-      orientation: EOrientation[<string>dump.orientation]
+      orientation: EOrientation[<string>dump.orientation],
+      fixedLayout: dump.fixedLayout === true
     });
     const r = new SplitLayoutContainer(doc, options, ratios[0], restore(dump.children[0]), restore(dump.children[0]));
     dump.children.slice(2).forEach((d, i) => r.push(restore(d), ratios[i + 2]));

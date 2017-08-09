@@ -7,7 +7,7 @@
   &[data-orientation=h] {
     flex-direction: row;
 
-    > [data-layout=separator] {
+    > [data-layout=separator]:not(.fixed) {
       cursor: ew-resize;
       flex-direction: column;
 
@@ -31,7 +31,7 @@
   &[data-orientation=v] {
     flex-direction: column;
 
-    > [data-layout=separator] {
+    > [data-layout=separator]:not(.fixed) {
       cursor: ns-resize;
       flex-direction: row;
 
@@ -76,11 +76,14 @@
     align-items: center;
     justify-content: center;
 
-    &:hover {
-      background: darken($phovea_layout_separator_color, 20%);
+    &:not(.fixed) {
 
-      span {
-        border-color: lighten($phovea_layout_separator_hints, 20%);
+      &:hover {
+        background: darken($phovea_layout_separator_color, 20%);
+
+        span {
+          border-color: lighten($phovea_layout_separator_hints, 20%);
+        }
       }
     }
 
@@ -94,6 +97,12 @@
 
       &:hover {
         border-color: white;
+      }
+    }
+
+    &.fixed {
+      span {
+        display: none;
       }
     }
   }

@@ -72,6 +72,7 @@ abstract class AParentBuilder extends ABuilder {
 
 class SplitBuilder extends AParentBuilder {
   private _ratio: number = 0.5;
+  private _fixedLayout: boolean = false;
 
   constructor(private readonly orientation: EOrientation, ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike) {
     super([left, right]);
@@ -88,9 +89,19 @@ class SplitBuilder extends AParentBuilder {
     return this;
   }
 
+  /**
+   * fixes the split separator, i.e, the user cannot change it
+   * @return {SplitBuilder}
+   */
+  fixedLayout() {
+    this._fixedLayout = true;
+    return this;
+  }
+
   protected buildOptions(): Partial<ISequentialLayoutContainerOptions> {
     return Object.assign({
-      orientation: this.orientation
+      orientation: this.orientation,
+      fixedLayout: this._fixedLayout,
     }, super.buildOptions());
   }
 
