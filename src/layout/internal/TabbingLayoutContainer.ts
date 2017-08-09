@@ -3,6 +3,7 @@ import {ILayoutContainer, ILayoutDump, ISize} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {dropAble} from 'phovea_core/src';
 import {IDropArea} from './interfaces';
+import {LayoutContainerEvents} from '../';
 
 
 export interface ITabbingLayoutContainerOptions extends ILayoutContainerOption {
@@ -10,6 +11,7 @@ export interface ITabbingLayoutContainerOptions extends ILayoutContainerOption {
 }
 
 export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayoutContainerOptions> {
+  private static readonly TAB_REORDER = `<div data-layout="tab-reorder">&nbsp;</div>`;
   readonly minChildCount = 0;
   private _active: ILayoutContainer | null = null;
 
@@ -28,11 +30,17 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
       //find id and move it here
       const root = this.root;
       const toMove = root.find(id);
-      if (toMove === null || this._children.indexOf(toMove) >= 0) {
+      if (toMove === null || toMove instanceof AParentLayoutContainer && this.parents.indexOf(toMove) >= 0) {
+        //can't move parent into me
         return false;
       }
-      //not a child already
-      this.push(toMove);
+      const alreadyChild = this._children.indexOf(toMove) >= 0;
+      if (alreadyChild) {
+        this.moveChild(toMove, this.length);
+      } else {
+        //not a child already
+        this.push(toMove);
+      }
       return true;
     }, null, true);
   }
@@ -64,6 +72,30 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
     this.activeChanged(this._active, this._active = child);
   }
 
+  private reorderAble(reorder: HTMLElement) {
+     dropAble(reorder, [ALayoutContainer.MIME_TYPE], (result) => {
+      const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
+      console.assert(id >= 0);
+      //find id and move it here
+      const root = this.root;
+      const toMove = root.find(id);
+      if (toMove === null || toMove instanceof AParentLayoutContainer && this.parents.indexOf(toMove) >= 0) {
+        //can't move parent into me
+        return false;
+      }
+      //next sibling = managed header
+      const index = this._children.findIndex((d) => d.header === reorder.nextSibling);
+      const alreadyChild = this._children.indexOf(toMove) >= 0;
+      if (alreadyChild) {
+        this.moveChild(toMove, index);
+      } else {
+        //not a child already
+        this.push(toMove, index);
+      }
+      return true;
+    }, null, true);
+  }
+
   protected addedChild(child: ILayoutContainer, index: number) {
     super.addedChild(child, index);
     child.visible = child === this.active;
@@ -71,17 +103,49 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
     child.header.onclick = () => {
       this.active = child;
     };
+    this.header.insertAdjacentHTML('beforeend', TabbingLayoutContainer.TAB_REORDER);
+    const reorder = <HTMLElement>this.header.lastElementChild!;
+    this.reorderAble(reorder);
     if (index < 0 || index >= this.length - 1) {
       this.header.appendChild(child.header);
       this.node.appendChild(child.node);
     } else {
-      this.header.insertBefore(child.header, this._children[index + 1].header);
+      this.header.insertBefore(child.header, this._children[index + 1].header.previousSibling);
+      this.header.insertBefore(reorder, child.header);
       this.node.insertBefore(child.node, this._children[index + 1].node);
     }
 
     if (this.active === null) {
       this.active = child;
     }
+  }
+
+  private moveChild(child: ILayoutContainer, index: number) {
+    const old = this._children.indexOf(child);
+    const atEnd = index === this.length;
+    if (old === index || (atEnd && old === index - 1)) {
+      //already at the right position
+      return;
+    }
+    this._children.splice(old, 1);
+    if (old < index) {
+      index -= 1; //since we removed it already
+    }
+    this._children.splice(index, 0, child);
+    //update header
+    const reorder = child.header.previousSibling;
+    if (atEnd) {
+      //reorder
+      this.header.appendChild(reorder);
+      this.header.appendChild(child.header);
+      this.node.appendChild(child.node);
+      return;
+    }
+    const next = this._children[index + 1];
+    this.header.insertBefore(child.header, next.header.previousSibling); //2 extra items
+    this.header.insertBefore(reorder, child.header);
+    this.node.insertBefore(child.node, next.node);
+    this.fire(LayoutContainerEvents.EVENT_TAB_REORDED, child, index);
   }
 
   replace(child: ILayoutContainer, replacement: ILayoutContainer) {
@@ -99,6 +163,8 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
       this.active = this.length === 1 ? null : (index === 0 ? this._children[1] : this._children[index - 1]!);
     }
     child.header.onclick = null;
+    //reorder
+    this.header.removeChild(child.header.previousSibling);
     this.header.removeChild(child.header);
     this.node.removeChild(child.node);
     super.takeDownChild(child);

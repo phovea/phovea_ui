@@ -14,6 +14,7 @@ export class LayoutContainerEvents {
   static readonly EVENT_CHILD_ADDED = 'addChild';
   static readonly EVENT_CHILD_REMOVED = 'removeChild';
   static readonly EVENT_CHANGE_SPLIT_RATIOS = 'changeRatios';
+  static readonly EVENT_TAB_REORDED = 'tabReorded';
 }
 /**
  * base interface for the container
