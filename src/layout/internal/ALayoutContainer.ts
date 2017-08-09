@@ -1,5 +1,5 @@
 import {EventHandler} from 'phovea_core/src/event';
-import {ILayoutDump} from 'phovea_ui/src/layout/interfaces';
+import {ILayoutDump, LayoutContainerEvents} from 'phovea_ui/src/layout/interfaces';
 import {dragAble, uniqueId} from 'phovea_core/src';
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 
@@ -70,7 +70,9 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     };
   }
 
-  abstract destroy(): void;
+  destroy() {
+    this.fire(LayoutContainerEvents.EVENT_DESTROYED, this);
+  }
 
   get name() {
     return this.options.name;
@@ -80,7 +82,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     if (this.options.name === name) {
       return;
     }
-    this.options.name = name;
+    this.fire(LayoutContainerEvents.EVENT_NAME_CHANGED, this.options.name, this.options.name = name);
     this.updateName(name);
   }
 

@@ -1,6 +1,7 @@
 import {ILayoutContainer, ILayoutDump, ISize, IView} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {dropViews} from './dropper';
+import {LayoutContainerEvents} from '../';
 
 export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContainerOption> implements ILayoutContainer {
 
@@ -28,7 +29,7 @@ export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContain
   }
 
   set visible(visible: boolean) {
-    this.view.visible = visible;
+    this.fire(LayoutContainerEvents.EVENT_VISIBILITY_CHANGED, this.view.visible, this.view.visible = visible);
   }
 
   get minSize() {
@@ -40,6 +41,7 @@ export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContain
   }
 
   destroy() {
+    super.destroy();
     if (this.parent) {
       this.parent.remove(this);
     }

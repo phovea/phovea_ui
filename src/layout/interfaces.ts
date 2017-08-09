@@ -6,6 +6,15 @@ import {IHasUniqueId} from 'phovea_core/src/idtype';
  */
 export declare type ISize = [number, number];
 
+export class LayoutContainerEvents {
+  static readonly EVENT_DESTROYED = 'destroy';
+  static readonly EVENT_VISIBILITY_CHANGED = 'visibilityChanged';
+  static readonly EVENT_NAME_CHANGED = 'nameChanged';
+
+  static readonly EVENT_CHILD_ADDED = 'addChild';
+  static readonly EVENT_CHILD_REMOVED = 'removeChild';
+  static readonly EVENT_CHANGE_SPLIT_RATIOS = 'changeRatios';
+}
 /**
  * base interface for the container
  */

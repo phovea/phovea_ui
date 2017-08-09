@@ -2,6 +2,7 @@ import {ILayoutContainer, ILayoutDump} from '../interfaces';
 import {EOrientation, IDropArea} from './interfaces';
 import {ALayoutContainer} from './ALayoutContainer';
 import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} from './ASequentialLayoutContainer';
+import {LayoutContainerEvents} from '../';
 
 export interface ISplitlLayoutContainerOptions extends ISequentialLayoutContainerOptions {
   /**
@@ -78,6 +79,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
 
   setRatio(index: number, ratio: number) {
     console.assert(ratio >= 0 && ratio <= 1);
+    const bak = this._ratios.slice();
 
     if (index === 0 || index >= (this.length - 2)) {
       if (index > 0 && index === (this.length - 2)) {
@@ -116,6 +118,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
     } else {
       right.forEach((r, i) => this._ratios[i + index + 1] = ratio / right.length);
     }
+    this.fire(LayoutContainerEvents.EVENT_CHANGE_SPLIT_RATIOS, bak, this._ratios.slice());
     this.updateRatios();
   }
 

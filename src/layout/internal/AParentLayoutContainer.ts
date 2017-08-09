@@ -1,4 +1,4 @@
-import {ILayoutContainer, ILayoutDump, ILayoutParentContainer, ISize} from '../interfaces';
+import {ILayoutContainer, ILayoutDump, ILayoutParentContainer, ISize, LayoutContainerEvents} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {IDropArea} from './interfaces';
 
@@ -50,7 +50,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     if (this._visible === visible) {
       return;
     }
-    this._visible = visible;
+    this.fire(LayoutContainerEvents.EVENT_VISIBILITY_CHANGED, this._visible, this._visible = visible);
     this.visibilityChanged(visible);
   }
 
@@ -81,8 +81,9 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     child.parent = this;
   }
 
-  protected addedChild(child: ILayoutContainer, _index: number) {
+  protected addedChild(child: ILayoutContainer, index: number) {
     child.resized();
+    this.fire(LayoutContainerEvents.EVENT_CHILD_ADDED, child, index);
   }
 
   replace(child: ILayoutContainer, replacement: ILayoutContainer) {
@@ -90,6 +91,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     console.assert(index >= 0);
 
     this.takeDownChild(child);
+    this.fire(LayoutContainerEvents.EVENT_CHILD_REMOVED, child);
     this.setupChild(replacement);
     this._children.splice(index, 1, replacement);
     this.addedChild(replacement, index);
@@ -109,6 +111,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
         this.parent.remove(this);
       }
     }
+    this.fire(LayoutContainerEvents.EVENT_CHILD_REMOVED, child);
     return true;
   }
 
@@ -121,6 +124,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
   }
 
   destroy() {
+    super.destroy();
     if (this.parent) {
       this.parent.remove(this);
     }
