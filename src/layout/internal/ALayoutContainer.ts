@@ -48,6 +48,16 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     }
   }
 
+  get parents() {
+    const r: AParentLayoutContainer<any>[] = [];
+    let p = this.parent;
+    while (p !== null) {
+      r.push(p);
+      p = p.parent;
+    }
+    return r;
+  }
+
   get hideAbleHeader() {
     return false;
   }

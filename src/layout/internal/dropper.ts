@@ -7,6 +7,7 @@ import TabbingLayoutContainer from './TabbingLayoutContainer';
 import SplitLayoutContainer from './SplitLayoutContainer';
 import {dropAble} from 'phovea_core/src/internal/dnd';
 import {EOrientation, IDropArea} from './interfaces';
+import {AParentLayoutContainer} from './AParentLayoutContainer';
 
 
 function determineDropArea(x: number, y: number): IDropArea {
@@ -42,6 +43,10 @@ export function dropViews(node: HTMLElement, reference: ALayoutContainer<any> & 
 }
 
 function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & ILayoutContainer, area: IDropArea) {
+  if (item instanceof AParentLayoutContainer && reference.parents.indexOf(item) >= 0) {
+    //can drop item within one of its children
+    return false;
+  }
   const parent = reference.parent;
   const canDirectly = parent.canDrop(area);
   if (canDirectly) {
