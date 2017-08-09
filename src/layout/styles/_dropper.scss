@@ -28,9 +28,9 @@
     user-select: none;
     opacity: 0;
     transition: opacity 1s ease;
-    background: radial-gradient(circle closest-side, $phovea_layout_dropper_background 30%, transparent 35%);
-    background-size: 33% 26%;
-    background-repeat: space;
+    background: radial-gradient(circle closest-side, rgba(0, 0, 0, 0.25) 20%, transparent 24%) space;
+    background-size: 26% 26%;
+    border-radius: 50%;
   }
 
   &::after {
