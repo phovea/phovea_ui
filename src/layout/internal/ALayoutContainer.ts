@@ -1,5 +1,5 @@
 import {EventHandler} from 'phovea_core/src/event';
-import {ILayoutDump, LayoutContainerEvents} from 'phovea_ui/src/layout/interfaces';
+import {ILayoutDump, LayoutContainerEvents} from '../interfaces';
 import {dragAble, uniqueId} from 'phovea_core/src';
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 
