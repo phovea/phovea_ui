@@ -28,6 +28,7 @@ export default class LineUpLayoutContainer extends ASequentialLayoutContainer<IS
     } else {
       this.node.insertBefore(wrap(child), this.node.children[index]);
     }
+    child.visible = this.visible;
   }
 
   protected takeDownChild(child: ILayoutContainer) {

@@ -15,6 +15,7 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
       fixed: true
     });
     this.node.dataset.layout = 'root';
+    this.visible = true;
   }
 
   set root(root: ILayoutContainer) {
@@ -40,6 +41,7 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
       this.node.appendChild(child.header);
     }
     this.node.appendChild(child.node);
+    child.visible = this.visible;
   }
 
   place(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea) {

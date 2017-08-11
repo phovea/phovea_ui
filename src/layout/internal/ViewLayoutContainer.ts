@@ -1,9 +1,9 @@
-import {ILayoutContainer, ILayoutDump, ISize, IView} from '../interfaces';
+import {ILayoutDump, ISize, IView, IViewLayoutContainer} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {dropViews} from './dropper';
 import {LayoutContainerEvents} from '../';
 
-export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContainerOption> implements ILayoutContainer {
+export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContainerOption> implements IViewLayoutContainer {
 
   readonly node: HTMLElement;
   readonly type = 'view';

@@ -21,6 +21,9 @@ export class LayoutContainerEvents {
  * base interface for the container
  */
 export interface ILayoutContainer extends IEventHandler, IHasUniqueId {
+  /**
+   * the container type
+   */
   readonly type: 'view'|'tabbing'|'split'|'lineup'|'root';
   /**
    * parent container or null if there is none anymore
@@ -177,6 +180,13 @@ export interface ISplitLayoutContainer extends ILayoutParentContainer {
    * @return {boolean}
    */
   push(child: ILayoutContainer, index?: number, ratio?: number): boolean;
+}
+
+export interface IViewLayoutContainer extends ILayoutContainer {
+  /**
+   * the represented view
+   */
+  readonly view: IView;
 }
 
 

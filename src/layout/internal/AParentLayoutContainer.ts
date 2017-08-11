@@ -9,7 +9,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
   readonly node: HTMLElement;
   abstract readonly minChildCount: number;
   protected readonly _children: ILayoutContainer[] = [];
-  private _visible: boolean;
+  private _visible: boolean = false;
   abstract readonly type: 'tabbing'|'split'|'lineup'|'root';
 
   constructor(document: Document, options: Partial<T>) {
@@ -120,6 +120,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
   }
 
   protected takeDownChild(child: ILayoutContainer) {
+    child.visible = false;
     (<any>child).parent = null;
   }
 

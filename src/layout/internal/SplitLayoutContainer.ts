@@ -202,6 +202,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
         this.node.insertBefore(separator, child.node.parentElement.nextSibling);
       }
     }
+    child.visible = this.visible;
   }
 
   replace(child: ILayoutContainer, replacement: ILayoutContainer) {
