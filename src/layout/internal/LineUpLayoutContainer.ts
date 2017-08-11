@@ -6,6 +6,7 @@ import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} fro
 
 export default class LineUpLayoutContainer extends ASequentialLayoutContainer<ISequentialLayoutContainerOptions> {
   readonly minChildCount = 1;
+  readonly type = 'lineup';
 
   constructor(document: Document, options: Partial<ISequentialLayoutContainerOptions>, ...children: ILayoutContainer[]) {
     super(document, options);

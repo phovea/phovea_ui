@@ -7,6 +7,7 @@ import {IBuildAbleOrViewLike} from '../builder';
 
 export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutContainerOption> implements IRootLayoutContainer {
   readonly minChildCount = 0;
+  readonly type = 'root';
 
   constructor(document: Document, public readonly build: (layout: IBuildAbleOrViewLike)=> ILayoutContainer) {
     super(document, {

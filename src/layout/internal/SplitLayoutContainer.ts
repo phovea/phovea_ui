@@ -16,6 +16,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
   private static readonly SEPARATOR_WIDTH = 5;
 
   readonly minChildCount = 2;
+  readonly type = 'split';
 
   private readonly _ratios: number[] = [];
 

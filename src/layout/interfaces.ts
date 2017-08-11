@@ -21,10 +21,11 @@ export class LayoutContainerEvents {
  * base interface for the container
  */
 export interface ILayoutContainer extends IEventHandler, IHasUniqueId {
+  readonly type: 'view'|'tabbing'|'split'|'lineup'|'root';
   /**
    * parent container or null if there is none anymore
    */
-  parent: ILayoutParentContainer | null;
+  readonly parent: ILayoutParentContainer | null;
   /**
    * HTML node managed by this container
    */

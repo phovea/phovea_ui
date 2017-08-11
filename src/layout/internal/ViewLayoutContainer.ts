@@ -6,6 +6,7 @@ import {LayoutContainerEvents} from '../';
 export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContainerOption> implements ILayoutContainer {
 
   readonly node: HTMLElement;
+  readonly type = 'view';
 
   constructor(public readonly view: IView, options: Partial<ILayoutContainerOption>) {
     super(view.node.ownerDocument, options);

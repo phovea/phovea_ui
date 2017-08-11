@@ -10,6 +10,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
   abstract readonly minChildCount: number;
   protected readonly _children: ILayoutContainer[] = [];
   private _visible: boolean;
+  abstract readonly type: 'tabbing'|'split'|'lineup'|'root';
 
   constructor(document: Document, options: Partial<T>) {
     super(document, options);
@@ -81,7 +82,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     if (child.parent) {
       child.parent.remove(child);
     }
-    child.parent = this;
+    (<any>child).parent = this;
   }
 
   protected addedChild(child: ILayoutContainer, index: number) {
@@ -119,7 +120,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
   }
 
   protected takeDownChild(child: ILayoutContainer) {
-    child.parent = null;
+    (<any>child).parent = null;
   }
 
   resized() {
