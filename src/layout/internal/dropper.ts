@@ -32,7 +32,7 @@ export function dropViews(node: HTMLElement, reference: ALayoutContainer<any> & 
     const area = determineDropArea(e.offsetX / node.offsetWidth, e.offsetY / node.offsetHeight);
     const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
     console.assert(reference.parent != null);
-    const item = reference.parent.root.find(id);
+    const item = reference.parent.rootParent.find(id);
     if (item === reference || item === null) {
       return false;
     }

@@ -1,13 +1,14 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {ILayoutContainer, ILayoutDump} from '../interfaces';
+import {ILayoutContainer, ILayoutDump, IRootLayoutContainer} from '../interfaces';
 import TabbingLayoutContainer from './TabbingLayoutContainer';
 import {ILayoutContainerOption} from './ALayoutContainer';
 import {IDropArea} from './interfaces';
+import {IBuildAbleOrViewLike} from '../builder';
 
-export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutContainerOption> {
+export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutContainerOption> implements IRootLayoutContainer {
   readonly minChildCount = 0;
 
-  constructor(document: Document) {
+  constructor(document: Document, public readonly build: (layout: IBuildAbleOrViewLike)=> ILayoutContainer) {
     super(document, {
       name: '',
       fixed: true
@@ -15,11 +16,15 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     this.node.dataset.layout = 'root';
   }
 
-  setRoot(root: ILayoutContainer) {
-    this.push(root);
+  set root(root: ILayoutContainer) {
+    if (this._children.length > 0) {
+      this.replace(this.root, root);
+    } else {
+      this.push(root);
+    }
   }
 
-  getRoot(root: ILayoutContainer) {
+  get root() {
     return this._children[0];
   }
 
@@ -54,10 +59,10 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     });
   }
 
-  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump) => ILayoutContainer, doc: Document) {
-    const r = new RootLayoutContainer(doc);
+  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump) => ILayoutContainer, doc: Document, build: (root: RootLayoutContainer, layout: IBuildAbleOrViewLike)=> ILayoutContainer) {
+    const r = new RootLayoutContainer(doc, (layout) => build(r, layout));
     if (dump.children && dump.children.length > 0) {
-      r.setRoot(restore(dump.children[0]));
+      r.root = restore(dump.children[0]);
       dump.children.slice(1).forEach((d) => r.push(restore(d)));
     }
     return r;

@@ -1,4 +1,4 @@
-import {ILayoutContainer, ILayoutDump, IView} from './interfaces';
+import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, IView} from './interfaces';
 import {EOrientation} from './internal/interfaces';
 import ViewLayoutContainer, {HTMLView} from './internal/ViewLayoutContainer';
 import SplitLayoutContainer from './internal/SplitLayoutContainer';
@@ -9,7 +9,7 @@ import {ILayoutContainerOption} from './internal/ALayoutContainer';
 import {ISequentialLayoutContainerOptions} from './internal/ASequentialLayoutContainer';
 
 
-declare type IBuildAbleOrViewLike = ABuilder | IView | string;
+export declare type IBuildAbleOrViewLike = ABuilder | IView | string;
 
 function toBuilder(view: IBuildAbleOrViewLike): ABuilder {
   if (view instanceof ABuilder) {
@@ -252,12 +252,12 @@ export function view(view: string | IView): ViewBuilder {
  * creates the root of a new layout
  * @param {IBuildAbleOrViewLike} child the only child of the root
  * @param {Document} doc root Document
- * @return {ILayoutContainer} the root element
+ * @return {IRootLayoutContainer} the root element
  */
-export function root(child: IBuildAbleOrViewLike, doc = document): ILayoutContainer {
+export function root(child: IBuildAbleOrViewLike, doc = document): IRootLayoutContainer {
   const b = toBuilder(child);
-  const r = new RootLayoutContainer(doc);
-  r.setRoot(b.build(r, doc));
+  const r = new RootLayoutContainer(doc, (child) => toBuilder(child).build(r, doc));
+  r.root = b.build(r, doc);
   return r;
 }
 
@@ -272,7 +272,7 @@ export function restore(dump: ILayoutDump, restoreView: (referenceId: number) =>
   const restorer = (d: ILayoutDump) => restore(d, restoreView, doc);
   switch (dump.type) {
     case 'root':
-      return RootLayoutContainer.restore(dump, restorer, doc);
+      return RootLayoutContainer.restore(dump, restorer, doc, (r, child) => toBuilder(child).build(r, doc));
     case 'split':
       return SplitLayoutContainer.restore(dump, restorer, doc);
     case 'lineup':

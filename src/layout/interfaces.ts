@@ -1,5 +1,6 @@
 import {IEventHandler} from 'phovea_core/src/event';
 import {IHasUniqueId} from 'phovea_core/src/idtype';
+import {IBuildAbleOrViewLike} from './builder';
 
 /**
  * [width, height]
@@ -20,6 +21,9 @@ export class LayoutContainerEvents {
  * base interface for the container
  */
 export interface ILayoutContainer extends IEventHandler, IHasUniqueId {
+  /**
+   * parent container or null if there is none anymore
+   */
   parent: ILayoutParentContainer | null;
   /**
    * HTML node managed by this container
@@ -46,13 +50,45 @@ export interface ILayoutContainer extends IEventHandler, IHasUniqueId {
    */
   visible: boolean;
 
+  /**
+   * notification that the size of the container has changed
+   */
   resized(): void;
 
+  /**
+   * destroys this container
+   */
   destroy(): void;
 
+  /**
+   * persists the layout in a dumpable version
+   * @return {ILayoutDump}
+   */
   persist(): ILayoutDump;
 
-  find(id: number): ILayoutContainer | null;
+  /**
+   * find a view by id or function
+   * @param {number | ((container: ILayoutContainer) => boolean)} id
+   * @return {ILayoutContainer}
+   */
+  find(id: number|((container: ILayoutContainer)=>boolean)): ILayoutContainer | null;
+}
+
+/**
+ * root layout element
+ */
+export interface IRootLayoutContainer extends ILayoutContainer {
+  /**
+   * the root element
+   */
+  root: ILayoutContainer;
+
+  /**
+   * build other container based on an existing root
+   * @param {IBuildAbleOrViewLike} item
+   * @return {ILayoutContainer}
+   */
+  build(item: IBuildAbleOrViewLike): ILayoutContainer;
 }
 
 export interface ILayoutDump {
@@ -73,10 +109,19 @@ export interface ILayoutDump {
 }
 
 export interface ILayoutParentContainer extends ILayoutContainer, Iterable<ILayoutContainer> {
+  /**
+   * children of this container
+   */
   readonly children: ILayoutContainer[];
 
+  /**
+   * shortcut for children.length
+   */
   readonly length: number;
 
+  /**
+   * shortcut for children.forEach
+   */
   forEach(callback: (child: ILayoutContainer, index: number) => void): void;
 
   /**
@@ -110,12 +155,24 @@ export interface IView {
    * HTMLElement of this view
    */
   readonly node: HTMLElement;
+  /**
+   * the minimal size of this view (currently not considered)
+   */
   readonly minSize: ISize;
 
+  /**
+   * visibility state of this view
+   */
   visible: boolean;
 
+  /**
+   * destroy this views
+   */
   destroy(): void;
 
+  /**
+   * notification that this view has been resized
+   */
   resized(): void;
 
   /**

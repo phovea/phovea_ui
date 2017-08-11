@@ -1,4 +1,7 @@
-import {ILayoutContainer, ILayoutDump, ILayoutParentContainer, ISize, LayoutContainerEvents} from '../interfaces';
+import {
+  ILayoutContainer, ILayoutDump, ILayoutParentContainer, IRootLayoutContainer, ISize,
+  LayoutContainerEvents
+} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {IDropArea} from './interfaces';
 
@@ -18,12 +21,12 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     return false;
   }
 
-  get root(): ILayoutParentContainer {
+  get rootParent(): IRootLayoutContainer&ILayoutParentContainer {
     let p: ILayoutParentContainer = this;
     while (p.parent !== null) {
       p = p.parent;
     }
-    return p;
+    return <IRootLayoutContainer&ILayoutParentContainer>p;
   }
 
   forEach(callback: (child: ILayoutContainer, index: number) => void) {
@@ -137,8 +140,8 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     });
   }
 
-  find(id: number) {
-    if (this.id === id) {
+  find(id: number|((container: ILayoutContainer)=>boolean)) {
+    if (super.find(id) != null) {
       return this;
     }
     for (const child of this._children) {

@@ -28,7 +28,7 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
       const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
       console.assert(id >= 0);
       //find id and move it here
-      const root = this.root;
+      const root = this.rootParent;
       const toMove = root.find(id);
       if (toMove === null || toMove === this || toMove instanceof AParentLayoutContainer && this.parents.indexOf(toMove) >= 0) {
         //can't move parent into me
@@ -77,7 +77,7 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
       const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
       console.assert(id >= 0);
       //find id and move it here
-      const root = this.root;
+      const root = this.rootParent;
       const toMove = root.find(id);
       if (toMove === null || toMove === this || toMove instanceof AParentLayoutContainer && this.parents.indexOf(toMove) >= 0) {
         //can't move parent into me
