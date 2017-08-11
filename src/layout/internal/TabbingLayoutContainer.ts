@@ -1,5 +1,5 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {ILayoutContainer, ILayoutDump, ISize} from '../interfaces';
+import {ILayoutContainer, ILayoutDump, ISize, ITabbingLayoutContainer} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {dropAble} from 'phovea_core/src';
 import {IDropArea} from './interfaces';
@@ -10,7 +10,7 @@ export interface ITabbingLayoutContainerOptions extends ILayoutContainerOption {
   readonly active: number;
 }
 
-export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayoutContainerOptions> {
+export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayoutContainerOptions> implements ITabbingLayoutContainer {
   private static readonly TAB_REORDER = `<div data-layout="tab-reorder">&nbsp;</div>`;
   readonly minChildCount = 0;
   private _active: ILayoutContainer | null = null;

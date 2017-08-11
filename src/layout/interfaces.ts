@@ -147,6 +147,38 @@ export interface ILayoutParentContainer extends ILayoutContainer, Iterable<ILayo
   remove(child: ILayoutContainer): boolean;
 }
 
+
+export interface ITabbingLayoutContainer extends ILayoutParentContainer {
+  /**
+   * get or set the active tab
+   */
+  active: ILayoutContainer;
+}
+
+export interface ISplitLayoutContainer extends ILayoutParentContainer {
+  /**
+   * get or set the ratios between the split elements
+   */
+  ratios: number[];
+
+  /**
+   * set the ratio at a specific index
+   * @param {number} index
+   * @param {number} ratio
+   */
+  setRatio(index: number, ratio: number): void;
+
+  /**
+   * push with optional ratio
+   * @param {ILayoutContainer} child
+   * @param {number} index
+   * @param {number} ratio
+   * @return {boolean}
+   */
+  push(child: ILayoutContainer, index?: number, ratio?: number): boolean;
+}
+
+
 /**
  * interface for the actual view
  */

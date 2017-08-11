@@ -1,4 +1,4 @@
-import {ILayoutContainer, ILayoutDump} from '../interfaces';
+import {ILayoutContainer, ILayoutDump, ISplitLayoutContainer} from '../interfaces';
 import {EOrientation, IDropArea} from './interfaces';
 import {ALayoutContainer} from './ALayoutContainer';
 import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} from './ASequentialLayoutContainer';
@@ -11,7 +11,7 @@ export interface ISplitlLayoutContainerOptions extends ISequentialLayoutContaine
   readonly fixedLayout: boolean;
 }
 
-export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISplitlLayoutContainerOptions> {
+export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISplitlLayoutContainerOptions> implements ISplitLayoutContainer {
   private static readonly SEPARATOR = `<div data-layout="separator"><span title="Squeeze Left"></span><span title="Squeeze Right"></span></div>`;
   private static readonly SEPARATOR_WIDTH = 5;
 
