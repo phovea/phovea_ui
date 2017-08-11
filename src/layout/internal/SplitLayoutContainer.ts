@@ -36,8 +36,8 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
 
     if (ratio !== undefined) {
       console.assert(child1 != null && child2 != null);
-      this.push(child1, -1, ratio);
-      this.push(child2, -1, 1 - ratio);
+      this.push(child1, -1, 1);
+      this.push(child2, -1, (1 - ratio) / ratio);
     }
   }
 
@@ -122,6 +122,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
     this.updateRatios();
   }
 
+
   private squeeze(separator: HTMLElement, dir: 'left' | 'right') {
     const index = Math.floor(Array.from(this.node.children).indexOf(separator) / 2);
     this.setRatio(index + (dir === 'right' ? 1 : 0), 0);
@@ -135,11 +136,18 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
       const wrapper = c.node.parentElement.style;
       wrapper.flex = `${act[i]} ${act[i]} 0`;
       wrapper.display = act[i] <= 1 ? 'none' : null;
+      c.resized();
     });
   }
 
   get ratios() {
     return this._ratios.slice();
+  }
+
+  set ratios(values: number[]) {
+    console.assert(values.length === this._ratios.length);
+    this._ratios.splice(0, this._ratios.length, ...values);
+    this.updateRatios();
   }
 
   protected getPadding() {
@@ -229,7 +237,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
   persist() {
     return Object.assign(super.persist(), {
       type: 'split',
-      ratios: this.ratios,
+      ratios: this.ratios.map((r) => Math.round(r * 100) / 100), //round to 2 digits
       fixedLayout: this.options.fixedLayout
     });
   }
@@ -241,8 +249,10 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
       orientation: EOrientation[<string>dump.orientation],
       fixedLayout: dump.fixedLayout === true
     });
-    const r = new SplitLayoutContainer(doc, options, ratios[0], restore(dump.children[0]), restore(dump.children[0]));
+    const r = new SplitLayoutContainer(doc, options, ratios[0], restore(dump.children[0]), restore(dump.children[1]));
     dump.children.slice(2).forEach((d, i) => r.push(restore(d), ratios[i + 2]));
+    //force specific ratios
+    r.ratios = ratios;
     return r;
   }
 }
