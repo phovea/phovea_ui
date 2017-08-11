@@ -30,7 +30,7 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
       //find id and move it here
       const root = this.root;
       const toMove = root.find(id);
-      if (toMove === null || toMove instanceof AParentLayoutContainer && this.parents.indexOf(toMove) >= 0) {
+      if (toMove === null || toMove === this || toMove instanceof AParentLayoutContainer && this.parents.indexOf(toMove) >= 0) {
         //can't move parent into me
         return false;
       }
@@ -79,7 +79,7 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
       //find id and move it here
       const root = this.root;
       const toMove = root.find(id);
-      if (toMove === null || toMove instanceof AParentLayoutContainer && this.parents.indexOf(toMove) >= 0) {
+      if (toMove === null || toMove === this || toMove instanceof AParentLayoutContainer && this.parents.indexOf(toMove) >= 0) {
         //can't move parent into me
         return false;
       }
