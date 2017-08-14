@@ -89,5 +89,7 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
     p.push(reference, -1, 0.5);
     p.push(item, -1, 0.5);
   }
+  //force ratios
+  p.ratios = [0.5, 0.5];
   return true;
 }
