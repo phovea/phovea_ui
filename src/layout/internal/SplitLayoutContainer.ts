@@ -59,9 +59,11 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
   }
 
   private enableDragging(index: number) {
+    const bak = this._ratios.slice();
     const mouseMove = (evt: MouseEvent) => {
       const ratio = this.options.orientation === EOrientation.HORIZONTAL ? evt.x / this.node.offsetWidth : evt.y / this.node.offsetHeight;
-      this.setRatio(index, ratio);
+      this.setRatioImpl(index, ratio);
+      //no events
       evt.stopPropagation();
       evt.preventDefault();
     };
@@ -72,6 +74,11 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
       this.node.removeEventListener('mousemove', mouseMove);
       this.node.removeEventListener('mouseup', disable);
       this.node.removeEventListener('mouseleave', disable);
+      const act = this._ratios.slice();
+      if (!bak.every((b,i) => act[i] === b)) {
+        //changed fire event just once
+       this.fire(withChanged(LayoutContainerEvents.EVENT_CHANGE_SPLIT_RATIOS), bak, act);
+      }
     };
     this.node.addEventListener('mousemove', mouseMove);
     this.node.addEventListener('mouseup', disable);
@@ -79,6 +86,12 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
   }
 
   setRatio(index: number, ratio: number) {
+    const bak = this._ratios.slice();
+    this.setRatioImpl(index, ratio);
+    this.fire(withChanged(LayoutContainerEvents.EVENT_CHANGE_SPLIT_RATIOS), bak, this._ratios.slice());
+  }
+
+  private setRatioImpl(index: number, ratio: number) {
     console.assert(ratio >= 0 && ratio <= 1);
     const bak = this._ratios.slice();
 
@@ -119,7 +132,6 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
     } else {
       right.forEach((r, i) => this._ratios[i + index + 1] = ratio / right.length);
     }
-    this.fire(withChanged(LayoutContainerEvents.EVENT_CHANGE_SPLIT_RATIOS), bak, this._ratios.slice());
     this.updateRatios();
   }
 
