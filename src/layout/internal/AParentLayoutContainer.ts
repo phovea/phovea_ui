@@ -120,6 +120,18 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     return true;
   }
 
+  clear() {
+    if (this.length === 0) {
+      return;
+    }
+    this._children.forEach((old) => this.takeDownChild(old));
+    this._children.splice(0, this._children.length);
+    if (this.minChildCount > this.length && this.parent) {
+      this.parent.remove(this);
+    }
+    this.fire(withChanged(LayoutContainerEvents.EVENT_CHILD_REMOVED));
+  }
+
   protected takeDownChild(child: ILayoutContainer) {
     this.stopPropagation(child, LayoutContainerEvents.EVENT_LAYOUT_CHANGED);
     child.visible = false;

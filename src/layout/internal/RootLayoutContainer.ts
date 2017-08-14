@@ -4,12 +4,13 @@ import TabbingLayoutContainer from './TabbingLayoutContainer';
 import {ILayoutContainerOption} from './ALayoutContainer';
 import {IDropArea} from './interfaces';
 import {IBuildAbleOrViewLike} from '../builder';
+import {IView} from '../';
 
 export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutContainerOption> implements IRootLayoutContainer {
   readonly minChildCount = 0;
   readonly type = 'root';
 
-  constructor(document: Document, public readonly build: (layout: IBuildAbleOrViewLike)=> ILayoutContainer) {
+  constructor(document: Document, public readonly build: (layout: IBuildAbleOrViewLike)=> ILayoutContainer, private readonly restorer: (dump: ILayoutDump, restoreView: (referenceId: number) => IView) => ILayoutContainer) {
     super(document, {
       name: '',
       fixed: true
@@ -56,18 +57,36 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     super.takeDownChild(child);
   }
 
+  restore(dump: ILayoutDump, restoreView: (referenceId: number) => IView) {
+    console.assert(dump.type === 'root');
+    this.clear();
+    const children = (dump.children || []).map((dump) => this.restorer(dump, restoreView));
+    if (children.length === 0) {
+      return;
+    }
+    this.root = children[0];
+    children.slice(1).forEach((c) => this.push(c));
+  }
+
   persist() {
     return Object.assign(super.persist(), {
       type: 'root'
     });
   }
 
-  static restore(dump: ILayoutDump, restore: (dump: ILayoutDump) => ILayoutContainer, doc: Document, build: (root: RootLayoutContainer, layout: IBuildAbleOrViewLike)=> ILayoutContainer) {
-    const r = new RootLayoutContainer(doc, (layout) => build(r, layout));
-    if (dump.children && dump.children.length > 0) {
-      r.root = restore(dump.children[0]);
-      dump.children.slice(1).forEach((d) => r.push(restore(d)));
-    }
+  static restore(dump: ILayoutDump, doc: Document, build: IBuildLayout, restorer: IRestoreLayout, restoreView: IViewRestorer) {
+    const r = new RootLayoutContainer(doc, (layout) => build(r, layout), restorer);
+    r.restore(dump, restoreView);
     return r;
   }
+}
+
+interface IBuildLayout {
+  (root: RootLayoutContainer, layout: IBuildAbleOrViewLike): ILayoutContainer;
+}
+interface IViewRestorer {
+  (referenceId: number): IView;
+}
+interface IRestoreLayout {
+  (dump: ILayoutDump, restoreView: IViewRestorer): ILayoutContainer;
 }

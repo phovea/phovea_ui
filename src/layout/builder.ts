@@ -256,7 +256,7 @@ export function view(view: string | IView): ViewBuilder {
  */
 export function root(child: IBuildAbleOrViewLike, doc = document): IRootLayoutContainer {
   const b = toBuilder(child);
-  const r = new RootLayoutContainer(doc, (child) => toBuilder(child).build(r, doc));
+  const r = new RootLayoutContainer(doc, (child) => toBuilder(child).build(r, doc), (dump, restoreView) => restore(dump, restoreView, doc));
   r.root = b.build(r, doc);
   return r;
 }
@@ -272,7 +272,7 @@ export function restore(dump: ILayoutDump, restoreView: (referenceId: number) =>
   const restorer = (d: ILayoutDump) => restore(d, restoreView, doc);
   switch (dump.type) {
     case 'root':
-      return RootLayoutContainer.restore(dump, restorer, doc, (r, child) => toBuilder(child).build(r, doc));
+      return RootLayoutContainer.restore(dump, doc, (r, child) => toBuilder(child).build(r, doc), (dump, restoreView) => restore(dump, restoreView, doc), restoreView);
     case 'split':
       return SplitLayoutContainer.restore(dump, restorer, doc);
     case 'lineup':

@@ -95,6 +95,11 @@ export interface IRootLayoutContainer extends ILayoutContainer {
    * @return {ILayoutContainer}
    */
   build(item: IBuildAbleOrViewLike): ILayoutContainer;
+
+  /**
+   * restores the given dump inplace
+   */
+  restore(dump: ILayoutDump, restoreView: (referenceId: number) => IView);
 }
 
 export interface ILayoutDump {
