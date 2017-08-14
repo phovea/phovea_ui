@@ -33,7 +33,7 @@ export function dropViews(node: HTMLElement, reference: ALayoutContainer<any> & 
     const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
     console.assert(reference.parent != null);
     const item = reference.parent.rootParent.find(id);
-    if (item === reference || item === null) {
+    if (item === null) {
       return false;
     }
     return dropLogic(item, reference, area);
@@ -50,12 +50,12 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
   const parent = reference.parent;
   const canDirectly = parent.canDrop(area);
   if (canDirectly) {
-    if (parent.children.indexOf(item) < 0) {
+    if (parent.children.indexOf(item) < 0 && item !== reference) {
       return parent.place(item, reference, area); //tod
     }
     return false; //already a child
   }
-  if (area === 'center') {
+  if (area === 'center' && item !== reference) {
     //replace myself with a tab container
     const p = new TabbingLayoutContainer(item.node.ownerDocument, {
       name: `${reference.name}, ${item.name}, ...`
@@ -72,7 +72,7 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
     return dropLogic(item, parent, area);
   }
 
-  if (parent === reference) {
+  if (parent === reference || item === reference) {
     //can't split my parent with my parent
     return false;
   }
