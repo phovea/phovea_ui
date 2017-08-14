@@ -8,6 +8,7 @@ import {IBuildAbleOrViewLike} from './builder';
 export declare type ISize = [number, number];
 
 export class LayoutContainerEvents {
+  static readonly EVENT_LAYOUT_CHANGED = 'changed';
   static readonly EVENT_DESTROYED = 'destroy';
   static readonly EVENT_VISIBILITY_CHANGED = 'visibilityChanged';
   static readonly EVENT_NAME_CHANGED = 'nameChanged';
@@ -16,6 +17,7 @@ export class LayoutContainerEvents {
   static readonly EVENT_CHILD_REMOVED = 'removeChild';
   static readonly EVENT_CHANGE_SPLIT_RATIOS = 'changeRatios';
   static readonly EVENT_TAB_REORDED = 'tabReorded';
+  static readonly EVENT_CHANGE_ACTIVE_TAB = 'changeActiveTab';
 }
 /**
  * base interface for the container

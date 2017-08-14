@@ -1,6 +1,6 @@
 import {ILayoutContainer, ILayoutDump, ISplitLayoutContainer} from '../interfaces';
 import {EOrientation, IDropArea} from './interfaces';
-import {ALayoutContainer} from './ALayoutContainer';
+import {ALayoutContainer, withChanged} from './ALayoutContainer';
 import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} from './ASequentialLayoutContainer';
 import {LayoutContainerEvents} from '../';
 
@@ -119,7 +119,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
     } else {
       right.forEach((r, i) => this._ratios[i + index + 1] = ratio / right.length);
     }
-    this.fire(LayoutContainerEvents.EVENT_CHANGE_SPLIT_RATIOS, bak, this._ratios.slice());
+    this.fire(withChanged(LayoutContainerEvents.EVENT_CHANGE_SPLIT_RATIOS), bak, this._ratios.slice());
     this.updateRatios();
   }
 
