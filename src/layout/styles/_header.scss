@@ -1,0 +1,19 @@
+
+header {
+  opacity: 1;
+
+  &[draggable] {
+    cursor: pointer;
+    cursor: -moz-grab;
+    cursor: -webkit-grab; // indicate grab able
+  }
+
+  &.phovea-dragging {
+    opacity: 0.2;
+  }
+
+  > button.close {
+    margin: 0 3px;
+    cursor: pointer;
+  }
+}

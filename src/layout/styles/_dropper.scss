@@ -1,0 +1,77 @@
+@import './vars';
+
+[data-drop] {
+  position: relative;
+
+  &.phovea-dragover {
+    &::before {
+      display: block;
+      opacity: 1;
+    }
+    &::after {
+      display: block;
+      opacity: 1;
+      background-color: $phovea_layout_dropper_background;
+    }
+  }
+
+  &::before {
+    /**
+     * indicate the possible droppers
+     */
+    content: '';
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0;
+    transition: opacity 1s ease;
+    background: radial-gradient(circle closest-side, rgba(0, 0, 0, 0.25) 18%, transparent 22%) space;
+    background-size: 26% 26%;
+    border-radius: 50%;
+  }
+
+  &::after {
+    pointer-events: none;
+    user-select: none;
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+
+    display: none;
+    transition: opacity ease 1s, left ease .5s, top ease .5s, width ease .5s, height ease .5s;
+
+    border-radius: 5px;
+    opacity: 0;
+    box-shadow: 2px 2px 2px 2px #ccc;
+
+  }
+  &[data-drop=left] {
+    &::after {
+      width: 30%;
+    }
+  }
+  &[data-drop=right] {
+    &::after {
+      left: 70%;
+      width: 30%;
+    }
+  }
+  &[data-drop=top] {
+    &::after {
+      height: 30%;
+    }
+  }
+  &[data-drop=bottom] {
+    &::after {
+      top: 70%;
+      height: 30%;
+    }
+  }
+}
