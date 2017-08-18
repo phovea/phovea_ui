@@ -57,9 +57,7 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
   }
   if (area === 'center' && item !== reference) {
     //replace myself with a tab container
-    const p = new TabbingLayoutContainer(item.node.ownerDocument, {
-      name: `${reference.name}, ${item.name}, ...`
-    });
+    const p = new TabbingLayoutContainer(item.node.ownerDocument, {});
     parent.replace(reference, p);
     p.push(reference);
     p.push(item);
