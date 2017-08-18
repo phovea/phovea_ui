@@ -67,6 +67,10 @@ export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContain
     const view = dump.html ? new HTMLView(dump.html, doc) : restoreView(dump.view);
     return new ViewLayoutContainer(view, ALayoutContainer.restoreOptions(dump));
   }
+
+  static derive(view: IView) {
+    return new ViewLayoutContainer(view, ALayoutContainer.deriveOptions(view.node));
+  }
 }
 
 export class HTMLView implements IView {
@@ -78,6 +82,28 @@ export class HTMLView implements IView {
     //HTML
     this.node = doc.createElement('div');
     this.node.innerHTML = html;
+  }
+
+  destroy() {
+    //nothing to do
+  }
+
+  resized() {
+    //nothing to do
+  }
+
+  dumpReference() {
+    return -1;
+  };
+}
+
+
+
+export class NodeView implements IView {
+  readonly minSize: ISize = [0, 0];
+  visible: boolean = true;
+
+  constructor(public readonly node: HTMLElement) {
   }
 
   destroy() {

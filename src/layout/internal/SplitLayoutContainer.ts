@@ -44,7 +44,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
 
   defaultOptions() {
     return Object.assign(super.defaultOptions(), {
-      fixed: false
+      fixedLayout: false
     });
   }
 
@@ -266,6 +266,52 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
     const r = new SplitLayoutContainer(doc, options, ratios[0], restore(dump.children[0]), restore(dump.children[1]));
     dump.children.slice(2).forEach((d, i) => r.push(restore(d), ratios[i + 2]));
     //force specific ratios
+    r.ratios = ratios;
+    return r;
+  }
+
+  static derive(node: HTMLElement, derive: (node: HTMLElement) => ILayoutContainer) {
+    const children = Array.from(node.children);
+    console.assert(children.length >= 2);
+
+    const deriveOrientation = () => {
+      if (node.dataset.layout.startsWith('v') || (node.dataset.orientation && node.dataset.orientation.startsWith('v'))) {
+        return EOrientation.VERTICAL;
+      }
+      return EOrientation.HORIZONTAL;
+    };
+    const deriveRatios = () => {
+      const ratio = node.dataset.ratio ? parseFloat(node.dataset.ratio) : NaN;
+      if (!isNaN(ratio)) {
+        const rest = 1 - ratio;
+        const r = [ratio];
+        for (let i = 1 ; i < children.length; ++i) {
+          r.push(rest / (children.length - 1));
+        }
+        return r;
+      }
+      const ratios = node.dataset.ratios ? node.dataset.ratios.split(' ').map((d) => parseFloat(d)): [];
+      if (ratios.every((d) => !isNaN(d))) {
+        if (ratios.length < children.length) {
+          const sum = ratios.reduce((a,b) => a + b, 0);
+          const missing = children.length - ratios.length;
+          for (let i = 0; i < missing; ++i) {
+            ratios.push((1 - sum) / missing);
+          }
+        }
+        return ratios.slice(0, children.length);
+      }
+      //generate uniform
+      return children.map((_) => 1 / children.length);
+    };
+
+    const options = Object.assign(ALayoutContainer.deriveOptions(node), {
+      orientation: deriveOrientation(),
+      fixedLayout: Boolean(node.dataset.fixedLayout)
+    });
+    const ratios = deriveRatios();
+    const r = new SplitLayoutContainer(node.ownerDocument, options);
+    children.forEach((c: HTMLElement) => r.push(derive(c)));
     r.ratios = ratios;
     return r;
   }

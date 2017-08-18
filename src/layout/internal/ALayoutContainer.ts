@@ -110,6 +110,13 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     };
   }
 
+  static deriveOptions(node: HTMLElement): Partial<ILayoutContainerOption> {
+    return {
+      name: node.dataset.name || 'View',
+      fixed: Boolean(node.dataset.fixed)
+    };
+  }
+
   find(id: number|((container: ILayoutContainer)=>boolean)) {
     return (typeof id === 'number' && this.id === id) || (typeof id === 'function' && id(<any>this)) ? this : null;
   }

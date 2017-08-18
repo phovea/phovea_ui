@@ -1,6 +1,6 @@
 import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, IView} from './interfaces';
 import {EOrientation} from './internal/interfaces';
-import ViewLayoutContainer, {HTMLView} from './internal/ViewLayoutContainer';
+import ViewLayoutContainer, {HTMLView, NodeView} from './internal/ViewLayoutContainer';
 import SplitLayoutContainer from './internal/SplitLayoutContainer';
 import LineUpLayoutContainer from './internal/LineUpLayoutContainer';
 import TabbingLayoutContainer, {ITabbingLayoutContainerOptions} from './internal/TabbingLayoutContainer';
@@ -284,4 +284,40 @@ export function restore(dump: ILayoutDump, restoreView: (referenceId: number) =>
     default:
       throw new Error(`invalid type: ${dump.type}`);
   }
+}
+
+/**
+ * derives from an existing html scaffolded layout the phovea layout and replaced the nodes with it
+ * @param {HTMLElement} node the root node
+ * @param {(node: HTMLElement) => IView} viewFactory how to build a view from a node
+ */
+export function derive(node: HTMLElement, viewFactory: (node: HTMLElement) => IView = (node) => new NodeView(node)): IRootLayoutContainer {
+  const doc = node.ownerDocument;
+  const r = new RootLayoutContainer(doc, (child) => toBuilder(child).build(r, doc), (dump, restoreView) => restore(dump, restoreView, doc));
+
+  const deriveImpl = (node: HTMLElement): ILayoutContainer => {
+    switch (node.dataset.layout || 'view') {
+      case 'hsplit':
+      case 'vsplit':
+      case 'split':
+        return SplitLayoutContainer.derive(node, deriveImpl);
+      case 'lineup':
+      case 'vlineup':
+      case 'hlineup':
+        return LineUpLayoutContainer.derive(node, deriveImpl);
+      case 'tabbing':
+        return TabbingLayoutContainer.derive(node, deriveImpl);
+      default:
+        // interpret as view
+        return ViewLayoutContainer.derive(viewFactory(node));
+    }
+  };
+
+  r.root = deriveImpl(node);
+
+  if (node.parentElement) {
+    //replace old node with new root
+    node.parentElement.replaceChild(r.node, node);
+  }
+  return r;
 }

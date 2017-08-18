@@ -214,4 +214,17 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
     }
     return r;
   }
+
+  static derive(node: HTMLElement, derive: (node: HTMLElement) => ILayoutContainer) {
+    const r = new TabbingLayoutContainer(node.ownerDocument, ALayoutContainer.deriveOptions(node));
+    const children = Array.from(node.children);
+
+    const activeIndex = children.findIndex((c: HTMLElement) => c.classList.contains('active'));
+
+    children.forEach((c: HTMLElement) => r.push(derive(c)));
+    if (activeIndex > 0) {
+      r.active = r.children[activeIndex];
+    }
+    return r;
+  }
 }

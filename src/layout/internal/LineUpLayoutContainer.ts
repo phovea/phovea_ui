@@ -50,4 +50,22 @@ export default class LineUpLayoutContainer extends ASequentialLayoutContainer<IS
     dump.children.forEach((d) => r.push(restore(d)));
     return r;
   }
+
+  static derive(node: HTMLElement, derive: (node: HTMLElement) => ILayoutContainer) {
+    const children = Array.from(node.children);
+    console.assert(children.length >= 1);
+
+    const deriveOrientation = () => {
+      if (node.dataset.layout.startsWith('v') || (node.dataset.orientation && node.dataset.orientation.startsWith('v'))) {
+        return EOrientation.VERTICAL;
+      }
+      return EOrientation.HORIZONTAL;
+    };
+    const options = Object.assign(ALayoutContainer.deriveOptions(node), {
+      orientation: deriveOrientation()
+    });
+    const r = new LineUpLayoutContainer(node.ownerDocument, options);
+    children.forEach((c: HTMLElement) => r.push(derive(c)));
+    return r;
+  }
 }
