@@ -113,7 +113,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
   static deriveOptions(node: HTMLElement): Partial<ILayoutContainerOption> {
     return {
       name: node.dataset.name || 'View',
-      fixed: Boolean(node.dataset.fixed)
+      fixed: node.dataset.fixed !== undefined
     };
   }
 

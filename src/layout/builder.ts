@@ -309,7 +309,7 @@ export function derive(node: HTMLElement, viewFactory: (node: HTMLElement) => IV
         return TabbingLayoutContainer.derive(node, deriveImpl);
       default:
         // interpret as view
-        return ViewLayoutContainer.derive(viewFactory(node));
+        return ViewLayoutContainer.derive(viewFactory(node) || new NodeView(node));
     }
   };
 
