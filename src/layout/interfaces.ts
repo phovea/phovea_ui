@@ -208,7 +208,7 @@ export interface IView {
   /**
    * the minimal size of this view (currently not considered)
    */
-  readonly minSize: ISize;
+  readonly minSize?: ISize;
 
   /**
    * visibility state of this view

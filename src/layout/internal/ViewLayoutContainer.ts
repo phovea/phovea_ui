@@ -34,7 +34,7 @@ export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContain
   }
 
   get minSize() {
-    return this.view.minSize;
+    return this.view.minSize? this.view.minSize : <[number, number]>[0, 0];
   }
 
   resized() {
