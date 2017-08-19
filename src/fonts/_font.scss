@@ -1,0 +1,23 @@
+
+$phovea_ui_assset_dir: '~phovea_ui/src/assets' !default;
+
+@function capitalize($string) {
+  @return to-upper-case(str-slice($string, 1, 1)) + str-slice($string, 2);
+}
+
+@mixin font-face($family, $style, $weight, $path, $local_weight) {
+	$weight2: capitalize($local_weight);
+	/* #{$family}-#{$local-weight} - latin */
+	@font-face {
+	  font-family: $family;
+	  font-style: $style;
+	  font-weight: $weight;
+	  src: url('#{$path}.eot'); /* IE9 Compat Modes */
+	  src: local('#{$family} #{$weight2}'), local('#{$family}-#{$weight2}'),
+		   url('#{$path}.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+		   url('#{$path}.woff2') format('woff2'), /* Super Modern Browsers */
+		   url('#{$path}.woff') format('woff'), /* Modern Browsers */
+		   url('#{$path}.ttf') format('truetype'), /* Safari, Android, iOS */
+		   url('#{$path}.svg##{$family}') format('svg'); /* Legacy iOS */
+	}
+}
