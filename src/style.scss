@@ -2,7 +2,7 @@
  * Created by Samuel Gratzl on 27.08.2014.
  */
 
-$boostrapAssetDir: '~phovea_ui/src/assets' !default;
+$boostrapAssetDir: './assets' !default;
 
 @import "./styles/colors";
 @import "./styles/base";
