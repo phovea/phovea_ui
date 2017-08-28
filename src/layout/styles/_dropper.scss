@@ -13,6 +13,10 @@
       opacity: 1;
       background-color: $phovea_layout_dropper_background;
     }
+
+    > * {
+      pointer-events: none;
+    }
   }
 
   &::before {
