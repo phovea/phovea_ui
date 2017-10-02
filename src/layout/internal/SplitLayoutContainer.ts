@@ -61,7 +61,11 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
   private enableDragging(index: number) {
     const bak = this._ratios.slice();
     const mouseMove = (evt: MouseEvent) => {
-      const ratio = this.options.orientation === EOrientation.HORIZONTAL ? evt.x / this.node.offsetWidth : evt.y / this.node.offsetHeight;
+      const n = this.node;
+      const bb = n.getBoundingClientRect();
+      const x = evt.clientX - bb.left - n.clientLeft + n.scrollLeft;
+      const y = evt.clientY - bb.top - n.clientTop + n.scrollTop;
+      const ratio = this.options.orientation === EOrientation.HORIZONTAL ? x / n.offsetWidth : y / n.offsetHeight;
       this.setRatioImpl(index, ratio);
       //no events
       evt.stopPropagation();
