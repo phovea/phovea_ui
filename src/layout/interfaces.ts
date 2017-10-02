@@ -83,6 +83,7 @@ export interface ILayoutContainer extends IEventHandler, IHasUniqueId {
    * @return {ILayoutContainer}
    */
   find(id: number|((container: ILayoutContainer)=>boolean)): ILayoutContainer | null;
+  findAll(predicate: (container: ILayoutContainer)=>boolean): ILayoutContainer[];
 }
 
 /**

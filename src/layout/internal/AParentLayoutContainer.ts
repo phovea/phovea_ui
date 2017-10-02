@@ -168,6 +168,11 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     }
     return null;
   };
+
+  findAll(predicate: (container: ILayoutContainer)=>boolean) {
+    const base = super.findAll(predicate);
+    return base.concat(...this._children.map((d) => d.findAll(predicate)));
+  };
 }
 
 export default AParentLayoutContainer;

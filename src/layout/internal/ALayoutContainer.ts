@@ -1,8 +1,7 @@
 import {EventHandler} from 'phovea_core/src/event';
-import {ILayoutDump, LayoutContainerEvents} from '../interfaces';
+import {ILayoutDump, LayoutContainerEvents, ILayoutContainer} from '../interfaces';
 import {dragAble, uniqueId} from 'phovea_core/src';
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {ILayoutContainer} from '../';
 
 export interface ILayoutContainerOption {
   name: string;
@@ -129,6 +128,9 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
   find(id: number|((container: ILayoutContainer)=>boolean)) {
     return (typeof id === 'number' && this.id === id) || (typeof id === 'function' && id(<any>this)) ? this : null;
   }
+  findAll(predicate: (container: ILayoutContainer)=>boolean): ILayoutContainer[] {
+    return predicate(<any>this) ? [<any>this]: [];
+  };
 }
 
 export default ALayoutContainer;
