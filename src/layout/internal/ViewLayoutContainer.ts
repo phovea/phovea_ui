@@ -38,7 +38,9 @@ export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContain
   }
 
   resized() {
-    this.view.resized();
+    if (this.view.resized) {
+      this.view.resized();
+    }
   }
 
   destroy() {

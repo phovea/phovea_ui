@@ -228,7 +228,7 @@ export interface IView {
   /**
    * notification that this view has been resized
    */
-  resized(): void;
+  resized?(): void;
 
   /**
    * determines the unique reference of this view for dumping
