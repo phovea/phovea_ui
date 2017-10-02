@@ -7,6 +7,7 @@ import {ILayoutContainer} from '../';
 export interface ILayoutContainerOption {
   name: string;
   readonly fixed: boolean;
+  readonly autoWrap: boolean;
 }
 
 export function withChanged(event: string) {
@@ -67,11 +68,16 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     return false;
   }
 
+  get autoWrapOnDrop() {
+    return this.options.autoWrap;
+  }
+
   protected defaultOptions(): T {
     return <any>{
       name: 'View',
       fixed: false,
-      hideAbleHeader: false
+      hideAbleHeader: false,
+      autoWrap: false
     };
   }
 
@@ -99,21 +105,24 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     return {
       type: '',
       name: this.name,
-      fixed: this.options.fixed
+      fixed: this.options.fixed,
+      autoWrap: this.options.autoWrap
     };
   }
 
   static restoreOptions(dump: ILayoutDump): Partial<ILayoutContainerOption> {
     return {
       name: dump.name,
-      fixed: dump.fixed
+      fixed: dump.fixed,
+      autoWrap: dump.autoWrap === true
     };
   }
 
   static deriveOptions(node: HTMLElement): Partial<ILayoutContainerOption> {
     return {
       name: node.dataset.name || 'View',
-      fixed: node.dataset.fixed !== undefined
+      fixed: node.dataset.fixed !== undefined,
+      autoWrap: node.dataset.autoWrap !== undefined
     };
   }
 

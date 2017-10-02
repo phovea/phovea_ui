@@ -21,6 +21,7 @@ function toBuilder(view: IBuildAbleOrViewLike): ABuilder {
 abstract class ABuilder {
   protected _name: string = 'View';
   protected _fixed: boolean = false;
+  protected _autoWrap: boolean = false;
 
   /**
    * specify the name of the view
@@ -41,10 +42,20 @@ abstract class ABuilder {
     return this;
   }
 
+  /**
+   * specify that the view should be automatically wrapped with a tabbing container in case of a new split
+   * @return {this} itself
+   */
+  autoWrap(): this {
+    this._autoWrap = true;
+    return this;
+  }
+
   protected buildOptions(): Partial<ILayoutContainerOption> {
     return {
       name: this._name,
-      fixed: this._fixed
+      fixed: this._fixed,
+      autoWrap: this._autoWrap
     };
   }
 

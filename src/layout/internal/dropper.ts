@@ -81,13 +81,20 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
   });
   parent.replace(reference, p);
   if (area === 'left' || area === 'top') {
-    p.push(item, -1, 0.5);
+    p.push(autoWrap(item), -1, 0.5);
     p.push(reference, -1, 0.5);
   } else {
     p.push(reference, -1, 0.5);
-    p.push(item, -1, 0.5);
+    p.push(autoWrap(item), -1, 0.5);
   }
   //force ratios
   p.ratios = [0.5, 0.5];
   return true;
+}
+
+function autoWrap(item: ILayoutContainer) {
+  if (item.autoWrapOnDrop) {
+    return new TabbingLayoutContainer(item.node.ownerDocument, {name: 'Side'}, item);
+  }
+  return item;
 }
