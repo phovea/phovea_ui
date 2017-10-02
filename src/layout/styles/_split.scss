@@ -69,6 +69,16 @@
     }
   }
 
+  &.slider-dragging {
+    -moz-user-select: none;
+    user-select: none;
+
+    > section {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
   > [data-layout=separator] {
     flex: 0 0 5px;
     background: $phovea_layout_separator_color;
