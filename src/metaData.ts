@@ -5,6 +5,7 @@ export interface IAppMetaData {
   version: string;
   repository: string;
   description: string;
+  homepage: string;
   screenshot?: string;
 }
 
