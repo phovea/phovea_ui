@@ -7,7 +7,6 @@ import './_font-awesome';
 import './style.scss';
 import * as template from 'html-loader!./_header.html';
 
-import {getAPIJSON} from 'phovea_core/src/ajax';
 import {mixin} from 'phovea_core/src/index';
 import * as $ from 'jquery';
 import buildBuildInfo from './buildInfo';
@@ -309,6 +308,17 @@ export class AppHeader {
         });
       });
     }
+  }
+
+  hideDialog(selector: string) {
+    $(selector).modal('hide');
+  }
+
+  showAndFocusOn(selector: string, focusSelector: string) {
+    $(selector).modal('show')
+      .on('shown.bs.modal', function () {
+        $(focusSelector, selector).focus();
+      });
   }
 }
 
