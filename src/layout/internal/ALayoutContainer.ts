@@ -29,7 +29,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     this.options = Object.assign(this.defaultOptions(), options);
     this.header = document.createElement('header');
     this.header.innerHTML = `
-        <button type="button" class="close${this.options.fixed ? ' hidden' : ''}" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <button type="button" class="close${this.options.fixed ? ' hidden' : ''}" aria-label="Close"><span>×</span></button>
         <span>${this.name}</span>`;
 
     //remove
