@@ -6,7 +6,7 @@ import {AParentLayoutContainer} from './AParentLayoutContainer';
 export interface ILayoutContainerOption {
   name: string;
   readonly fixed: boolean;
-  readonly autoWrap: boolean;
+  readonly autoWrap: boolean|string;
 }
 
 export function withChanged(event: string) {

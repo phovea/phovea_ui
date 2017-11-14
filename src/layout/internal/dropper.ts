@@ -94,7 +94,7 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
 
 function autoWrap(item: ILayoutContainer) {
   if (item.autoWrapOnDrop) {
-    return new TabbingLayoutContainer(item.node.ownerDocument, {name: 'Side'}, item);
+    return new TabbingLayoutContainer(item.node.ownerDocument, {name: typeof item.autoWrapOnDrop === 'string' ? item.autoWrapOnDrop : 'Side'}, item);
   }
   return item;
 }

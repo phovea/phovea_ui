@@ -50,8 +50,11 @@ export interface ILayoutContainer extends IEventHandler, IHasUniqueId {
 
   /**
    * whether the view should be automatically wrapped in a tabbing environment upon split drop
+   * false ... no
+   * true ... yes
+   * string ... named of wrapped container
    */
-  readonly autoWrapOnDrop: boolean;
+  readonly autoWrapOnDrop: boolean|string;
   /**
    * name of this container
    */
