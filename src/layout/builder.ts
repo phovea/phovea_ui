@@ -1,6 +1,6 @@
 import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, IView} from './interfaces';
 import {EOrientation} from './internal/interfaces';
-import ViewLayoutContainer, {HTMLView, NodeView} from './internal/ViewLayoutContainer';
+import ViewLayoutContainer, {HTMLView, IViewLayoutContainerOptions, NodeView} from './internal/ViewLayoutContainer';
 import SplitLayoutContainer from './internal/SplitLayoutContainer';
 import LineUpLayoutContainer from './internal/LineUpLayoutContainer';
 import TabbingLayoutContainer, {ITabbingLayoutContainerOptions} from './internal/TabbingLayoutContainer';
@@ -187,14 +187,31 @@ class TabbingBuilder extends AParentBuilder {
 }
 
 export class ViewBuilder extends ABuilder {
-  constructor(private readonly view: string | IView) {
+  private _hideHeader: boolean = false;
+
+  constructor(private readonly view: string | IView | HTMLElement) {
     super();
+  }
+
+  hideHeader() {
+    this._hideHeader = true;
+    this._fixed = true;
+    return this;
+  }
+
+  protected buildOptions(): Partial<IViewLayoutContainerOptions> {
+    return Object.assign({
+      hideHeader: this._hideHeader
+    }, super.buildOptions());
   }
 
   build(root: RootLayoutContainer, doc: Document): ILayoutContainer {
     const options = this.buildOptions();
     if (typeof this.view === 'string') {
       return new ViewLayoutContainer(new HTMLView(this.view, doc), options);
+    }
+    if ((<HTMLElement>this.view).nodeName !== undefined) {
+      return new ViewLayoutContainer(new NodeView(<HTMLElement>this.view), options);
     }
     return new ViewLayoutContainer(<IView>this.view, options);
   }
@@ -255,7 +272,7 @@ export function tabbing(...children: IBuildAbleOrViewLike[]): TabbingBuilder {
  * @param {string | IView} view possible view content
  * @return {ViewBuilder} a view builder
  */
-export function view(view: string | IView): ViewBuilder {
+export function view(view: string | IView | HTMLElement): ViewBuilder {
   return new ViewBuilder(view);
 }
 

@@ -3,7 +3,11 @@ import {ALayoutContainer, ILayoutContainerOption, withChanged} from './ALayoutCo
 import {dropViews} from './dropper';
 import {LayoutContainerEvents} from '../';
 
-export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContainerOption> implements IViewLayoutContainer {
+export interface IViewLayoutContainerOptions extends ILayoutContainerOption {
+  hideHeader: boolean;
+}
+
+export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutContainerOptions> implements IViewLayoutContainer {
 
   readonly node: HTMLElement;
   readonly type = 'view';
@@ -23,6 +27,16 @@ export default class ViewLayoutContainer extends ALayoutContainer<ILayoutContain
     }
 
     dropViews(this.node, this);
+  }
+
+  protected defaultOptions() {
+    return Object.assign(super.defaultOptions(), {
+      hideHeader: false
+    });
+  }
+
+  get hideAbleHeader() {
+    return this.options.hideHeader;
   }
 
   get visible() {
