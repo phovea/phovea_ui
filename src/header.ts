@@ -300,11 +300,15 @@ export class AppHeader {
         const title = <HTMLElement>this.aboutDialog.parentElement.querySelector('.modal-title');
         getMetaData().then((metaData) => {
           title.innerHTML = metaData.name;
-          content.innerHTML = `<p>${metaData.description}</p>
-            <p>
-            <strong>Version</strong>: ${metaData.version}
-            </p>
-            ${metaData.screenshot? `<img src="${metaData.screenshot}" class="center-block img-responsive img-thumbnail"/>` : ''}`;
+          let contentTpl = `<p>${metaData.description}</p>`;
+          if(metaData.homepage) {
+            contentTpl += `<p><strong>Homepage</strong>: <a href="${metaData.homepage}" target="_blank" rel="noopener">${metaData.homepage}</a></p>`;
+          }
+          contentTpl += `<p><strong>Version</strong>: ${metaData.version}</p>`;
+          if(metaData.screenshot) {
+            contentTpl += `<img src="${metaData.screenshot}" class="center-block img-responsive img-thumbnail"/>`;
+          }
+          content.innerHTML = contentTpl;
         });
       });
     }
