@@ -144,11 +144,11 @@
     height: 33%;
     display: flex;
 
-
     &::before,
     &::after {
       width: 50%;
       height: 100%;
+      background-position-x: 70%;
     }
 
     &::before {
