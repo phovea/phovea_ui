@@ -11,10 +11,16 @@ import {AParentLayoutContainer} from './AParentLayoutContainer';
 
 
 function determineDropArea(x: number, y: number): IDropArea {
-  if (x < 0.3) {
+  if (x > 0.2 && x < 0.4 && y > 0.3 && y < 0.7) {
+    return 'horizontal-scroll';
+  }
+  if (x > 0.6 && x < 0.8  && y > 0.3 && y < 0.7) {
+    return 'vertical-scroll';
+  }
+  if (x < 0.2) {
     return 'left';
   }
-  if (x > 0.7) {
+  if (x > 0.8) {
     return 'right';
   }
   if (y < 0.3) {
@@ -75,8 +81,17 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
     return false;
   }
   //replace myself with a split container
+  let orientation: EOrientation;
+
+  if(area === 'left' || area === 'right' || area === 'horizontal-scroll') {
+    orientation = EOrientation.HORIZONTAL;
+  } else { // top, bottom and vertical-scroll
+    orientation = EOrientation.VERTICAL;
+  }
+
   const p = new SplitLayoutContainer(item.node.ownerDocument, {
-    orientation: (area === 'left' || area === 'right') ? EOrientation.HORIZONTAL : EOrientation.VERTICAL,
+    orientation,
+    mode: area,
     name: (area === 'left' || area === 'top') ? `${item.name}|${reference.name}` : `${reference.name}|${item.name}`
   });
   parent.replace(reference, p);

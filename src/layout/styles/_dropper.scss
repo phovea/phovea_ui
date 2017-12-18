@@ -60,13 +60,13 @@
   }
   &[data-drop=left] {
     &::after {
-      width: 30%;
+      width: 20%;
     }
   }
   &[data-drop=right] {
     &::after {
-      left: 70%;
-      width: 30%;
+      left: 80%;
+      width: 20%;
     }
   }
   &[data-drop=top] {
@@ -78,6 +78,33 @@
     &::after {
       top: 70%;
       height: 30%;
+    }
+  }
+
+  &[data-drop=horizontal-scroll] {
+    &::after {
+      top: 30%;
+      left: 20%;
+      height: 40%;
+      width: 20%;
+    }
+  }
+
+  &[data-drop=vertical-scroll] {
+    &::after {
+      top: 30%;
+      left: 60%;
+      height: 40%;
+      width: 20%;
+    }
+  }
+
+  &[data-drop=center] {
+    &::after {
+      top: 30%;
+      left: 40%;
+      height: 40%;
+      width: 20%;
     }
   }
 }

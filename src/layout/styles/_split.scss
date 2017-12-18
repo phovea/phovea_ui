@@ -4,6 +4,22 @@
   display: flex;
   align-items: stretch;
 
+  &[data-mode='horizontal-scroll'] {
+    > section {
+      min-width: 1000px;
+    }
+  }
+
+  &[data-mode='vertical-scroll'] {
+    > section {
+      min-height: 500px;
+    }
+  }
+
+  &[data-mode='vertical-split'] {
+    display: block;
+  }
+
   &[data-orientation=h] {
     flex-direction: row;
 

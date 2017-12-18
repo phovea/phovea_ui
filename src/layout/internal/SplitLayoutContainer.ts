@@ -9,6 +9,11 @@ export interface ISplitlLayoutContainerOptions extends ISequentialLayoutContaine
    * if true the user can't change the separator, i.e. it is fixed
    */
   readonly fixedLayout: boolean;
+
+  /**
+   * attribute, which determines whether views can overflow the container (i.e. have scroll bars) or are space filling
+   */
+  mode: string;
 }
 
 export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISplitlLayoutContainerOptions> implements ISplitLayoutContainer {
@@ -24,6 +29,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
     super(document, options);
     console.assert(ratio === undefined || (ratio >= 0 && ratio <= 1));
     this.node.dataset.layout = 'split';
+    this.node.dataset.mode = this.options.mode;
 
     if(!this.options.fixedLayout) {
       this.node.addEventListener('mousedown', (evt) => {
