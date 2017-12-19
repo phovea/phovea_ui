@@ -18,17 +18,6 @@ export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutCon
     this.node.dataset.layout = 'view';
     this.node.appendChild(view.node);
 
-    const dropLocationsOverlay = this.node.ownerDocument.createElement('div');
-    dropLocationsOverlay.classList.add('drop-locations-overlay', 'hidden');
-
-    dropLocationsOverlay.innerHTML = `
-      <div class="top-bottom"></div>
-      <div class="center"></div>
-      <div class="left-right"></div>
-    `;
-
-    this.node.appendChild(dropLocationsOverlay);
-
     const min = this.minSize;
     if (min[0] > 0) {
       view.node.style.minWidth = `${min[0]}px`;

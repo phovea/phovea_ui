@@ -34,6 +34,15 @@ function determineDropArea(x: number, y: number): IDropArea {
 
 export function dropViews(node: HTMLElement, reference: ALayoutContainer<any> & ILayoutContainer) {
   node.dataset.drop = 'center';
+
+  node.insertAdjacentHTML('beforeend', `
+    <div class="drop-locations-overlay">
+      <div class="top-bottom"></div>
+      <div class="center"></div>
+      <div class="left-right"></div>
+    </div>
+  `);
+
   dropAble(node, [ALayoutContainer.MIME_TYPE], (result, e) => {
     const area = determineDropArea(e.offsetX / node.offsetWidth, e.offsetY / node.offsetHeight);
     const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
