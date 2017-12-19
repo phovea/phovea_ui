@@ -90,16 +90,8 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
     return false;
   }
   //replace myself with a split container
-  let orientation: EOrientation;
-
-  if(area === 'left' || area === 'right' || area === 'horizontal-scroll') {
-    orientation = EOrientation.HORIZONTAL;
-  } else { // top, bottom and vertical-scroll
-    orientation = EOrientation.VERTICAL;
-  }
-
   const p = new SplitLayoutContainer(item.node.ownerDocument, {
-    orientation,
+    orientation: (area === 'left' || area === 'right') ? EOrientation.HORIZONTAL : EOrientation.VERTICAL,
     name: (area === 'left' || area === 'top') ? `${item.name}|${reference.name}` : `${reference.name}|${item.name}`
   });
   parent.replace(reference, p);
