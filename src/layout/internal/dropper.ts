@@ -100,7 +100,6 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
 
   const p = new SplitLayoutContainer(item.node.ownerDocument, {
     orientation,
-    mode: area,
     name: (area === 'left' || area === 'top') ? `${item.name}|${reference.name}` : `${reference.name}|${item.name}`
   });
   parent.replace(reference, p);
