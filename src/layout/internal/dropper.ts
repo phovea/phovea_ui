@@ -8,6 +8,7 @@ import SplitLayoutContainer from './SplitLayoutContainer';
 import {dropAble} from 'phovea_core/src/internal/dnd';
 import {EOrientation, IDropArea} from './interfaces';
 import {AParentLayoutContainer} from './AParentLayoutContainer';
+import LineUpLayoutContainer from './LineUpLayoutContainer';
 
 
 function determineDropArea(x: number, y: number): IDropArea {
@@ -79,7 +80,6 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
     p.active = item;
     return true;
   }
-
   //corner case if I'm the child of a tabbing, tab that and not me
   if (parent instanceof TabbingLayoutContainer) {
     return dropLogic(item, parent, area);
@@ -89,6 +89,19 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
     //can't split my parent with my parent
     return false;
   }
+
+  if (area === 'horizontal-scroll' || area === 'vertical-scroll') {
+    const orientation = area === 'horizontal-scroll'? EOrientation.HORIZONTAL : EOrientation.VERTICAL;
+    const p = new LineUpLayoutContainer(item.node.ownerDocument, {
+      orientation
+    });
+    parent.replace(reference, p);
+    p.push(reference);
+    p.push(item);
+    return true;
+  }
+
+
   //replace myself with a split container
   const p = new SplitLayoutContainer(item.node.ownerDocument, {
     orientation: (area === 'left' || area === 'right') ? EOrientation.HORIZONTAL : EOrientation.VERTICAL,

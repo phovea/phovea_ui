@@ -16,7 +16,7 @@ export abstract class ASequentialLayoutContainer<T extends ISequentialLayoutCont
   }
 
   canDrop(area: IDropArea) {
-    return this.options.orientation === EOrientation.HORIZONTAL ? (area === 'left' || area === 'right') : (area === 'top' || area === 'bottom');
+    return this.options.orientation === EOrientation.HORIZONTAL ? (area === 'left' || area === 'right' || area === 'horizontal-scroll') : (area === 'top' || area === 'bottom' || area === 'vertical-scroll');
   }
 
   defaultOptions() {
