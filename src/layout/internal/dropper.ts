@@ -38,9 +38,9 @@ export function dropViews(node: HTMLElement, reference: ALayoutContainer<any> & 
 
   node.insertAdjacentHTML('beforeend', `
     <div class="drop-locations-overlay">
-      <div class="top-bottom"></div>
-      <div class="center"></div>
-      <div class="left-right"></div>
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
   `);
 
