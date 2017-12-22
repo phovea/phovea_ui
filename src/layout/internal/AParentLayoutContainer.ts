@@ -104,7 +104,6 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
   }
 
   remove(child: ILayoutContainer) {
-    this.cleanup();
     this.takeDownChild(child);
     this._children.splice(this._children.indexOf(child), 1);
     if (this.minChildCount > this.length && this.parent) {
@@ -174,13 +173,6 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     const base = super.findAll(predicate);
     return base.concat(...this._children.map((d) => d.findAll(predicate)));
   };
-
-  /**
-   * hook for cleaning up in sub classes when closing tabs (e.g. for restoring the size)
-   */
-  protected cleanup() {
-    // hook
-  }
 }
 
 export default AParentLayoutContainer;
