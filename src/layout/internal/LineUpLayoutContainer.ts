@@ -75,4 +75,11 @@ export default class LineUpLayoutContainer extends ASequentialLayoutContainer<IL
     children.forEach((c: HTMLElement) => r.push(derive(c)));
     return r;
   }
+
+  /**
+   * remove mode data attribute, such that the original width / height (100%) when closing the detail views is restored
+   */
+  protected cleanup() {
+    this.node.dataset.mode = '';
+  }
 }
