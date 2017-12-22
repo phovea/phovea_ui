@@ -93,7 +93,8 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
   if (area === 'horizontal-scroll' || area === 'vertical-scroll') {
     const orientation = area === 'horizontal-scroll'? EOrientation.HORIZONTAL : EOrientation.VERTICAL;
     const p = new LineUpLayoutContainer(item.node.ownerDocument, {
-      orientation
+      orientation,
+      stackLayout: true
     });
     parent.replace(reference, p);
     p.push(reference);

@@ -1,16 +1,23 @@
 import {ILayoutContainer, ILayoutDump} from '../interfaces';
 import {EOrientation, IDropArea} from './interfaces';
-import {ALayoutContainer} from './ALayoutContainer';
+import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} from './ASequentialLayoutContainer';
 
+export interface ILineUpLayoutContainer extends ISequentialLayoutContainerOptions {
+  stackLayout?: boolean;
+}
 
-export default class LineUpLayoutContainer extends ASequentialLayoutContainer<ISequentialLayoutContainerOptions> {
+export default class LineUpLayoutContainer extends ASequentialLayoutContainer<ILineUpLayoutContainer> {
   readonly minChildCount = 1;
   readonly type = 'lineup';
 
-  constructor(document: Document, options: Partial<ISequentialLayoutContainerOptions>, ...children: ILayoutContainer[]) {
-    super(document, options);
+  constructor(document: Document, options: Partial<ILineUpLayoutContainer>, ...children: ILayoutContainer[]) {
+    super(document, Object.assign({ stackLayout: false }, options));
     this.node.dataset.layout = 'lineup';
+
+    if(this.options.stackLayout) {
+      this.node.dataset.mode ='stacked';
+    }
     children.forEach((d) => this.push(d));
   }
 
