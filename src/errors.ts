@@ -1,4 +1,5 @@
-import {generateDialog} from './dialogs';
+import {Dialog} from './dialogs';
+
 let globalErrorTemplate = (details: string) => details;
 
 /**
@@ -27,7 +28,8 @@ export function setGlobalErrorTemplate(template: (details: string) => string) {
  */
 export function showErrorModalDialog(error: any) {
   function commonDialog(title: string, body: string) {
-    return new Promise((resolve, reject) => {
+    // lazy import
+    return System.import('./dialogs').then(({generateDialog}: {generateDialog(title: string, primaryBtnText: string): Dialog}) => new Promise((resolve, reject) => {
       const dialog = generateDialog(title, 'Dismiss');
 
       dialog.body.innerHTML = globalErrorTemplate(body);
@@ -43,7 +45,7 @@ export function showErrorModalDialog(error: any) {
       });
 
       dialog.show();
-    });
+    }));
   }
 
   if (error instanceof Response || error.response instanceof Response) {
