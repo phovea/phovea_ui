@@ -4,7 +4,7 @@ import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} from './ASequentialLayoutContainer';
 
 export interface ILineUpLayoutContainer extends ISequentialLayoutContainerOptions {
-  stackLayout?: boolean;
+  stackLayout: boolean;
 }
 
 export default class LineUpLayoutContainer extends ASequentialLayoutContainer<ILineUpLayoutContainer> {
