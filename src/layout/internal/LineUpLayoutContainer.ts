@@ -12,7 +12,7 @@ export default class LineUpLayoutContainer extends ASequentialLayoutContainer<IL
   readonly type = 'lineup';
 
   constructor(document: Document, options: Partial<ILineUpLayoutContainer>, ...children: ILayoutContainer[]) {
-    super(document, Object.assign({ stackLayout: false }, options));
+    super(document, options);
     this.node.dataset.layout = 'lineup';
 
     if(this.options.stackLayout) {
@@ -77,5 +77,11 @@ export default class LineUpLayoutContainer extends ASequentialLayoutContainer<IL
     const r = new LineUpLayoutContainer(node.ownerDocument, options);
     children.forEach((c: HTMLElement) => r.push(derive(c)));
     return r;
+  }
+
+  defaultOptions() {
+    return Object.assign(super.defaultOptions(), {
+      stackLayout: false
+    });
   }
 }
