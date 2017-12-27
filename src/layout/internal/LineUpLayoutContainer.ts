@@ -46,13 +46,15 @@ export default class LineUpLayoutContainer extends ASequentialLayoutContainer<IL
 
   persist() {
     return Object.assign(super.persist(), {
-      type: 'lineup'
+      type: 'lineup',
+      stackLayout: this.options.stackLayout
     });
   }
 
   static restore(dump: ILayoutDump, restore: (dump: ILayoutDump) => ILayoutContainer, doc: Document) {
     const options = Object.assign(ALayoutContainer.restoreOptions(dump), {
-      orientation: EOrientation[<string>dump.orientation]
+      orientation: EOrientation[<string>dump.orientation],
+      stackLayout: dump.stackLayout
     });
     const r = new LineUpLayoutContainer(doc, options);
     dump.children.forEach((d) => r.push(restore(d)));
