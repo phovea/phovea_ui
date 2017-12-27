@@ -5,7 +5,7 @@ import {ALayoutContainer} from './ALayoutContainer';
 import TabbingLayoutContainer from './TabbingLayoutContainer';
 import SplitLayoutContainer from './SplitLayoutContainer';
 import {dropAble} from 'phovea_core/src/internal/dnd';
-import {EOrientation, IDropArea} from '../interfaces';
+import {EOrientation, IDropArea} from './interfaces';
 import {ILayoutContainer} from '../interfaces';
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 
