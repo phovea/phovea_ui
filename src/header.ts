@@ -2,13 +2,12 @@
  * Created by Samuel Gratzl on 24.11.2014.
  */
 
-import './_bootstrap';
 import './_font-awesome';
 import './style.scss';
 import * as template from 'html-loader!./_header.html';
 
 import {mixin} from 'phovea_core/src/index';
-import * as $ from 'jquery';
+import lazyBootstrap from './_lazyBootstrap';
 import buildBuildInfo from './buildInfo';
 import getMetaData from './metaData';
 
@@ -251,12 +250,10 @@ export class AppHeader {
 
   wait() {
     AppHeader.setVisibility(<HTMLElement>document.querySelector('#headerWaitingOverlay'), true);
-    //$('#headerWaitingOverlay').fadeIn();
   }
 
   ready() {
     AppHeader.setVisibility(<HTMLElement>document.querySelector('#headerWaitingOverlay'), false);
-    //$('#headerWaitingOverlay').fadeOut();
   }
 
   private static setVisibility(element: HTMLElement, isVisible: boolean) {
@@ -278,13 +275,15 @@ export class AppHeader {
 
     // set the URL to GitHub issues dynamically
     if (isVisible) {
-      $('#headerReportBugDialog').on('show.bs.modal', () => {
-        const content = <HTMLElement>this.parent.querySelector('*[data-header="bug"]');
-        content.innerHTML = 'Loading...';
-        buildBuildInfo().then((buildInfo) => {
-          content.innerHTML = buildInfo.toHTML();
-        }).catch((error) => {
-          content.innerHTML = error.toString();
+      lazyBootstrap().then(($) => {
+        $('#headerReportBugDialog').on('show.bs.modal', () => {
+          const content = <HTMLElement>this.parent.querySelector('*[data-header="bug"]');
+          content.innerHTML = 'Loading...';
+          buildBuildInfo().then((buildInfo) => {
+            content.innerHTML = buildInfo.toHTML();
+          }).catch((error) => {
+            content.innerHTML = error.toString();
+          });
         });
       });
     }
@@ -300,25 +299,33 @@ export class AppHeader {
         const title = <HTMLElement>this.aboutDialog.parentElement.querySelector('.modal-title');
         getMetaData().then((metaData) => {
           title.innerHTML = metaData.name;
-          content.innerHTML = `<p>${metaData.description}</p>
-            <p>
-            <strong>Version</strong>: ${metaData.version}
-            </p>
-            ${metaData.screenshot? `<img src="${metaData.screenshot}" class="center-block img-responsive img-thumbnail"/>` : ''}`;
+          let contentTpl = `<p>${metaData.description}</p>`;
+          if(metaData.homepage) {
+            contentTpl += `<p><strong>Homepage</strong>: <a href="${metaData.homepage}" target="_blank" rel="noopener">${metaData.homepage}</a></p>`;
+          }
+          contentTpl += `<p><strong>Version</strong>: ${metaData.version}</p>`;
+          if(metaData.screenshot) {
+            contentTpl += `<img src="${metaData.screenshot}" class="center-block img-responsive img-thumbnail"/>`;
+          }
+          content.innerHTML = contentTpl;
         });
       });
     }
   }
 
   hideDialog(selector: string) {
-    $(selector).modal('hide');
+    lazyBootstrap().then(($) => {
+      $(selector).modal('hide');
+    });
   }
 
   showAndFocusOn(selector: string, focusSelector: string) {
-    $(selector).modal('show')
-      .on('shown.bs.modal', function () {
-        $(focusSelector, selector).focus();
-      });
+    lazyBootstrap().then(($) => {
+      $(selector).modal('show')
+        .on('shown.bs.modal', function () {
+          $(focusSelector, selector).focus();
+        });
+    });
   }
 }
 
