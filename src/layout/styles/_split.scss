@@ -76,6 +76,12 @@
     > section {
       pointer-events: none;
       opacity: 0.5;
+
+      @supports (-moz-appearance:meterbar) { // firefox only
+        * {
+          display: none;
+        }
+      }
     }
   }
 
