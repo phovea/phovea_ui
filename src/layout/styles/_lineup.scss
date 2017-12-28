@@ -13,23 +13,11 @@
   &[data-orientation=h] {
     overflow-x: auto;
     flex-direction: row;
-
-    &[data-mode=stacked] {
-      > section {
-        min-width: 50%;
-      }
-    }
   }
 
   &[data-orientation=v] {
     overflow-y: auto;
     flex-direction: column;
-
-    &[data-mode=stacked] {
-      > section {
-        min-height: 50%;
-      }
-    }
   }
 
   > section {
