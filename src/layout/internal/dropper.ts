@@ -2,11 +2,11 @@
  * Created by Samuel Gratzl on 01.08.2017.
  */
 import {ALayoutContainer} from './ALayoutContainer';
-import {ILayoutContainer} from 'phovea_ui/src/layout';
 import TabbingLayoutContainer from './TabbingLayoutContainer';
 import SplitLayoutContainer from './SplitLayoutContainer';
 import {dropAble} from 'phovea_core/src/internal/dnd';
 import {EOrientation, IDropArea} from './interfaces';
+import {ILayoutContainer} from '../interfaces';
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 import LineUpLayoutContainer from './LineUpLayoutContainer';
 
