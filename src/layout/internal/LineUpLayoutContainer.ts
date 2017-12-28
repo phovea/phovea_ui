@@ -35,6 +35,14 @@ export default class LineUpLayoutContainer extends ASequentialLayoutContainer<IL
     } else {
       this.node.insertBefore(wrap(child), this.node.children[index]);
     }
+
+    if(this.options.stackLayout) {
+      if(this.options.orientation === EOrientation.HORIZONTAL) {
+        child.node.parentElement.style.minWidth = child.minSize[0] > 0? `${child.minSize[0]}px` : null; // set minSize if available or delete CSS property
+      } else {
+        child.node.parentElement.style.minHeight = child.minSize[1] > 0? `${child.minSize[1]}px` : null;
+      }
+    }
     child.visible = this.visible;
   }
 
