@@ -37,7 +37,7 @@ export function dropViews(node: HTMLElement, reference: ALayoutContainer<any> & 
   node.dataset.drop = 'center';
 
   node.insertAdjacentHTML('beforeend', `
-    <div class="drop-locations-overlay">
+    <div class="phovea-drop-locations-overlay">
       <div></div>
       <div></div>
       <div></div>

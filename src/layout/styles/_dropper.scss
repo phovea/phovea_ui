@@ -15,7 +15,7 @@
       background-color: $phovea_layout_dropper_background;
     }
 
-    > .drop-locations-overlay {
+    > .phovea-drop-locations-overlay {
       display: block;
     }
 
@@ -93,7 +93,7 @@
     }
   }
 
-  > .drop-locations-overlay {
+  > .phovea-drop-locations-overlay {
     display: none;
     width: 100%;
     height: 100%;
