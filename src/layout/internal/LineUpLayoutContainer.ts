@@ -3,14 +3,21 @@ import {EOrientation, IDropArea} from './interfaces';
 import {ALayoutContainer} from './ALayoutContainer';
 import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} from './ASequentialLayoutContainer';
 
+export interface ILineUpLayoutContainer extends ISequentialLayoutContainerOptions {
+  stackLayout: boolean;
+}
 
-export default class LineUpLayoutContainer extends ASequentialLayoutContainer<ISequentialLayoutContainerOptions> {
+export default class LineUpLayoutContainer extends ASequentialLayoutContainer<ILineUpLayoutContainer> {
   readonly minChildCount = 1;
   readonly type = 'lineup';
 
-  constructor(document: Document, options: Partial<ISequentialLayoutContainerOptions>, ...children: ILayoutContainer[]) {
+  constructor(document: Document, options: Partial<ILineUpLayoutContainer>, ...children: ILayoutContainer[]) {
     super(document, options);
     this.node.dataset.layout = 'lineup';
+
+    if(this.options.stackLayout) {
+      this.node.dataset.mode ='stacked';
+    }
     children.forEach((d) => this.push(d));
   }
 
@@ -28,23 +35,34 @@ export default class LineUpLayoutContainer extends ASequentialLayoutContainer<IS
     } else {
       this.node.insertBefore(wrap(child), this.node.children[index]);
     }
+
+    if(this.options.stackLayout) {
+      if(this.options.orientation === EOrientation.HORIZONTAL) {
+        child.node.parentElement.style.minWidth = child.minSize[0] > 0? `${child.minSize[0]}px` : null; // set minSize if available or delete CSS property
+      } else {
+        child.node.parentElement.style.minHeight = child.minSize[1] > 0? `${child.minSize[1]}px` : null;
+      }
+    }
     child.visible = this.visible;
   }
 
   protected takeDownChild(child: ILayoutContainer) {
     this.node.removeChild(child.node.parentElement);
+    this.node.dataset.mode = '';
     super.takeDownChild(child);
   }
 
   persist() {
     return Object.assign(super.persist(), {
-      type: 'lineup'
+      type: 'lineup',
+      stackLayout: this.options.stackLayout
     });
   }
 
   static restore(dump: ILayoutDump, restore: (dump: ILayoutDump) => ILayoutContainer, doc: Document) {
     const options = Object.assign(ALayoutContainer.restoreOptions(dump), {
-      orientation: EOrientation[<string>dump.orientation]
+      orientation: EOrientation[<string>dump.orientation],
+      stackLayout: dump.stackLayout
     });
     const r = new LineUpLayoutContainer(doc, options);
     dump.children.forEach((d) => r.push(restore(d)));
@@ -62,10 +80,17 @@ export default class LineUpLayoutContainer extends ASequentialLayoutContainer<IS
       return EOrientation.HORIZONTAL;
     };
     const options = Object.assign(ALayoutContainer.deriveOptions(node), {
-      orientation: deriveOrientation()
+      orientation: deriveOrientation(),
+      stackLayout: node.dataset.mode === 'stacked'
     });
     const r = new LineUpLayoutContainer(node.ownerDocument, options);
     children.forEach((c: HTMLElement) => r.push(derive(c)));
     return r;
+  }
+
+  defaultOptions() {
+    return Object.assign(super.defaultOptions(), {
+      stackLayout: false
+    });
   }
 }

@@ -127,7 +127,7 @@ class SplitBuilder extends AParentBuilder {
 
 class LineUpBuilder extends AParentBuilder {
 
-  constructor(private readonly orientation: EOrientation, children: IBuildAbleOrViewLike[]) {
+  constructor(private readonly orientation: EOrientation, children: IBuildAbleOrViewLike[], private readonly stackLayout: boolean = false) {
     super(children);
   }
 
@@ -142,7 +142,8 @@ class LineUpBuilder extends AParentBuilder {
 
   protected buildOptions(): Partial<ISequentialLayoutContainerOptions> {
     return Object.assign({
-      orientation: this.orientation
+      orientation: this.orientation,
+      stackLayout: this.stackLayout
     }, super.buildOptions());
   }
 
@@ -256,6 +257,25 @@ export function horizontalLineUp(...children: IBuildAbleOrViewLike[]): LineUpBui
  */
 export function verticalLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder {
   return new LineUpBuilder(EOrientation.VERTICAL, children);
+}
+
+/**
+ * similar to the horizontalLineUp, except that each container takes its own amount of space
+ * @param {IBuildAbleOrViewLike} children the children of the layout
+ * @return {LineUpBuilder} a lineup builder
+ */
+export function horizontalStackedLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder {
+  return new LineUpBuilder(EOrientation.HORIZONTAL, children, true);
+}
+
+
+/**
+ * similar to the verticalLineUp, except that each container takes its own amount of space
+ * @param {IBuildAbleOrViewLike} children the children of the layout
+ * @return {LineUpBuilder} a lineup builder
+ */
+export function verticalStackedLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder {
+  return new LineUpBuilder(EOrientation.VERTICAL, children, true);
 }
 
 /**

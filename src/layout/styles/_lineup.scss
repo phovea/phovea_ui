@@ -4,6 +4,12 @@
   display: flex;
   flex-wrap: nowrap;
 
+  &[data-mode=stacked] {
+    > section {
+      flex-basis: auto;
+    }
+  }
+
   &[data-orientation=h] {
     overflow-x: auto;
     flex-direction: row;

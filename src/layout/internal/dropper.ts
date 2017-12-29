@@ -8,13 +8,20 @@ import {dropAble} from 'phovea_core/src/internal/dnd';
 import {EOrientation, IDropArea} from './interfaces';
 import {ILayoutContainer} from '../interfaces';
 import {AParentLayoutContainer} from './AParentLayoutContainer';
+import LineUpLayoutContainer from './LineUpLayoutContainer';
 
 
 function determineDropArea(x: number, y: number): IDropArea {
-  if (x < 0.3) {
+  if (x > 0.2 && x < 0.4 && y > 0.3 && y < 0.7) {
+    return 'horizontal-scroll';
+  }
+  if (x > 0.6 && x < 0.8  && y > 0.3 && y < 0.7) {
+    return 'vertical-scroll';
+  }
+  if (x < 0.2) {
     return 'left';
   }
-  if (x > 0.7) {
+  if (x > 0.8) {
     return 'right';
   }
   if (y < 0.3) {
@@ -28,6 +35,15 @@ function determineDropArea(x: number, y: number): IDropArea {
 
 export function dropViews(node: HTMLElement, reference: ALayoutContainer<any> & ILayoutContainer) {
   node.dataset.drop = 'center';
+
+  node.insertAdjacentHTML('beforeend', `
+    <div class="phovea-drop-locations-overlay">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  `);
+
   dropAble(node, [ALayoutContainer.MIME_TYPE], (result, e) => {
     const area = determineDropArea(e.offsetX / node.offsetWidth, e.offsetY / node.offsetHeight);
     const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
@@ -64,9 +80,8 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
     p.active = item;
     return true;
   }
-
   //corner case if I'm the child of a tabbing, tab that and not me
-  if (parent instanceof TabbingLayoutContainer) {
+  if (parent instanceof TabbingLayoutContainer && !(area === 'horizontal-scroll' || area === 'vertical-scroll')) {
     return dropLogic(item, parent, area);
   }
 
@@ -74,6 +89,20 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
     //can't split my parent with my parent
     return false;
   }
+
+  if (area === 'horizontal-scroll' || area === 'vertical-scroll') {
+    const orientation = area === 'horizontal-scroll'? EOrientation.HORIZONTAL : EOrientation.VERTICAL;
+    const p = new LineUpLayoutContainer(item.node.ownerDocument, {
+      orientation,
+      stackLayout: true
+    });
+    parent.replace(reference, p);
+    p.push(reference);
+    p.push(item);
+    return true;
+  }
+
+
   //replace myself with a split container
   const p = new SplitLayoutContainer(item.node.ownerDocument, {
     orientation: (area === 'left' || area === 'right') ? EOrientation.HORIZONTAL : EOrientation.VERTICAL,
