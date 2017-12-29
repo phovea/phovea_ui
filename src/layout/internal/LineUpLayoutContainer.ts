@@ -1,6 +1,6 @@
 import {ILayoutContainer, ILayoutDump} from '../interfaces';
 import {EOrientation, IDropArea} from './interfaces';
-import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
+import {ALayoutContainer} from './ALayoutContainer';
 import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} from './ASequentialLayoutContainer';
 
 export interface ILineUpLayoutContainer extends ISequentialLayoutContainerOptions {
