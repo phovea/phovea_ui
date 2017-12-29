@@ -81,7 +81,7 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
     return true;
   }
   //corner case if I'm the child of a tabbing, tab that and not me
-  if (parent instanceof TabbingLayoutContainer) {
+  if (parent instanceof TabbingLayoutContainer && !(area === 'horizontal-scroll' || area === 'vertical-scroll')) {
     return dropLogic(item, parent, area);
   }
 

@@ -80,7 +80,8 @@ export default class LineUpLayoutContainer extends ASequentialLayoutContainer<IL
       return EOrientation.HORIZONTAL;
     };
     const options = Object.assign(ALayoutContainer.deriveOptions(node), {
-      orientation: deriveOrientation()
+      orientation: deriveOrientation(),
+      stackLayout: node.dataset.mode === 'stacked'
     });
     const r = new LineUpLayoutContainer(node.ownerDocument, options);
     children.forEach((c: HTMLElement) => r.push(derive(c)));
