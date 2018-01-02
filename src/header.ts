@@ -11,6 +11,11 @@ import lazyBootstrap from './_lazyBootstrap';
 import buildBuildInfo from './buildInfo';
 import getMetaData from './metaData';
 
+
+// declare the function name of the `cookie-bar` for the TS compiler (see addEUCookieDisclaimer())
+declare var setupCookieBar: any;
+
+
 /**
  * Defines a header link
  */
@@ -179,7 +184,19 @@ export class AppHeader {
    */
   constructor(private parent: HTMLElement, options: IAppHeaderOptions = {}) {
     mixin(this.options, options);
+    this.addEUCookieDisclaimer();
     this.build();
+  }
+
+  private addEUCookieDisclaimer() {
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.async = true;
+    script.src = 'https://cdn.jsdelivr.net/npm/cookie-bar/cookiebar-latest.min.js?theme=flying';
+    script.onload = () => {
+      setupCookieBar();
+    };
+    this.parent.ownerDocument.body.appendChild(script);
   }
 
   private async build() {
