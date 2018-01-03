@@ -99,6 +99,11 @@ export interface IAppHeaderOptions {
    * default: true
    */
   showReportBugLink?: boolean;
+
+  /**
+   * show/hide the EU cookie disclaimer bar from `cookie-bar.eu`
+   */
+  showCookieDisclaimer?: boolean;
 }
 
 /**
@@ -154,7 +159,12 @@ export class AppHeader {
     /**
      * show/hide the bug report link
      */
-    showReportBugLink: true
+    showReportBugLink: true,
+
+    /**
+     * show/hide the EU cookie disclaimer bar from `cookie-bar.eu`
+     */
+    showCookieDisclaimer: false
   };
 
   /**
@@ -189,6 +199,10 @@ export class AppHeader {
   }
 
   private addEUCookieDisclaimer() {
+    if(!this.options.showCookieDisclaimer) {
+      return;
+    }
+
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.async = true;
