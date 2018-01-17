@@ -352,6 +352,9 @@ export function derive(node: HTMLElement, viewFactory: (node: HTMLElement) => IV
       case 'lineup':
       case 'vlineup':
       case 'hlineup':
+      case 'stack':
+      case 'hstack':
+      case 'vstack':
         return LineUpLayoutContainer.derive(node, deriveImpl);
       case 'tabbing':
         return TabbingLayoutContainer.derive(node, deriveImpl);
