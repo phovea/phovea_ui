@@ -329,7 +329,7 @@ export class AppHeader {
         const content = <HTMLElement>this.aboutDialog.querySelector('.metaData');
         const title = <HTMLElement>this.aboutDialog.parentElement.querySelector('.modal-title');
         getMetaData().then((metaData) => {
-          title.innerHTML = metaData.name;
+          title.innerHTML = metaData.name.replace('_', ' ');
           let contentTpl = `<p>${metaData.description}</p>`;
           if(metaData.homepage) {
             contentTpl += `<p><strong>Homepage</strong>: <a href="${metaData.homepage}" target="_blank" rel="noopener">${metaData.homepage}</a></p>`;
