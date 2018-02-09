@@ -324,7 +324,7 @@ export class AppHeader {
     const link = <HTMLElement>this.parent.querySelector('*[data-header="aboutLink"]');
     AppHeader.setVisibility(link, isVisible);
     if(isVisible) {
-      link.addEventListener('click', () => {
+      const modifyDialogOnce = () => {
         // request last deployment data
         const content = <HTMLElement>this.aboutDialog.querySelector('.metaData');
         const title = <HTMLElement>this.aboutDialog.parentElement.querySelector('.modal-title');
@@ -340,7 +340,10 @@ export class AppHeader {
           }
           content.innerHTML = contentTpl;
         });
-      });
+        // remove event listener to prevent another DOM modification
+        link.removeEventListener('click', modifyDialogOnce);
+      };
+      link.addEventListener('click', modifyDialogOnce);
     }
   }
 
