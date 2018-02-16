@@ -47,15 +47,15 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
 
     if(this.options.fixed) {
       this.header.addEventListener('mouseenter', () => {
-        this.header.classList.add('show-header');
+        this.header.classList.add('show-header'); // show header when hovering over the minimal header
       });
 
       this.header.addEventListener('mouseleave', () => {
-        this.header.classList.remove('show-header');
+        this.header.classList.remove('show-header'); // hide header again
       });
 
       this.on(LayoutContainerEvents.EVENT_LAYOUT_CHANGED, () => {
-        if (this.children.length < 2) {
+        if (this.children.length < 2) { // frozen layout to apply minimal style to the header and hide views
           this.header.classList.add('frozen');
         } else {
           this.header.classList.remove('frozen');
