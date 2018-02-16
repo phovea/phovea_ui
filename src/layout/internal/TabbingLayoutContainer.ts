@@ -14,7 +14,12 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
   private static readonly TAB_REORDER = `<div data-layout="tab-reorder">&nbsp;</div>`;
   readonly minChildCount = 0;
   readonly type = 'tabbing';
+
+  private readonly mouseEnter = () => this.header.classList.remove('hidden-header'); // show full header when hovering over the minimal header
+  private readonly mouseLeave = () => this.header.classList.add('hidden-header'); // hide header again
+
   private _active: ILayoutContainer | null = null;
+
 
   constructor(document: Document, options: Partial<ITabbingLayoutContainerOptions>, ...children: ILayoutContainer[]) {
     super(document, options);
@@ -44,6 +49,15 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
       }
       return true;
     }, null, true);
+
+    if(this.options.fixed) {
+      this.header.classList.add('fixed');
+      this.toggleFrozenLayout();
+
+      this.on(LayoutContainerEvents.EVENT_LAYOUT_CHANGED, () => {
+        this.toggleFrozenLayout();
+      });
+    }
   }
 
   canDrop(area: IDropArea) {
@@ -226,5 +240,17 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
       r.active = r.children[activeIndex];
     }
     return r;
+  }
+
+  private toggleFrozenLayout() {
+    if (this.children.length < 2) { // frozen layout to apply minimal style to the header and hide views
+      this.header.classList.add('hidden-header');
+      this.header.addEventListener('mouseenter', this.mouseEnter);
+      this.header.addEventListener('mouseleave', this.mouseLeave);
+    } else {
+      this.header.classList.remove('hidden-header');
+      this.header.removeEventListener('mouseenter', this.mouseEnter);
+      this.header.removeEventListener('mouseleave', this.mouseLeave);
+    }
   }
 }

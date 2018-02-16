@@ -56,6 +56,7 @@
     flex: 1 1 0;
     display: inline-flex;
     flex-direction: column;
+    position: relative;
 
     > header {
       flex: 0 0 auto;
@@ -117,6 +118,7 @@
     }
 
     &.fixed {
+      flex: 0 0 2px;
       span {
         display: none;
       }

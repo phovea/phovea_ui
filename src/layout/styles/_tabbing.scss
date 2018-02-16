@@ -19,6 +19,27 @@ header[data-layout=tabbing] {
   flex: 0 0 auto;
   border-bottom: 1px solid $phovea_layout_active_tab_header;
 
+  &.fixed {
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+    height: 3px;
+
+    > span {
+      display: none;
+    }
+
+    &:not(.hidden-header) {
+      height: auto;
+    }
+
+    &.hidden-header {
+      > * { // hide all buttons inside the header unless it should be shown with the show-header class
+        display: none;
+      }
+    }
+  }
+
   > :nth-child(2) {
     display: inline-block;
     margin: 0 2px;
