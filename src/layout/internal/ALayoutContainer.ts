@@ -1,5 +1,5 @@
 import {EventHandler} from 'phovea_core/src/event';
-import {ILayoutDump, LayoutContainerEvents, ILayoutContainer} from '../interfaces';
+import {ILayoutDump, LayoutContainerEvents, ILayoutContainer, ILayoutParentContainer} from '../interfaces';
 import {dragAble, uniqueId} from 'phovea_core/src';
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 
@@ -131,6 +131,17 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
   findAll(predicate: (container: ILayoutContainer)=>boolean): ILayoutContainer[] {
     return predicate(<any>this) ? [<any>this]: [];
   };
+
+  closest(id: number|((container: ILayoutParentContainer)=>boolean)) {
+    if (!this.parent) {
+      return null;
+    }
+    const parent = this.parent;
+    if ((typeof id === 'number' && parent.id === id) || (typeof id === 'function' && id(parent) )) {
+      return parent;
+    }
+    return parent.closest(id);
+  }
 }
 
 export default ALayoutContainer;

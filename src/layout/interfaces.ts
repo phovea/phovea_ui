@@ -87,6 +87,11 @@ export interface ILayoutContainer extends IEventHandler, IHasUniqueId {
    */
   find(id: number|((container: ILayoutContainer)=>boolean)): ILayoutContainer | null;
   findAll(predicate: (container: ILayoutContainer)=>boolean): ILayoutContainer[];
+
+  /**
+   * find the closest parent matching the given criteria
+   */
+  closest(id: number|((container: ILayoutParentContainer)=>boolean)): ILayoutParentContainer | null;
 }
 
 /**
