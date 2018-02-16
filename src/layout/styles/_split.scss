@@ -117,6 +117,7 @@
     }
 
     &.fixed {
+      flex: 0 0 2px;
       span {
         display: none;
       }

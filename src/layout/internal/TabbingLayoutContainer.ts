@@ -44,6 +44,24 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
       }
       return true;
     }, null, true);
+
+    if(this.options.fixed) {
+      this.header.addEventListener('mouseenter', () => {
+        this.header.classList.add('show-header');
+      });
+
+      this.header.addEventListener('mouseleave', () => {
+        this.header.classList.remove('show-header');
+      });
+
+      this.on(LayoutContainerEvents.EVENT_LAYOUT_CHANGED, () => {
+        if (this.children.length < 2) {
+          this.header.classList.add('frozen');
+        } else {
+          this.header.classList.remove('frozen');
+        }
+      });
+    }
   }
 
   canDrop(area: IDropArea) {
