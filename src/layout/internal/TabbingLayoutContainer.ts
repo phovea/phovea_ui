@@ -46,7 +46,7 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
     }, null, true);
 
     if(this.options.fixed) {
-      this.header.classList.add('frozen');
+      this.header.classList.add('fixed');
 
       const mouseEnter = () => {
         this.header.classList.remove('hidden-header'); // show full header when hovering over the minimal header
