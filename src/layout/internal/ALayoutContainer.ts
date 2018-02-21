@@ -7,6 +7,11 @@ export interface ILayoutContainerOption {
   name: string;
   readonly fixed: boolean;
   readonly autoWrap: boolean|string;
+  /**
+   * if true the user can't drag and drop view, but the separator can still be changed, i.e. it is an intermediate solution between a non-fixed and a fixed layout
+   */
+  fixedLayout: boolean;
+
 }
 
 export function withChanged(event: string) {
@@ -27,6 +32,11 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     super();
     console.assert(document != null);
     this.options = Object.assign(this.defaultOptions(), options);
+
+    if (this.options.fixed) {
+      this.options.fixedLayout = true;
+    }
+
     this.header = document.createElement('header');
     this.header.innerHTML = `
         <button type="button" class="close${this.options.fixed ? ' hidden' : ''}" aria-label="Close"><span>×</span></button>
@@ -40,7 +50,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     });
 
     //drag
-    if (!this.options.fixed) {
+    if (!this.options.fixedLayout) {
       dragAble(this.header, () => {
         return {
           effectAllowed: 'move',
@@ -76,7 +86,8 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
       name: 'View',
       fixed: false,
       hideAbleHeader: false,
-      autoWrap: false
+      autoWrap: false,
+      fixedLayout: false
     };
   }
 
@@ -105,7 +116,8 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
       type: '',
       name: this.name,
       fixed: this.options.fixed,
-      autoWrap: this.options.autoWrap
+      autoWrap: this.options.autoWrap,
+      fixedLayout: this.options.fixedLayout
     };
   }
 
@@ -113,7 +125,8 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     return {
       name: dump.name,
       fixed: dump.fixed,
-      autoWrap: dump.autoWrap === true
+      autoWrap: dump.autoWrap === true,
+      fixedLayout: dump.fixedLayout === true
     };
   }
 
@@ -121,7 +134,8 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     return {
       name: node.dataset.name || 'View',
       fixed: node.dataset.fixed !== undefined,
-      autoWrap: node.dataset.autoWrap !== undefined
+      autoWrap: node.dataset.autoWrap !== undefined,
+      fixedLayout: node.dataset.fixedLayout !== undefined
     };
   }
 

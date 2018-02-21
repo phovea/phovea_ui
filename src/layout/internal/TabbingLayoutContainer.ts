@@ -30,25 +30,27 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
       this.active = this._children[this.options.active];
     }
 
-    dropAble(this.header, [ALayoutContainer.MIME_TYPE], (result) => {
-      const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
-      console.assert(id >= 0);
-      //find id and move it here
-      const root = this.rootParent;
-      const toMove = root.find(id);
-      if (toMove === null || toMove === this || toMove instanceof AParentLayoutContainer && this.parents.indexOf(toMove) >= 0) {
-        //can't move parent into me
-        return false;
-      }
-      const alreadyChild = this._children.indexOf(toMove) >= 0;
-      if (alreadyChild) {
-        this.moveChild(toMove, this.length);
-      } else {
-        //not a child already
-        this.push(toMove);
-      }
-      return true;
-    }, null, true);
+    if (!this.options.fixedLayout) {
+      dropAble(this.header, [ALayoutContainer.MIME_TYPE], (result) => {
+        const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
+        console.assert(id >= 0);
+        //find id and move it here
+        const root = this.rootParent;
+        const toMove = root.find(id);
+        if (toMove === null || toMove === this || toMove instanceof AParentLayoutContainer && this.parents.indexOf(toMove) >= 0) {
+          //can't move parent into me
+          return false;
+        }
+        const alreadyChild = this._children.indexOf(toMove) >= 0;
+        if (alreadyChild) {
+          this.moveChild(toMove, this.length);
+        } else {
+          //not a child already
+          this.push(toMove);
+        }
+        return true;
+      }, null, true);
+    }
 
     if(this.options.fixed) {
       this.header.classList.add('fixed');

@@ -4,14 +4,7 @@ import {ALayoutContainer, withChanged} from './ALayoutContainer';
 import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} from './ASequentialLayoutContainer';
 import {LayoutContainerEvents} from '../';
 
-export interface ISplitlLayoutContainerOptions extends ISequentialLayoutContainerOptions {
-  /**
-   * if true the user can't change the separator, i.e. it is fixed
-   */
-  readonly fixedLayout: boolean;
-}
-
-export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISplitlLayoutContainerOptions> implements ISplitLayoutContainer {
+export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISequentialLayoutContainerOptions> implements ISplitLayoutContainer {
   private static readonly SEPARATOR = `<div data-layout="separator"><span title="Squeeze Left"></span><span title="Squeeze Right"></span></div>`;
   private static readonly SEPARATOR_WIDTH = 5;
 
@@ -20,12 +13,12 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
 
   private readonly _ratios: number[] = [];
 
-  constructor(document: Document, options: Partial<ISplitlLayoutContainerOptions>, ratio?: number, child1?: ILayoutContainer, child2?: ILayoutContainer) {
+  constructor(document: Document, options: Partial<ISequentialLayoutContainerOptions>, ratio?: number, child1?: ILayoutContainer, child2?: ILayoutContainer) {
     super(document, options);
     console.assert(ratio === undefined || (ratio >= 0 && ratio <= 1));
     this.node.dataset.layout = 'split';
 
-    if(!this.options.fixedLayout) {
+    if(!this.options.fixed) {
       this.node.addEventListener('mousedown', (evt) => {
         if (this.isSeparator(<HTMLElement>evt.target)) {
           //dragging
@@ -43,9 +36,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
   }
 
   defaultOptions() {
-    return Object.assign(super.defaultOptions(), {
-      fixedLayout: false
-    });
+    return Object.assign(super.defaultOptions());
   }
 
   place(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea) {
@@ -201,7 +192,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISp
     if (this.length > 1) {
       this.node.insertAdjacentHTML('beforeend', SplitLayoutContainer.SEPARATOR);
       const separator = this.node.lastElementChild;
-      if(!this.options.fixedLayout) {
+      if(!this.options.fixed) {
         separator.firstElementChild.addEventListener('click', (evt) => {
           evt.preventDefault();
           evt.stopPropagation();

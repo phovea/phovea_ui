@@ -26,7 +26,9 @@ export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutCon
       view.node.style.minHeight = `${min[1]}px`;
     }
 
-    dropViews(this.node, this);
+    if (!this.options.fixedLayout) {
+      dropViews(this.node, this);
+    }
   }
 
   protected defaultOptions() {

@@ -22,6 +22,7 @@ abstract class ABuilder {
   protected _name: string = 'View';
   protected _fixed: boolean = false;
   protected _autoWrap: boolean|string = false;
+  protected _fixedLayout: boolean = false;
 
   /**
    * specify the name of the view
@@ -34,11 +35,22 @@ abstract class ABuilder {
   }
 
   /**
-   * specify that the view cannot be closed
+   * specify that the view cannot be closed and the view and separators cannot be moved via drag and drop
+   * setting the fixed option implies the fixedLayout option
    * @return {this} itself
    */
   fixed(): this {
     this._fixed = true;
+    this._fixedLayout = true;
+    return this;
+  }
+
+  /**
+   * specify that drag and drop is disabled for views, but the separator can still be moved
+   * @returns {this}
+   */
+  fixedLayout(): this {
+    this._fixedLayout = true;
     return this;
   }
 
@@ -55,7 +67,8 @@ abstract class ABuilder {
     return {
       name: this._name,
       fixed: this._fixed,
-      autoWrap: this._autoWrap
+      autoWrap: this._autoWrap,
+      fixedLayout: this._fixedLayout
     };
   }
 
@@ -83,7 +96,6 @@ abstract class AParentBuilder extends ABuilder {
 
 class SplitBuilder extends AParentBuilder {
   private _ratio: number = 0.5;
-  private _fixedLayout: boolean = false;
 
   constructor(private readonly orientation: EOrientation, ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike) {
     super([left, right]);
@@ -100,19 +112,9 @@ class SplitBuilder extends AParentBuilder {
     return this;
   }
 
-  /**
-   * fixes the split separator, i.e, the user cannot change it
-   * @return {SplitBuilder}
-   */
-  fixedLayout() {
-    this._fixedLayout = true;
-    return this;
-  }
-
   protected buildOptions(): Partial<ISequentialLayoutContainerOptions> {
     return Object.assign({
       orientation: this.orientation,
-      fixedLayout: this._fixedLayout,
     }, super.buildOptions());
   }
 
