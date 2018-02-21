@@ -40,7 +40,7 @@ export interface IHeaderLink {
  * Header link extends the header link with a  flag for disabling the logo
  */
 export class AppHeaderLink implements IHeaderLink {
-  constructor(public name = 'Phovea', public readonly action = (event: MouseEvent) => false, public readonly href: string = '#', public addLogo:boolean = true) {
+  constructor(public name = 'Phovea', public readonly action = (event: MouseEvent) => false, public readonly href: string = '#', public addLogo: boolean = true) {
   }
 }
 
@@ -199,7 +199,7 @@ export class AppHeader {
   }
 
   private addEUCookieDisclaimer() {
-    if(!this.options.showCookieDisclaimer) {
+    if (!this.options.showCookieDisclaimer) {
       return;
     }
 
@@ -323,19 +323,19 @@ export class AppHeader {
   private toggleAboutLink(isVisible: boolean) {
     const link = <HTMLElement>this.parent.querySelector('*[data-header="aboutLink"]');
     AppHeader.setVisibility(link, isVisible);
-    if(isVisible) {
+    if (isVisible) {
       const modifyDialogOnce = () => {
         // request last deployment data
         const content = <HTMLElement>this.aboutDialog.querySelector('.metaData');
         const title = <HTMLElement>this.aboutDialog.parentElement.querySelector('.modal-title');
         getMetaData().then((metaData) => {
-          title.innerHTML = metaData.name.replace('_', ' ');
+          title.innerHTML = (metaData.displayName || metaData.name).replace('_', ' ');
           let contentTpl = `<p class="description">${metaData.description}</p>`;
-          if(metaData.homepage) {
+          if (metaData.homepage) {
             contentTpl += `<p class="homepage"><strong>Homepage</strong>: <a href="${metaData.homepage}" target="_blank" rel="noopener">${metaData.homepage}</a></p>`;
           }
           contentTpl += `<p class="version"><strong>Version</strong>: ${metaData.version}</p>`;
-          if(metaData.screenshot) {
+          if (metaData.screenshot) {
             contentTpl += `<img src="${metaData.screenshot}" class="center-block img-responsive img-thumbnail"/>`;
           }
           content.innerHTML = contentTpl;
