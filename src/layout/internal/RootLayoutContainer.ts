@@ -20,6 +20,27 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
 
     this.on(LayoutContainerEvents.EVENT_MAXIMIZE, (evt) => {
       // maximize views
+      const view = evt.args[0];
+      const section = document.createElement('section');
+      section.classList.add('maximized-view');
+
+      // create a deep clone of the header and the view and add them to the root layout
+      // the original view can therefore be left unchanged
+      const headerClone = view.header.cloneNode(true);
+      const viewClone = view.node.cloneNode(true);
+
+      // create a new event listener since event listeners on elements are not cloned
+      headerClone.querySelector('button.size-toggle').addEventListener('click', () => {
+        view.toggleMaximizedView();
+      });
+      section.appendChild(headerClone);
+      section.appendChild(viewClone);
+      this.node.insertAdjacentElement('afterbegin', section);
+    });
+
+    this.on(LayoutContainerEvents.EVENT_MINIMIZE, (evt) => {
+      // since the view was cloned only the node needs to be removed to restore the original layout
+      this.node.querySelector('.maximized-view').remove();
     });
   }
 

@@ -53,7 +53,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     });
 
     this.header.querySelector('.size-toggle').addEventListener('click', (evt) => {
-      this.maximize();
+      this.toggleMaximizedView();
     });
 
     //drag
@@ -164,17 +164,19 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     return parent.closest(id);
   }
 
-  private maximize() {
+  toggleMaximizedView() {
     const header = this.header.querySelector('.size-toggle i');
+    this.isMaximized = !this.isMaximized;
+
     if (this.isMaximized) {
-      header.classList.add('fa-expand');
-      header.classList.remove('fa-compress');
-    } else {
       header.classList.remove('fa-expand');
       header.classList.add('fa-compress');
       this.fire(LayoutContainerEvents.EVENT_MAXIMIZE, this);
+    } else {
+      header.classList.add('fa-expand');
+      header.classList.remove('fa-compress');
+      this.fire(LayoutContainerEvents.EVENT_MINIMIZE, this);
     }
-    this.isMaximized = !this.isMaximized;
   }
 }
 
