@@ -28,6 +28,8 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
 
   readonly id = uniqueId(ALayoutContainer.MIME_TYPE);
 
+  private isMaximized: boolean = false;
+
   constructor(document: Document, options: Partial<T>) {
     super();
     console.assert(document != null);
@@ -40,13 +42,18 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     this.header = document.createElement('header');
     this.header.innerHTML = `
         <button type="button" class="close${this.options.fixed ? ' hidden' : ''}" aria-label="Close"><span>×</span></button>
-        <span>${this.name}</span>`;
+        <span>${this.name}</span>
+        <button type="button" class="size-toggle ${this.options.fixed ? 'hidden' : ''}" aria-label="Toggle View Size"><span><i class="fa fa-expand"></i></span></button>`;
 
     //remove
-    this.header.firstElementChild.addEventListener('click', (evt) => {
+    this.header.querySelector('.close').addEventListener('click', (evt) => {
       evt.preventDefault();
       evt.stopPropagation();
       this.destroy();
+    });
+
+    this.header.querySelector('.size-toggle').addEventListener('click', (evt) => {
+      this.maximize();
     });
 
     //drag
@@ -155,6 +162,19 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
       return parent;
     }
     return parent.closest(id);
+  }
+
+  private maximize() {
+    const header = this.header.querySelector('.size-toggle i');
+    if (this.isMaximized) {
+      header.classList.add('fa-expand');
+      header.classList.remove('fa-compress');
+    } else {
+      header.classList.remove('fa-expand');
+      header.classList.add('fa-compress');
+      this.fire(LayoutContainerEvents.EVENT_MAXIMIZE, this);
+    }
+    this.isMaximized = !this.isMaximized;
   }
 }
 

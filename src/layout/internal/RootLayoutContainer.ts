@@ -1,7 +1,7 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {ILayoutContainer, ILayoutDump, IRootLayoutContainer} from '../interfaces';
+import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, LayoutContainerEvents} from '../interfaces';
 import TabbingLayoutContainer from './TabbingLayoutContainer';
-import {ILayoutContainerOption} from './ALayoutContainer';
+import {default as ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {IDropArea} from './interfaces';
 import {IBuildAbleOrViewLike} from '../builder';
 import {IView} from '../';
@@ -17,6 +17,10 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     });
     this.node.dataset.layout = 'root';
     this.visible = true;
+
+    this.on(LayoutContainerEvents.EVENT_MAXIMIZE, (evt) => {
+      // maximize views
+    });
   }
 
   set root(root: ILayoutContainer) {

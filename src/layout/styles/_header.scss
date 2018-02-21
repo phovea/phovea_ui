@@ -12,8 +12,18 @@ header {
     opacity: 0.2;
   }
 
-  > button.close {
-    margin: 0 3px;
-    cursor: pointer;
+  > button {
+    &.close,
+    &.maximize {
+      margin: 0 3px;
+      cursor: pointer;
+    }
+
+    &.size-toggle {
+      padding: 0;
+      background: transparent;
+      border: 0;
+      opacity: .2;
+    }
   }
 }

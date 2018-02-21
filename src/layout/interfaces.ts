@@ -18,6 +18,7 @@ export class LayoutContainerEvents {
   static readonly EVENT_CHANGE_SPLIT_RATIOS = 'changeRatios';
   static readonly EVENT_TAB_REORDED = 'tabReorded';
   static readonly EVENT_CHANGE_ACTIVE_TAB = 'changeActiveTab';
+  static readonly EVENT_MAXIMIZE = 'maximize';
 }
 /**
  * base interface for the container
