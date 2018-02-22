@@ -20,23 +20,26 @@ header[data-layout=tabbing] {
   border-bottom: 1px solid $phovea_layout_active_tab_header;
 
   &.fixed {
-    position: absolute;
-    width: 100%;
-    z-index: 10;
-    height: 3px;
+
+    &.floating-header {
+      position: absolute;
+      width: 100%;
+      z-index: 10;
+      height: 3px;
+
+      &.show-header {
+        height: auto;
+      }
+
+      &:not(.show-header) {
+        > * { // hide all buttons inside the  header unless it should be shown with the show-header class
+          display: none;
+        }
+      }
+    }
 
     > span {
       display: none;
-    }
-
-    &:not(.hidden-header) {
-      height: auto;
-    }
-
-    &.hidden-header {
-      > * { // hide all buttons inside the header unless it should be shown with the show-header class
-        display: none;
-      }
     }
   }
 
