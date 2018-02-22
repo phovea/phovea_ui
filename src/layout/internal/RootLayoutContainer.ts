@@ -1,7 +1,7 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, LayoutContainerEvents} from '../interfaces';
 import TabbingLayoutContainer from './TabbingLayoutContainer';
-import {default as ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
+import {ILayoutContainerOption} from './ALayoutContainer';
 import {IDropArea} from './interfaces';
 import {IBuildAbleOrViewLike} from '../builder';
 import {IView} from '../';
@@ -9,6 +9,8 @@ import {IView} from '../';
 export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutContainerOption> implements IRootLayoutContainer {
   readonly minChildCount = 0;
   readonly type = 'root';
+
+  private viewDump: AParentLayoutContainer;
 
   constructor(document: Document, public readonly build: (layout: IBuildAbleOrViewLike)=> ILayoutContainer, private readonly restorer: (dump: ILayoutDump, restoreView: (referenceId: number) => IView) => ILayoutContainer) {
     super(document, {
@@ -24,22 +26,22 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
       const section = document.createElement('section');
       section.classList.add('maximized-view');
 
-      // create a deep clone of the header and the view and add them to the root layout
-      // the original view can therefore be left unchanged
-      const headerClone = view.header.cloneNode(true);
-      const viewClone = view.node.cloneNode(true);
+      this.viewDump = view;
 
-      // create a new event listener since event listeners on elements are not cloned
-      headerClone.querySelector('button.size-toggle').addEventListener('click', () => {
-        view.toggleMaximizedView();
-      });
-      section.appendChild(headerClone);
-      section.appendChild(viewClone);
+      section.appendChild(view.header);
+      section.appendChild(view.node);
       this.node.insertAdjacentElement('afterbegin', section);
     });
 
     this.on(LayoutContainerEvents.EVENT_MINIMIZE, (evt) => {
       // since the view was cloned only the node needs to be removed to restore the original layout
+      const parent = this.viewDump.parent;
+      const referenceView = this.viewDump.node.nextElementSibling;
+      parent.node.insertBefore(this.viewDump.node, referenceView);
+
+      const referenceHeader = this.viewDump.header.nextElementSibling;
+      parent.header.insertBefore(this.viewDump.header, referenceHeader);
+
       this.node.querySelector('.maximized-view').remove();
     });
   }

@@ -26,10 +26,14 @@
     z-index: 100;
     display: flex;
     flex-direction: column;
+    background-color: #fff;
 
     > header {
-      flex: 0 0 auto;
       background-color: $phovea_layout_view_header;
+    }
+
+    > article {
+      flex: 1 1 auto;
     }
   }
 }
