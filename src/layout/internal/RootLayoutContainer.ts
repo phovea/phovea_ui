@@ -10,7 +10,10 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
   readonly minChildCount = 0;
   readonly type = 'root';
 
-  private viewDump: AParentLayoutContainer;
+  private viewDump: {
+    viewSibling: HTMLElement,
+    headerSibling: HTMLElement
+  };
 
   constructor(document: Document, public readonly build: (layout: IBuildAbleOrViewLike)=> ILayoutContainer, private readonly restorer: (dump: ILayoutDump, restoreView: (referenceId: number) => IView) => ILayoutContainer) {
     super(document, {
@@ -23,10 +26,14 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     this.on(LayoutContainerEvents.EVENT_MAXIMIZE, (evt) => {
       // maximize views
       const view = evt.args[0];
+
       const section = document.createElement('section');
       section.classList.add('maximized-view');
 
-      this.viewDump = view;
+      this.viewDump = {
+        viewSibling: view.node.nextElementSibling,
+        headerSibling: view.header.nextElementSibling
+      };
 
       section.appendChild(view.header);
       section.appendChild(view.node);
@@ -34,13 +41,11 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     });
 
     this.on(LayoutContainerEvents.EVENT_MINIMIZE, (evt) => {
-      // since the view was cloned only the node needs to be removed to restore the original layout
-      const parent = this.viewDump.parent;
-      const referenceView = this.viewDump.node.nextElementSibling;
-      parent.node.insertBefore(this.viewDump.node, referenceView);
+      const view = evt.args[0];
+      const parent = view.parent;
 
-      const referenceHeader = this.viewDump.header.nextElementSibling;
-      parent.header.insertBefore(this.viewDump.header, referenceHeader);
+      parent.node.insertBefore(view.node, this.viewDump.viewSibling);
+      parent.header.insertBefore(view.header, this.viewDump.headerSibling);
 
       this.node.querySelector('.maximized-view').remove();
     });
