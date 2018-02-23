@@ -48,6 +48,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     this.header.firstElementChild.addEventListener('click', (evt) => {
       evt.preventDefault();
       evt.stopPropagation();
+      this.toggleMaximizedView();
       this.destroy();
     });
 
