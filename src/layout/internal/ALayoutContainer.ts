@@ -42,18 +42,13 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     this.header = document.createElement('header');
     this.header.innerHTML = `
         <button type="button" class="close${this.options.fixed ? ' hidden' : ''}" aria-label="Close"><span>×</span></button>
-        <span>${this.name}</span>
-        <button type="button" class="size-toggle ${this.options.fixed ? 'hidden' : ''}" aria-label="Toggle View Size"><span><i class="fa fa-expand"></i></span></button>`;
+        <span>${this.name}</span>`;
 
     //remove
-    this.header.querySelector('.close').addEventListener('click', (evt) => {
+    this.header.firstElementChild.addEventListener('click', (evt) => {
       evt.preventDefault();
       evt.stopPropagation();
       this.destroy();
-    });
-
-    this.header.querySelector('.size-toggle').addEventListener('click', (evt) => {
-      this.toggleMaximizedView();
     });
 
     //drag
@@ -164,7 +159,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     return parent.closest(id);
   }
 
-  toggleMaximizedView() {
+  protected toggleMaximizedView() {
     const header = this.header.querySelector('.size-toggle i');
     this.isMaximized = !this.isMaximized;
 
