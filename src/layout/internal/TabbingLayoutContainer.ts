@@ -15,8 +15,8 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
   readonly minChildCount = 0;
   readonly type = 'tabbing';
 
-  private readonly mouseEnter = () => this.header.classList.remove('hidden-header'); // show full header when hovering over the minimal header
-  private readonly mouseLeave = () => this.header.classList.add('hidden-header'); // hide header again
+  private readonly mouseEnter = () => this.header.classList.add('show-header'); // show full header when hovering over the minimal header
+  private readonly mouseLeave = () => this.header.classList.remove('show-header'); // hide header again
 
   private _active: ILayoutContainer | null = null;
 
@@ -246,11 +246,11 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
 
   private toggleFrozenLayout() {
     if (this.children.length < 2) { // frozen layout to apply minimal style to the header and hide views
-      this.header.classList.add('hidden-header');
+      this.header.classList.add('floating-header');
       this.header.addEventListener('mouseenter', this.mouseEnter);
       this.header.addEventListener('mouseleave', this.mouseLeave);
     } else {
-      this.header.classList.remove('hidden-header');
+      this.header.classList.remove('floating-header');
       this.header.removeEventListener('mouseenter', this.mouseEnter);
       this.header.removeEventListener('mouseleave', this.mouseLeave);
     }
