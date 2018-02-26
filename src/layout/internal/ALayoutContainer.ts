@@ -48,7 +48,6 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     this.header.firstElementChild.addEventListener('click', (evt) => {
       evt.preventDefault();
       evt.stopPropagation();
-      this.toggleMaximizedView();
       this.destroy();
     });
 
@@ -161,16 +160,22 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
   }
 
   protected toggleMaximizedView() {
-    const header = this.header.querySelector('.size-toggle i');
+    const sizeToggle = <HTMLElement>this.header.querySelector('.size-toggle');
+    const sizeToggleIcon = sizeToggle.querySelector('i');
+    const closeButton = this.header.querySelector('.close');
     this.isMaximized = !this.isMaximized;
 
     if (this.isMaximized) {
-      header.classList.remove('fa-expand');
-      header.classList.add('fa-compress');
+      closeButton.classList.add('hidden');
+      sizeToggle.title = 'Restore default size';
+      sizeToggleIcon.classList.remove('fa-expand');
+      sizeToggleIcon.classList.add('fa-compress');
       this.fire(LayoutContainerEvents.EVENT_MAXIMIZE, this);
     } else {
-      header.classList.add('fa-expand');
-      header.classList.remove('fa-compress');
+      closeButton.classList.remove('hidden');
+      sizeToggle.title = 'Expand view';
+      sizeToggleIcon.classList.add('fa-expand');
+      sizeToggleIcon.classList.remove('fa-compress');
       this.fire(LayoutContainerEvents.EVENT_MINIMIZE, this);
     }
   }
