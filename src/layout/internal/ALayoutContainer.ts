@@ -28,7 +28,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
 
   readonly id = uniqueId(ALayoutContainer.MIME_TYPE);
 
-  private isMaximized: boolean = false;
+  protected isMaximized: boolean = false;
 
   constructor(document: Document, options: Partial<T>) {
     super();

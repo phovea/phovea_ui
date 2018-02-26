@@ -17,6 +17,7 @@ export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutCon
     this.node = view.node.ownerDocument.createElement('article');
     this.node.dataset.layout = 'view';
     this.node.appendChild(view.node);
+
     this.header.insertAdjacentHTML('beforeend', `<button type="button" class="size-toggle ${this.options.fixed ? 'hidden' : ''}" aria-label="Toggle View Size"><span><i class="fa fa-expand"></i></span></button>`);
 
     const min = this.minSize;
@@ -31,8 +32,20 @@ export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutCon
       dropViews(this.node, this);
     }
 
-    this.header.querySelector('.size-toggle').addEventListener('click', (evt) => {
+    const updateTitle = () => {
+      this.header.title = `Double click to ${this.isMaximized? 'restore default size' : 'maximize'}`;
+    };
+
+    updateTitle();
+
+    this.header.querySelector('.size-toggle').addEventListener('click', () => {
       this.toggleMaximizedView();
+      updateTitle();
+    });
+
+    this.header.addEventListener('dblclick', () => {
+      this.toggleMaximizedView();
+      updateTitle();
     });
   }
 
