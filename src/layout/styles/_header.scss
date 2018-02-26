@@ -14,7 +14,7 @@ header {
 
   > button {
     &.close,
-    &.maximize {
+    &.size-toggle {
       margin: 0 3px;
       cursor: pointer;
     }
@@ -24,6 +24,7 @@ header {
       background: transparent;
       border: 0;
       opacity: .2;
+      float: right;
     }
   }
 }
