@@ -19,7 +19,7 @@ export class LayoutContainerEvents {
   static readonly EVENT_TAB_REORDED = 'tabReorded';
   static readonly EVENT_CHANGE_ACTIVE_TAB = 'changeActiveTab';
   static readonly EVENT_MAXIMIZE = 'maximize';
-  static readonly EVENT_MINIMIZE = 'minimize';
+  static readonly RESTORE_SIZE = 'restoreSize';
 }
 /**
  * base interface for the container

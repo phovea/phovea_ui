@@ -40,7 +40,7 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
       this.node.insertAdjacentElement('afterbegin', section);
     });
 
-    this.on(LayoutContainerEvents.EVENT_MINIMIZE, (evt) => {
+    this.on(LayoutContainerEvents.RESTORE_SIZE, (evt) => {
       const view = evt.args[0];
       const parent = view.parent;
 

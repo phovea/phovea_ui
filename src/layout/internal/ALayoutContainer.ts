@@ -176,7 +176,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
       sizeToggle.title = 'Expand view';
       sizeToggleIcon.classList.add('fa-expand');
       sizeToggleIcon.classList.remove('fa-compress');
-      this.fire(LayoutContainerEvents.EVENT_MINIMIZE, this);
+      this.fire(LayoutContainerEvents.RESTORE_SIZE, this);
     }
   }
 }
