@@ -23,10 +23,7 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     this.node.dataset.layout = 'root';
     this.visible = true;
 
-    this.on(LayoutContainerEvents.EVENT_MAXIMIZE, (evt) => {
-      // maximize views
-      const view = evt.args[0];
-
+    this.on(LayoutContainerEvents.EVENT_MAXIMIZE, (_evt, view) => {
       const section = document.createElement('section');
       section.classList.add('maximized-view');
 
@@ -40,8 +37,7 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
       this.node.insertAdjacentElement('afterbegin', section);
     });
 
-    this.on(LayoutContainerEvents.EVENT_RESTORE_SIZE, (evt) => {
-      const view = evt.args[0];
+    this.on(LayoutContainerEvents.EVENT_RESTORE_SIZE, (_evt, view) => {
       const parent = view.parent;
 
       parent.node.insertBefore(view.node, this.viewDump.viewSibling);
