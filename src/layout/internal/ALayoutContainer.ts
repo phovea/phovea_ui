@@ -28,6 +28,12 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
 
   readonly id = uniqueId(ALayoutContainer.MIME_TYPE);
 
+  private readonly keyDownListener = (evt) => {
+    if (evt.keyCode === 27) { // Escape
+      this.toggleMaximizedView();
+    }
+  };
+
   protected isMaximized: boolean = false;
 
   constructor(document: Document, options: Partial<T>) {
@@ -170,6 +176,9 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
       sizeToggle.title = 'Restore default size';
       sizeToggleIcon.classList.remove('fa-expand');
       sizeToggleIcon.classList.add('fa-compress');
+
+      this.header.ownerDocument.addEventListener('keydown', this.keyDownListener);
+
       this.fire(LayoutContainerEvents.EVENT_MAXIMIZE, this);
     } else {
       if (!this.options.fixedLayout) {
@@ -179,8 +188,17 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
       sizeToggle.title = 'Expand view';
       sizeToggleIcon.classList.add('fa-expand');
       sizeToggleIcon.classList.remove('fa-compress');
+
+      this.header.ownerDocument.removeEventListener('keydown', this.keyDownListener);
+
       this.fire(LayoutContainerEvents.EVENT_RESTORE_SIZE, this);
     }
+
+    this.updateTitle();
+  }
+
+  protected updateTitle() {
+    this.header.title = `Double click to ${this.isMaximized? 'restore default size' : 'expand view'}`;
   }
 }
 

@@ -32,21 +32,12 @@ export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutCon
       dropViews(this.node, this);
     }
 
-    const updateTitle = () => {
-      this.header.title = `Double click to ${this.isMaximized? 'restore default size' : 'expand view'}`;
-    };
+    this.updateTitle();
 
-    updateTitle();
+    this.header.querySelector('.size-toggle').addEventListener('click', () => this.toggleMaximizedView());
+    this.header.addEventListener('dblclick', () => this.toggleMaximizedView());
 
-    this.header.querySelector('.size-toggle').addEventListener('click', () => {
-      this.toggleMaximizedView();
-      updateTitle();
-    });
 
-    this.header.addEventListener('dblclick', () => {
-      this.toggleMaximizedView();
-      updateTitle();
-    });
   }
 
   protected defaultOptions() {
