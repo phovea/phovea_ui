@@ -87,7 +87,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
 
   protected addedChild(child: ILayoutContainer, index: number) {
     child.resized();
-    this.propagate(child, LayoutContainerEvents.EVENT_LAYOUT_CHANGED, LayoutContainerEvents.EVENT_MAXIMIZE, LayoutContainerEvents.RESTORE_SIZE);
+    this.propagate(child, LayoutContainerEvents.EVENT_LAYOUT_CHANGED, LayoutContainerEvents.EVENT_MAXIMIZE, LayoutContainerEvents.EVENT_RESTORE_SIZE);
     this.fire(withChanged(LayoutContainerEvents.EVENT_CHILD_ADDED), child, index);
   }
 
@@ -133,7 +133,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
   }
 
   protected takeDownChild(child: ILayoutContainer) {
-    this.stopPropagation(child, LayoutContainerEvents.EVENT_LAYOUT_CHANGED, LayoutContainerEvents.EVENT_MAXIMIZE, LayoutContainerEvents.RESTORE_SIZE);
+    this.stopPropagation(child, LayoutContainerEvents.EVENT_LAYOUT_CHANGED, LayoutContainerEvents.EVENT_MAXIMIZE, LayoutContainerEvents.EVENT_RESTORE_SIZE);
     child.visible = false;
     (<any>child).parent = null;
   }
