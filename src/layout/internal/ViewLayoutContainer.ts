@@ -33,7 +33,7 @@ export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutCon
     }
 
     const updateTitle = () => {
-      this.header.title = `Double click to ${this.isMaximized? 'restore default size' : 'maximize'}`;
+      this.header.title = `Double click to ${this.isMaximized? 'restore default size' : 'expand view'}`;
     };
 
     updateTitle();
