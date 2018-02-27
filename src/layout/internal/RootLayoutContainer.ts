@@ -24,7 +24,7 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     this.visible = true;
 
     this.on(LayoutContainerEvents.EVENT_MAXIMIZE, (_evt, view) => {
-      const section = document.createElement('section');
+      const section = this.node.ownerDocument.createElement('section');
       section.classList.add('maximized-view');
 
       this.viewDump = {
