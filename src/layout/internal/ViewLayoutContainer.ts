@@ -36,8 +36,6 @@ export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutCon
 
     this.header.querySelector('.size-toggle').addEventListener('click', () => this.toggleMaximizedView());
     this.header.addEventListener('dblclick', () => this.toggleMaximizedView());
-
-
   }
 
   protected defaultOptions() {

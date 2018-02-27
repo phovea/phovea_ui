@@ -28,11 +28,11 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
 
   readonly id = uniqueId(ALayoutContainer.MIME_TYPE);
 
-  private readonly keyDownListener = (evt) => {
+  private readonly keyDownListener = (evt: KeyboardEvent) => {
     if (evt.keyCode === 27) { // Escape
       this.toggleMaximizedView();
     }
-  };
+  }
 
   protected isMaximized: boolean = false;
 
