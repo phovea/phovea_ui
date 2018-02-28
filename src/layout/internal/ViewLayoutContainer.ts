@@ -18,6 +18,8 @@ export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutCon
     this.node.dataset.layout = 'view';
     this.node.appendChild(view.node);
 
+    this.header.insertAdjacentHTML('beforeend', `<button type="button" title="Expand view" class="size-toggle" aria-label="Toggle View Size"><span><i class="fa fa-expand"></i></span></button>`);
+
     const min = this.minSize;
     if (min[0] > 0) {
       view.node.style.minWidth = `${min[0]}px`;
@@ -29,6 +31,11 @@ export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutCon
     if (!this.options.fixedLayout) {
       dropViews(this.node, this);
     }
+
+    this.updateTitle();
+
+    this.header.querySelector('.size-toggle').addEventListener('click', () => this.toggleMaximizedView());
+    this.header.addEventListener('dblclick', () => this.toggleMaximizedView());
   }
 
   protected defaultOptions() {

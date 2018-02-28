@@ -1,5 +1,5 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {ILayoutContainer, ILayoutDump, IRootLayoutContainer} from '../interfaces';
+import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, LayoutContainerEvents} from '../interfaces';
 import TabbingLayoutContainer from './TabbingLayoutContainer';
 import {ILayoutContainerOption} from './ALayoutContainer';
 import {IDropArea} from './interfaces';
@@ -10,6 +10,17 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
   readonly minChildCount = 0;
   readonly type = 'root';
 
+  private viewDump: {
+    parent: {
+      viewParent: HTMLElement,
+      headerParent: HTMLElement
+    },
+    sibling: {
+      viewSibling: HTMLElement,
+      headerSibling: HTMLElement
+    }
+  };
+
   constructor(document: Document, public readonly build: (layout: IBuildAbleOrViewLike)=> ILayoutContainer, private readonly restorer: (dump: ILayoutDump, restoreView: (referenceId: number) => IView) => ILayoutContainer) {
     super(document, {
       name: '',
@@ -17,6 +28,35 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     });
     this.node.dataset.layout = 'root';
     this.visible = true;
+
+    this.on(LayoutContainerEvents.EVENT_MAXIMIZE, (_evt, view) => {
+      const section = this.node.ownerDocument.createElement('section');
+      section.classList.add('maximized-view');
+
+      this.viewDump = {
+        parent: {
+          viewParent: view.node.parentNode,
+          headerParent: view.header.parentNode
+        },
+        sibling: {
+          viewSibling: view.node.nextElementSibling,
+          headerSibling: view.header.nextElementSibling
+        }
+      };
+
+      section.appendChild(view.header);
+      section.appendChild(view.node);
+      this.node.insertAdjacentElement('afterbegin', section);
+    });
+
+    this.on(LayoutContainerEvents.EVENT_RESTORE_SIZE, (_evt, view) => {
+      const parent = view.parent;
+
+      this.viewDump.parent.viewParent.insertBefore(view.node, this.viewDump.sibling.viewSibling);
+      this.viewDump.parent.headerParent.insertBefore(view.header, this.viewDump.sibling.headerSibling);
+
+      this.node.querySelector('.maximized-view').remove();
+    });
   }
 
   set root(root: ILayoutContainer) {
