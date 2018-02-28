@@ -11,8 +11,14 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
   readonly type = 'root';
 
   private viewDump: {
-    viewSibling: HTMLElement,
-    headerSibling: HTMLElement
+    parent: {
+      viewParent: HTMLElement,
+      headerParent: HTMLElement
+    },
+    sibling: {
+      viewSibling: HTMLElement,
+      headerSibling: HTMLElement
+    }
   };
 
   constructor(document: Document, public readonly build: (layout: IBuildAbleOrViewLike)=> ILayoutContainer, private readonly restorer: (dump: ILayoutDump, restoreView: (referenceId: number) => IView) => ILayoutContainer) {
@@ -28,8 +34,14 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
       section.classList.add('maximized-view');
 
       this.viewDump = {
-        viewSibling: view.node.nextElementSibling,
-        headerSibling: view.header.nextElementSibling
+        parent: {
+          viewParent: view.node.parentNode,
+          headerParent: view.header.parentNode
+        },
+        sibling: {
+          viewSibling: view.node.nextElementSibling,
+          headerSibling: view.header.nextElementSibling
+        }
       };
 
       section.appendChild(view.header);
@@ -40,8 +52,8 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     this.on(LayoutContainerEvents.EVENT_RESTORE_SIZE, (_evt, view) => {
       const parent = view.parent;
 
-      parent.node.insertBefore(view.node, this.viewDump.viewSibling);
-      parent.header.insertBefore(view.header, this.viewDump.headerSibling);
+      this.viewDump.parent.viewParent.insertBefore(view.node, this.viewDump.sibling.viewSibling);
+      this.viewDump.parent.headerParent.insertBefore(view.header, this.viewDump.sibling.headerSibling);
 
       this.node.querySelector('.maximized-view').remove();
     });
