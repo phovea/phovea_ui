@@ -26,7 +26,7 @@ export abstract class ASequentialLayoutContainer<T extends ISequentialLayoutCont
   }
 
   get hideAbleHeader() {
-    return this.options.fixed;
+    return this.options.fixedLayout;
   }
 
   protected getPadding() {
