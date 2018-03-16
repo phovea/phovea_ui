@@ -1,10 +1,9 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, LayoutContainerEvents} from '../interfaces';
+import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, LayoutContainerEvents, IView} from '../interfaces';
 import TabbingLayoutContainer from './TabbingLayoutContainer';
-import {ILayoutContainerOption} from './ALayoutContainer';
+import {default as ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {IDropArea} from './interfaces';
 import {IBuildAbleOrViewLike} from '../builder';
-import {IView} from '../';
 
 export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutContainerOption> implements IRootLayoutContainer {
   readonly minChildCount = 0;
@@ -19,7 +18,7 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
       viewSibling: HTMLElement,
       headerSibling: HTMLElement
     }
-  };
+  } | null = null;
 
   constructor(document: Document, public readonly build: (layout: IBuildAbleOrViewLike)=> ILayoutContainer, private readonly restorer: (dump: ILayoutDump, restoreView: (referenceId: number) => IView) => ILayoutContainer) {
     super(document, {
@@ -29,33 +28,38 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     this.node.dataset.layout = 'root';
     this.visible = true;
 
-    this.on(LayoutContainerEvents.EVENT_MAXIMIZE, (_evt, view) => {
+    this.on(LayoutContainerEvents.EVENT_MAXIMIZE, (_evt, view: ILayoutContainer) => {
       const section = this.node.ownerDocument.createElement('section');
       section.classList.add('maximized-view');
 
       this.viewDump = {
         parent: {
-          viewParent: view.node.parentNode,
-          headerParent: view.header.parentNode
+          viewParent: <HTMLElement>view.node.parentElement,
+          headerParent: <HTMLElement>view.header.parentElement
         },
         sibling: {
-          viewSibling: view.node.nextElementSibling,
-          headerSibling: view.header.nextElementSibling
+          viewSibling: <HTMLElement>view.node.nextElementSibling,
+          headerSibling: <HTMLElement>view.header.nextElementSibling
         }
       };
 
       section.appendChild(view.header);
       section.appendChild(view.node);
       this.node.insertAdjacentElement('afterbegin', section);
+
+      view.resized();
     });
 
-    this.on(LayoutContainerEvents.EVENT_RESTORE_SIZE, (_evt, view) => {
-      const parent = view.parent;
-
+    this.on(LayoutContainerEvents.EVENT_RESTORE_SIZE, (_evt, view: ILayoutContainer) => {
+      if (!this.viewDump) {
+        return;
+      }
       this.viewDump.parent.viewParent.insertBefore(view.node, this.viewDump.sibling.viewSibling);
       this.viewDump.parent.headerParent.insertBefore(view.header, this.viewDump.sibling.headerSibling);
-
+      this.viewDump = null;
       this.node.querySelector('.maximized-view').remove();
+
+      view.resized();
     });
   }
 
