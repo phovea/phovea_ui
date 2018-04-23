@@ -88,7 +88,7 @@ export interface IAppHeaderOptions {
    */
   rightMenu?: IHeaderLink[];
 
-  showAboutLink?: boolean | ((title: HTMLElement, content: HTMLElement)=>void)
+  showAboutLink?: boolean | ((title: HTMLElement, content: HTMLElement)=>void);
 
   /**
    * show/hide the options link
