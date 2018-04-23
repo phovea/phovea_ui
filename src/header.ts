@@ -88,22 +88,30 @@ export interface IAppHeaderOptions {
    */
   rightMenu?: IHeaderLink[];
 
+  showAboutLink?: boolean | ((title: HTMLElement, content: HTMLElement)=>void)
+
   /**
    * show/hide the options link
    * default: false
    */
-  showOptionsLink?: boolean;
+  showOptionsLink?: boolean | ((title: HTMLElement, content: HTMLElement)=>void);
 
   /**
    * show/hide the bug report link
    * default: true
    */
-  showReportBugLink?: boolean;
+  showReportBugLink?: boolean | ((title: HTMLElement, content: HTMLElement)=>void);
 
   /**
    * show/hide the EU cookie disclaimer bar from `cookie-bar.eu`
    */
   showCookieDisclaimer?: boolean;
+
+  /**
+   * show help link true or the url to link
+   * default: false
+   */
+  showHelpLink?: boolean | string;
 }
 
 /**
@@ -164,7 +172,12 @@ export class AppHeader {
     /**
      * show/hide the EU cookie disclaimer bar from `cookie-bar.eu`
      */
-    showCookieDisclaimer: false
+    showCookieDisclaimer: false,
+
+    /**
+     * show help link
+     */
+    showHelpLink: false
   };
 
   /**
@@ -251,9 +264,10 @@ export class AppHeader {
     this.optionsDialog = <HTMLElement>this.parent.querySelector('*[data-header="options"]');
 
     // show/hide links
-    this.toggleOptionsLink(this.options.showOptionsLink);
-    this.toggleAboutLink(true); // always visible
-    this.toggleReportBugLink(this.options.showReportBugLink);
+    this.toggleOptionsLink(this.options.showOptionsLink !== false, typeof this.options.showOptionsLink === 'function' ? this.options.showOptionsLink : null);
+    this.toggleAboutLink(this.options.showAboutLink !== false, typeof this.options.showAboutLink === 'function' ? this.options.showAboutLink : null);
+    this.toggleReportBugLink(this.options.showReportBugLink !== false, typeof this.options.showReportBugLink === 'function' ? this.options.showReportBugLink : null);
+    this.toggleHelpLink(this.options.showHelpLink !== false, typeof this.options.showHelpLink === 'string' ? this.options.showHelpLink : null);
 
     this.options.mainMenu.forEach((l) => this.addMainMenu(l.name, l.action, l.href));
     this.options.rightMenu.forEach((l) => this.addRightMenu(l.name, l.action, l.href));
@@ -288,58 +302,65 @@ export class AppHeader {
   }
 
   private static setVisibility(element: HTMLElement, isVisible: boolean) {
-    if (isVisible) {
-      element.classList.remove('hidden');
-    } else {
-      element.classList.add('hidden');
-    }
+    element.classList.toggle('hidden', !isVisible);
   }
 
-  toggleOptionsLink(isVisible: boolean) {
+  toggleOptionsLink(isVisible: boolean, contentGenerator?: (title: HTMLElement, content: HTMLElement)=>void) {
     const link = <HTMLElement>this.parent.querySelector('*[data-header="optionsLink"]');
-    AppHeader.setVisibility(link, isVisible);
-  }
-
-  toggleReportBugLink(isVisible: boolean) {
-    const link = <HTMLElement>this.parent.querySelector('*[data-header="bugLink"]');
     AppHeader.setVisibility(link, isVisible);
 
     // set the URL to GitHub issues dynamically
     if (isVisible) {
+      contentGenerator = contentGenerator || defaultOptionsInfo;
       lazyBootstrap().then(($) => {
-        $('#headerReportBugDialog').on('show.bs.modal', () => {
-          const content = <HTMLElement>this.parent.querySelector('*[data-header="bug"]');
+        $('#headerOptionsDialog').one('show.bs.modal', () => {
+          const content = <HTMLElement>this.parent.querySelector('*[data-header="options"]');
+          const title = <HTMLElement>this.parent.querySelector('#headerOptionsDialog .modal-title');
           content.innerHTML = 'Loading...';
-          buildBuildInfo().then((buildInfo) => {
-            content.innerHTML = buildInfo.toHTML();
-          }).catch((error) => {
-            content.innerHTML = error.toString();
-          });
+          contentGenerator(title, content);
         });
       });
     }
   }
 
-  private toggleAboutLink(isVisible: boolean) {
+  toggleHelpLink(isVisible: boolean, helpUrl?: string) {
+    const link = <HTMLElement>this.parent.querySelector('*[data-header="helpLink"]');
+    AppHeader.setVisibility(link, isVisible);
+
+    if (isVisible && helpUrl) {
+      link.querySelector('a')!.href = helpUrl;
+    }
+  }
+
+  toggleReportBugLink(isVisible: boolean, contentGenerator?: (title: HTMLElement, content: HTMLElement)=>void) {
+    const link = <HTMLElement>this.parent.querySelector('*[data-header="bugLink"]');
+    AppHeader.setVisibility(link, isVisible);
+
+    // set the URL to GitHub issues dynamically
+    if (isVisible) {
+      contentGenerator = contentGenerator || defaultBuildInfo;
+      lazyBootstrap().then(($) => {
+        $('#headerReportBugDialog').one('show.bs.modal', () => {
+          const content = <HTMLElement>this.parent.querySelector('*[data-header="bug"]');
+          const title = <HTMLElement>this.parent.querySelector('#headerReportBugDialog .modal-title');
+          content.innerHTML = 'Loading...';
+          contentGenerator(title, content);
+        });
+      });
+    }
+  }
+
+  private toggleAboutLink(isVisible: boolean, contentGenerator?: (title: HTMLElement, content: HTMLElement)=>void) {
     const link = <HTMLElement>this.parent.querySelector('*[data-header="aboutLink"]');
     AppHeader.setVisibility(link, isVisible);
     if (isVisible) {
+      contentGenerator = contentGenerator || defaultAboutInfo;
       const modifyDialogOnce = () => {
         // request last deployment data
-        const content = <HTMLElement>this.aboutDialog.querySelector('.metaData');
+        const content = <HTMLElement>this.aboutDialog;
         const title = <HTMLElement>this.aboutDialog.parentElement.querySelector('.modal-title');
-        getMetaData().then((metaData) => {
-          title.innerHTML = (metaData.displayName || metaData.name).replace('_', ' ');
-          let contentTpl = `<p class="description">${metaData.description}</p>`;
-          if (metaData.homepage) {
-            contentTpl += `<p class="homepage"><strong>Homepage</strong>: <a href="${metaData.homepage}" target="_blank" rel="noopener">${metaData.homepage}</a></p>`;
-          }
-          contentTpl += `<p class="version"><strong>Version</strong>: ${metaData.version}</p>`;
-          if (metaData.screenshot) {
-            contentTpl += `<img src="${metaData.screenshot}" class="center-block img-responsive img-thumbnail"/>`;
-          }
-          content.innerHTML = contentTpl;
-        });
+
+        contentGenerator(title, content);
         // remove event listener to prevent another DOM modification
         link.removeEventListener('click', modifyDialogOnce);
       };
@@ -365,4 +386,32 @@ export class AppHeader {
 
 export function create(parent: HTMLElement, options: IAppHeaderOptions = {}) {
   return new AppHeader(parent, options);
+}
+
+function defaultBuildInfo(_title: HTMLElement, content: HTMLElement) {
+  buildBuildInfo().then((buildInfo) => {
+    content.innerHTML = buildInfo.toHTML();
+  }).catch((error) => {
+    content.innerHTML = error.toString();
+  });
+}
+
+function defaultAboutInfo(title: HTMLElement, content: HTMLElement) {
+  content = <HTMLElement>content.querySelector('.metaData');
+  getMetaData().then((metaData) => {
+    title.innerHTML = (metaData.displayName || metaData.name).replace('_', ' ');
+    let contentTpl = `<p class="description">${metaData.description}</p>`;
+    if (metaData.homepage) {
+      contentTpl += `<p class="homepage"><strong>Homepage</strong>: <a href="${metaData.homepage}" target="_blank" rel="noopener">${metaData.homepage}</a></p>`;
+    }
+    contentTpl += `<p class="version"><strong>Version</strong>: ${metaData.version}</p>`;
+    if (metaData.screenshot) {
+      contentTpl += `<img src="${metaData.screenshot}" class="center-block img-responsive img-thumbnail"/>`;
+    }
+    content.innerHTML = contentTpl;
+  });
+}
+
+function defaultOptionsInfo(_title: HTMLElement, content: HTMLElement) {
+  content.innerHTML = 'No options available';
 }
