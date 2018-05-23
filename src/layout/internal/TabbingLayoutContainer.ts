@@ -69,7 +69,7 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
   place(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea) {
     console.assert(area === 'center');
     return this.push(child);
-  };
+  }
 
   protected defaultOptions(): ITabbingLayoutContainerOptions {
     return Object.assign(super.defaultOptions(), {
