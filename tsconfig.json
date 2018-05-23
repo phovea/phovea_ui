@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "es6",
+    "module": "esnext",
     "target": "es5",
     "importHelpers": true,
     "sourceMap": true,
@@ -9,17 +9,20 @@
     "experimentalDecorators": true,
     "lib": [
       "dom",
-      "es2015"
+      "es2015",
+      "es2016.array.include",
+      "es2017.object"
     ],
-    "baseUrl": "../",
-    "noImplicitAny": false,
-    "skipLibCheck": true
+    "declaration": true,
+    "removeComments": true,
+    "forceConsistentCasingInFileNames": true,
+    "stripInternal": true,
+    "esModuleInterop": true
   },
+  "compileOnSave": false,
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "tests/**/*.ts",
-    "index.ts",
     "tsd.d.ts"
   ]
 }
