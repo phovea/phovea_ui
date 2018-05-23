@@ -1,5 +1,5 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {ILayoutContainer, ISize} from '../interfaces';
+import {ILayoutContainer, ISize, ILayoutDump} from '../interfaces';
 import {ILayoutContainerOption} from './ALayoutContainer';
 import {EOrientation, IDropArea} from './interfaces';
 
@@ -51,7 +51,7 @@ export abstract class ASequentialLayoutContainer<T extends ISequentialLayoutCont
     }
   }
 
-  persist() {
+  persist(): ILayoutDump {
     return Object.assign(super.persist(), {
       type: 'sequence',
       orientation: EOrientation[this.options.orientation]

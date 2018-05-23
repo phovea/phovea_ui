@@ -378,7 +378,7 @@ export class AppHeader {
     lazyBootstrap().then(($) => {
       $(selector).modal('show')
         .on('shown.bs.modal', function () {
-          $(focusSelector, selector).focus();
+          $(selector).find(focusSelector).focus();
         });
     });
   }

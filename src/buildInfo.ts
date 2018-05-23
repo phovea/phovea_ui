@@ -5,18 +5,18 @@
 import {getAPIJSON} from 'phovea_core/src/ajax';
 import {offline} from 'phovea_core/src';
 
-interface IBuildInfo {
+export interface IBuildInfo {
   name: string;
   version: string;
   resolved: string;
 }
 
-interface IServerBuildInfo extends IBuildInfo {
+export interface IServerBuildInfo extends IBuildInfo {
   dependencies: string[];
   plugins: IBuildInfo[];
 }
 
-interface IClientBuildInfo extends IBuildInfo {
+export interface IClientBuildInfo extends IBuildInfo {
   dependencies: any;
   extraDependencies: any;
 }
@@ -56,7 +56,7 @@ UserAgent | ${navigator.userAgent}
 Platform | ${navigator.platform}
 Screen Size | ${screen.width} x ${screen.height}
 Window Size | ${window.innerWidth} x ${window.innerHeight}
-      
+
 ~~~json\n${JSON.stringify(this.client, null, ' ')}\n${this.server ? `\n${JSON.stringify(this.server, null, ' ')}\n`: ''}~~~`;
   }
 

@@ -125,12 +125,12 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
   }
 }
 
-interface IBuildLayout {
+export interface IBuildLayout {
   (root: RootLayoutContainer, layout: IBuildAbleOrViewLike): ILayoutContainer;
 }
-interface IViewRestorer {
+export interface IViewRestorer {
   (referenceId: number): IView;
 }
-interface IRestoreLayout {
+export interface IRestoreLayout {
   (dump: ILayoutDump, restoreView: IViewRestorer): ILayoutContainer;
 }

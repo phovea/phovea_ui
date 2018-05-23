@@ -18,7 +18,7 @@ function toBuilder(view: IBuildAbleOrViewLike): ABuilder {
   return new ViewBuilder(<IView | string>view);
 }
 
-abstract class ABuilder {
+export abstract class ABuilder {
   protected _name: string = 'View';
   protected _fixed: boolean = false;
   protected _autoWrap: boolean|string = false;
@@ -75,7 +75,7 @@ abstract class ABuilder {
   abstract build(root: RootLayoutContainer, doc: Document): ILayoutContainer;
 }
 
-abstract class AParentBuilder extends ABuilder {
+export abstract class AParentBuilder extends ABuilder {
   protected readonly children: ABuilder[] = [];
 
   constructor(children: IBuildAbleOrViewLike[]) {
@@ -94,7 +94,7 @@ abstract class AParentBuilder extends ABuilder {
   }
 }
 
-class SplitBuilder extends AParentBuilder {
+export class SplitBuilder extends AParentBuilder {
   private _ratio: number = 0.5;
 
   constructor(private readonly orientation: EOrientation, ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike) {
@@ -127,7 +127,7 @@ class SplitBuilder extends AParentBuilder {
   }
 }
 
-class LineUpBuilder extends AParentBuilder {
+export class LineUpBuilder extends AParentBuilder {
 
   constructor(private readonly orientation: EOrientation, children: IBuildAbleOrViewLike[], private readonly stackLayout: boolean = false) {
     super(children);
@@ -155,7 +155,7 @@ class LineUpBuilder extends AParentBuilder {
   }
 }
 
-class TabbingBuilder extends AParentBuilder {
+export class TabbingBuilder extends AParentBuilder {
   private _active: number | null = null;
 
   /**
