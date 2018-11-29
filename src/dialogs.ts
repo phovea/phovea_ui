@@ -24,7 +24,7 @@ export class Dialog {
             <h4 class="modal-title">${title}</h4>
           </div>
           <div class="modal-body">
-  
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default btn-primary">${primaryBtnText}</button>

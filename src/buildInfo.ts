@@ -56,7 +56,7 @@ UserAgent | ${navigator.userAgent}
 Platform | ${navigator.platform}
 Screen Size | ${screen.width} x ${screen.height}
 Window Size | ${window.innerWidth} x ${window.innerHeight}
-      
+
 ~~~json\n${JSON.stringify(this.client, null, ' ')}\n${this.server ? `\n${JSON.stringify(this.server, null, ' ')}\n`: ''}~~~`;
   }
 

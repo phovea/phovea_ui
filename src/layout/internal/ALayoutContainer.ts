@@ -152,7 +152,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
   }
   findAll(predicate: (container: ILayoutContainer)=>boolean): ILayoutContainer[] {
     return predicate(<any>this) ? [<any>this]: [];
-  };
+  }
 
   closest(id: number|((container: ILayoutParentContainer)=>boolean)) {
     if (!this.parent) {
