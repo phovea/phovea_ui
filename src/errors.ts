@@ -29,7 +29,7 @@ export function setGlobalErrorTemplate(template: (details: string) => string) {
 export function showErrorModalDialog(error: any) {
   function commonDialog(title: string, body: string) {
     // lazy import
-    return System.import('./dialogs').then(({generateDialog}: {generateDialog(title: string, primaryBtnText: string): Dialog}) => new Promise((resolve, reject) => {
+    return System.import('./dialogs').then(({generateDialog}: {generateDialog(title: string, primaryBtnText: string): Dialog}) => new Promise((_resolve, reject) => {
       const dialog = generateDialog(title, 'Dismiss');
 
       dialog.body.innerHTML = globalErrorTemplate(body);
@@ -53,14 +53,15 @@ export function showErrorModalDialog(error: any) {
     return xhr.text().then((body: string) => {
       const title = `Error ${xhr.status} (${xhr.statusText})`;
       if (xhr.status !== 400) {
+        const shortUrl = (xhr.url.length > 100) ? `${xhr.url.substring(0, 100)}...` : xhr.url;
         body = `${body}<hr>
-          The requested URL was:<br><a href="${xhr.url}" target="_blank">${(xhr.url.length > 100) ? xhr.url.substring(0, 100) + '...' : xhr.url}</a>`;
+          The requested URL was:<br><a href="${xhr.url}" target="_blank">${shortUrl}</a>`;
       }
       return commonDialog(title, body);
     });
-  } else if (error instanceof Error) {
-    return commonDialog(error.name, error.message);
-  } else {
-    return commonDialog('Unknown Error', error.toString());
   }
+  if (error instanceof Error) {
+    return commonDialog(error.name, error.message);
+  }
+  return commonDialog('Unknown Error', error.toString());
 }

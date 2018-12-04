@@ -29,14 +29,17 @@ export default class LineUpLayoutContainer extends ASequentialLayoutContainer<IL
 
   protected addedChild(child: ILayoutContainer, index: number) {
     super.addedChild(child, index);
-    if (index < 0 || index >= (this._children.length - 1)) {
-      //+1 since we already chanded the children
-      this.node.appendChild(wrap(child));
-    } else {
-      this.node.insertBefore(wrap(child), this.node.children[index]);
+    const childNode = wrap(child);
+    if(childNode) {
+      if (index < 0 || index >= (this._children.length - 1)) {
+        //+1 since we already chanded the children
+        this.node.appendChild(childNode);
+      } else {
+        this.node.insertBefore(childNode, this.node.children[index]);
+      }
     }
 
-    if(this.options.stackLayout) {
+    if(this.options.stackLayout && child.node && child.node.parentElement) {
       if(this.options.orientation === EOrientation.HORIZONTAL) {
         child.node.parentElement.style.minWidth = child.minSize[0] > 0? `${child.minSize[0]}px` : null; // set minSize if available or delete CSS property
       } else {
@@ -47,7 +50,9 @@ export default class LineUpLayoutContainer extends ASequentialLayoutContainer<IL
   }
 
   protected takeDownChild(child: ILayoutContainer) {
-    this.node.removeChild(child.node.parentElement);
+    if(child.node && child.node.parentElement) {
+      this.node.removeChild(child.node.parentElement);
+    }
     this.node.dataset.mode = '';
     super.takeDownChild(child);
   }
@@ -61,11 +66,13 @@ export default class LineUpLayoutContainer extends ASequentialLayoutContainer<IL
 
   static restore(dump: ILayoutDump, restore: (dump: ILayoutDump) => ILayoutContainer, doc: Document) {
     const options = Object.assign(ALayoutContainer.restoreOptions(dump), {
-      orientation: EOrientation[<string>dump.orientation],
+      orientation: EOrientation[<any>dump.orientation],
       stackLayout: dump.stackLayout
     });
     const r = new LineUpLayoutContainer(doc, options);
-    dump.children.forEach((d) => r.push(restore(d)));
+    if(dump.children) {
+      dump.children.forEach((d) => r.push(restore(d)));
+    }
     return r;
   }
 
@@ -74,17 +81,17 @@ export default class LineUpLayoutContainer extends ASequentialLayoutContainer<IL
     console.assert(children.length >= 1);
 
     const deriveOrientation = () => {
-      if (node.dataset.layout.startsWith('v') || (node.dataset.orientation && node.dataset.orientation.startsWith('v'))) {
+      if (node.dataset.layout && (node.dataset.layout.startsWith('v') || (node.dataset.orientation && node.dataset.orientation.startsWith('v')))) {
         return EOrientation.VERTICAL;
       }
       return EOrientation.HORIZONTAL;
     };
     const options = Object.assign(ALayoutContainer.deriveOptions(node), {
       orientation: deriveOrientation(),
-      stackLayout: node.dataset.mode === 'stacked' || node.dataset.layout.endsWith('stack')
+      stackLayout: node.dataset.mode === 'stacked' || (node.dataset.layout && node.dataset.layout.endsWith('stack'))
     });
-    const r = new LineUpLayoutContainer(node.ownerDocument, options);
-    children.forEach((c: HTMLElement) => r.push(derive(c)));
+    const r = new LineUpLayoutContainer(<Document>node.ownerDocument, options);
+    children.forEach((c) => r.push(derive(<HTMLElement>c)));
     return r;
   }
 

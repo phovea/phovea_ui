@@ -18,12 +18,12 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     this.node.classList.add('phovea-layout');
   }
 
-  canDrop(area: IDropArea) {
+  canDrop(_area: IDropArea) {
     return false;
   }
 
   get rootParent(): IRootLayoutContainer&ILayoutParentContainer {
-    let p: ILayoutParentContainer = this;
+    let p: ILayoutParentContainer = <any>this;
     while (p.parent !== null) {
       p = p.parent;
     }
@@ -111,9 +111,9 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
         //remove and inline my children (just one since the remove will be called again
         this.parent.push(this._children[1]);
       } else if (this.length > 0) {
-        this.parent.replace(this, this._children[0]);
+        this.parent.replace(<any>this, this._children[0]);
       } else {
-        this.parent.remove(this);
+        this.parent.remove(<any>this);
       }
     }
     this.fire(withChanged(LayoutContainerEvents.EVENT_CHILD_REMOVED), child);
@@ -127,7 +127,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     this._children.forEach((old) => this.takeDownChild(old));
     this._children.splice(0, this._children.length);
     if (this.minChildCount > this.length && this.parent) {
-      this.parent.remove(this);
+      this.parent.remove(<any>this);
     }
     this.fire(withChanged(LayoutContainerEvents.EVENT_CHILD_REMOVED));
   }
@@ -145,7 +145,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
   destroy() {
     super.destroy();
     if (this.parent) {
-      this.parent.remove(this);
+      this.parent.remove(<any>this);
     }
     this.forEach((d) => d.destroy());
   }
@@ -156,7 +156,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     });
   }
 
-  find(id: number|((container: ILayoutContainer)=>boolean)) {
+  find(id: number|((container: ILayoutContainer)=>boolean)): ILayoutContainer | null {
     if (super.find(id) != null) {
       return this;
     }
@@ -167,12 +167,12 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
       }
     }
     return null;
-  };
+  }
 
   findAll(predicate: (container: ILayoutContainer)=>boolean) {
     const base = super.findAll(predicate);
     return base.concat(...this._children.map((d) => d.findAll(predicate)));
-  };
+  }
 }
 
 export default AParentLayoutContainer;

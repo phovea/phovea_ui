@@ -183,7 +183,7 @@ class TabbingBuilder extends AParentBuilder {
     }, super.buildOptions());
   }
 
-  build(root: RootLayoutContainer, doc) {
+  build(root: RootLayoutContainer, doc: any) {
     const built = this.buildChildren(root, doc);
     return new TabbingLayoutContainer(doc, this.buildOptions(), ...built);
   }
@@ -208,7 +208,7 @@ export class ViewBuilder extends ABuilder {
     }, super.buildOptions());
   }
 
-  build(root: RootLayoutContainer, doc: Document): ILayoutContainer {
+  build(_root: RootLayoutContainer, doc: Document): ILayoutContainer {
     const options = this.buildOptions();
     if (typeof this.view === 'string') {
       return new ViewLayoutContainer(new HTMLView(this.view, doc), options);
@@ -306,9 +306,9 @@ export function view(view: string | IView | HTMLElement): ViewBuilder {
  */
 export function root(child: IBuildAbleOrViewLike, doc = document): IRootLayoutContainer {
   const b = toBuilder(child);
-  const r = new RootLayoutContainer(doc, (child) => toBuilder(child).build(r, doc), (dump, restoreView) => restore(dump, restoreView, doc));
+  const r:RootLayoutContainer = new RootLayoutContainer(doc, (child) => toBuilder(child).build(r, doc), (dump, restoreView) => restore(dump, restoreView, doc));
   r.root = b.build(r, doc);
-  return r;
+  return <any>r;
 }
 
 /**
@@ -341,10 +341,12 @@ export function restore(dump: ILayoutDump, restoreView: (referenceId: number) =>
  * @param {HTMLElement} node the root node
  * @param {(node: HTMLElement) => IView} viewFactory how to build a view from a node
  */
-export function derive(node: HTMLElement, viewFactory: (node: HTMLElement) => IView = (node) => new NodeView(node)): IRootLayoutContainer {
+export function derive(node: HTMLElement, viewFactory: (node: HTMLElement) => IView = (node) => new NodeView(node)): IRootLayoutContainer | null {
   const doc = node.ownerDocument;
-  const r = new RootLayoutContainer(doc, (child) => toBuilder(child).build(r, doc), (dump, restoreView) => restore(dump, restoreView, doc));
-
+  if(!doc) {
+    return null;
+  }
+  const r: RootLayoutContainer = new RootLayoutContainer(doc, (child:IBuildAbleOrViewLike) => toBuilder(child).build(r, doc), (dump: ILayoutDump, restoreView: (referenceId: number) => IView) => restore(dump, restoreView, doc));
   const deriveImpl = (node: HTMLElement): ILayoutContainer => {
     switch (node.dataset.layout || 'view') {
       case 'hsplit':
@@ -372,5 +374,5 @@ export function derive(node: HTMLElement, viewFactory: (node: HTMLElement) => IV
     //replace old node with new root
     node.parentElement.replaceChild(r.node, node);
   }
-  return r;
+  return <any>r;
 }

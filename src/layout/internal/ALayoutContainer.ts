@@ -51,24 +51,27 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
         <span>${this.name}</span>`;
 
     //remove
-    this.header.firstElementChild.addEventListener('click', (evt) => {
-      evt.preventDefault();
-      evt.stopPropagation();
-      this.destroy();
-    });
+    if(this.header.firstElementChild) {
+      this.header.firstElementChild.addEventListener('click', (evt) => {
+        evt.preventDefault();
+        evt.stopPropagation();
+        this.destroy();
+      });
+    }
 
     //drag
-    if (!this.options.fixedLayout) {
-      dragAble(this.header, () => {
-        return {
-          effectAllowed: 'move',
-          data: {
-            'text/plain': this.name,
-            [ALayoutContainer.MIME_TYPE]: String(this.id)
-          }
-        };
-      }, true);
+    if (this.options.fixedLayout) {
+      return;
     }
+    dragAble(this.header, () => {
+      return {
+        effectAllowed: 'move',
+        data: {
+          'text/plain': this.name,
+          [ALayoutContainer.MIME_TYPE]: String(this.id)
+        }
+      };
+    }, true);
   }
 
   get parents() {
@@ -147,22 +150,22 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     };
   }
 
-  find(id: number|((container: ILayoutContainer)=>boolean)) {
-    return (typeof id === 'number' && this.id === id) || (typeof id === 'function' && id(<any>this)) ? this : null;
+  find(id: number|((container: ILayoutContainer)=>boolean)): ILayoutContainer | null {
+    return (typeof id === 'number' && this.id === id) || (typeof id === 'function' && id(<any>this)) ? (<any>this) : null;
   }
   findAll(predicate: (container: ILayoutContainer)=>boolean): ILayoutContainer[] {
     return predicate(<any>this) ? [<any>this]: [];
-  };
+  }
 
-  closest(id: number|((container: ILayoutParentContainer)=>boolean)) {
+  closest(id: number|((container: ILayoutParentContainer)=>boolean)):ILayoutParentContainer | null {
     if (!this.parent) {
       return null;
     }
     const parent = this.parent;
     if ((typeof id === 'number' && parent.id === id) || (typeof id === 'function' && id(parent) )) {
-      return parent;
+      return <any>parent;
     }
-    return parent.closest(id);
+    return <any>parent.closest(id);
   }
 
   protected toggleMaximizedView() {
@@ -172,24 +175,31 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     this.isMaximized = !this.isMaximized;
 
     if (this.isMaximized) {
-      closeButton.classList.add('hidden');
+      if(closeButton) {
+        closeButton.classList.add('hidden');
+      }
       sizeToggle.title = 'Restore default size';
-      sizeToggleIcon.classList.remove('fa-expand');
-      sizeToggleIcon.classList.add('fa-compress');
-
-      this.header.ownerDocument.addEventListener('keydown', this.keyDownListener);
-
+      if(sizeToggleIcon) {
+        sizeToggleIcon.classList.remove('fa-expand');
+        sizeToggleIcon.classList.add('fa-compress');
+      }
+      if(this.header.ownerDocument) {
+        this.header.ownerDocument.addEventListener('keydown', this.keyDownListener);
+      }
       this.fire(LayoutContainerEvents.EVENT_MAXIMIZE, this);
     } else {
-      if (!this.options.fixedLayout) {
+      if (!this.options.fixedLayout && closeButton) {
         closeButton.classList.remove('hidden');
       }
 
       sizeToggle.title = 'Expand view';
-      sizeToggleIcon.classList.add('fa-expand');
-      sizeToggleIcon.classList.remove('fa-compress');
-
-      this.header.ownerDocument.removeEventListener('keydown', this.keyDownListener);
+      if(sizeToggleIcon) {
+        sizeToggleIcon.classList.add('fa-expand');
+        sizeToggleIcon.classList.remove('fa-compress');
+      }
+      if(this.header.ownerDocument) {
+        this.header.ownerDocument.removeEventListener('keydown', this.keyDownListener);
+      }
 
       this.fire(LayoutContainerEvents.EVENT_RESTORE_SIZE, this);
     }

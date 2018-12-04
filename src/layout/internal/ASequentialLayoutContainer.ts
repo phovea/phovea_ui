@@ -62,6 +62,9 @@ export abstract class ASequentialLayoutContainer<T extends ISequentialLayoutCont
 export default ASequentialLayoutContainer;
 
 export function wrap(child: ILayoutContainer) {
+  if(!child.node || !child.node.ownerDocument) {
+    return;
+  }
   const s = child.node.ownerDocument.createElement('section');
   if (!child.hideAbleHeader) {
     s.appendChild(child.header);

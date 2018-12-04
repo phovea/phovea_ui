@@ -4,16 +4,16 @@
 // to resolve the jquery extensions
 /// <reference types="bootstrap" />
 import './_bootstrap';
-import * as $ from 'jquery';
+import $ from 'jquery';
 import {mixin, randomId} from 'phovea_core/src';
 
 export class Dialog {
   protected readonly $dialog: JQuery;
-  private bakKeyDownListener: (ev: KeyboardEvent) => any = null; // temporal for restoring an old keydown listener
+  private bakKeyDownListener: ((ev: KeyboardEvent) => any) | null = null; // temporal for restoring an old keydown listener
   static openDialogs: number = 0;
 
   constructor(title: string, primaryBtnText = 'OK') {
-    const dialog = document.createElement('div');
+    const dialog: HTMLDivElement = document.createElement('div');
     dialog.setAttribute('role', 'dialog');
     dialog.classList.add('modal', 'fade');
     dialog.innerHTML = `
@@ -24,7 +24,7 @@ export class Dialog {
             <h4 class="modal-title">${title}</h4>
           </div>
           <div class="modal-body">
-  
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default btn-primary">${primaryBtnText}</button>
@@ -83,13 +83,15 @@ export class Dialog {
 }
 
 export class FormDialog extends Dialog {
-  constructor(title: string, primaryBtnText = 'OK', private readonly formId = 'form' + randomId(5)) {
+  constructor(title: string, primaryBtnText = 'OK', private readonly formId = `form ${randomId(5)}`) {
     super(title, primaryBtnText);
 
-    this.body.innerHTML = `<form id="${formId}"></form>`;
+    this.body.innerHTML = `<form id="${this.formId}"></form>`;
     const b = this.footer.querySelector('button');
-    b.setAttribute('type', 'submit');
-    b.setAttribute('form', formId);
+    if(b) {
+      b.setAttribute('type', 'submit');
+      b.setAttribute('form', this.formId);
+    }
   }
 
   get form() {
@@ -97,7 +99,7 @@ export class FormDialog extends Dialog {
   }
 
   getFormData() {
-    return new FormData(this.form);
+    return new FormData(this.form ? this.form : undefined);
   }
 
   onSubmit(callback: () => boolean) {
@@ -143,7 +145,7 @@ export function prompt(text: string, options: IPromptOptions|string = {}): Promi
   }
   mixin(o, options);
   return new Promise((resolve) => {
-    const dialog = generateDialog(o.title);
+    const dialog = generateDialog(o.title ? o.title : 'Input');
     if (o.multiline) {
       dialog.body.innerHTML = `<form><textarea class="form-control" rows="5" placeholder="${o.placeholder}" autofocus="autofocus">${text}</textarea></form>`;
     } else {
@@ -185,7 +187,7 @@ export function choose(items: string[], options: IChooseOptions|string = {}): Pr
   mixin(o, options);
 
   return new Promise((resolve) => {
-    const dialog = generateDialog(o.title);
+    const dialog = generateDialog(o.title ? o.title : 'Choose');
     const option = items.map((d) => `<option value="${d}">${d}</option>`).join('\n');
     if (o.editable) {
       dialog.body.innerHTML = `<form><input type="text" list="chooseList" class="form-control" autofocus="autofocus" placeholder="${o.placeholder}">

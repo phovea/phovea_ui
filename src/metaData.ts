@@ -10,11 +10,11 @@ export interface IAppMetaData {
   screenshot?: string;
 }
 
-let metaData: Promise<IAppMetaData> = null;
+let metaData: Promise<IAppMetaData> | undefined = undefined;
 
 export default function getMetaData() {
-  if (metaData === null) {
-    metaData = self.fetch('./phoveaMetaData.json').then((r) => r.json()).catch((r) => {
+  if (metaData === undefined) {
+    metaData = self.fetch('./phoveaMetaData.json').then((r) => r.json()).catch((_r) => {
       console.warn('cannot read phoveaMetaData.json file, generate dummy');
       return {name: 'Phovea Application', version: '?', repository: '?', homepage: '', description: 'Fallback appication meta data'};
     });

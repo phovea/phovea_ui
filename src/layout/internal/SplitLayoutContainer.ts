@@ -28,9 +28,14 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
       });
     }
 
-    if (ratio !== undefined) {
-      console.assert(child1 != null && child2 != null);
+    if (ratio === undefined) {
+      return;
+    }
+    console.assert(child1 != null && child2 != null);
+    if(child1) {
       this.push(child1, -1, 1);
+    }
+    if(child2) {
       this.push(child2, -1, (1 - ratio) / ratio);
     }
   }
@@ -91,7 +96,6 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
 
   private setRatioImpl(index: number, ratio: number) {
     console.assert(ratio >= 0 && ratio <= 1);
-    const bak = this._ratios.slice();
 
     if (index === 0 || index >= (this.length - 2)) {
       if (index > 0 && index === (this.length - 2)) {
@@ -107,7 +111,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
         this._ratios.forEach((r, i) => this._ratios[i] = r * factor);
       } else {
         //even
-        this._ratios.forEach((r, i) => this._ratios[i] = (1 - ratio) / (this._ratios.length - 1));
+        this._ratios.forEach((_r, i) => this._ratios[i] = (1 - ratio) / (this._ratios.length - 1));
       }
       this._ratios[index] = ratio;
       this.updateRatios();
@@ -120,7 +124,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
     if (factorBefore > 0) {
       left.forEach((r, i) => this._ratios[i] = r * factorBefore);
     } else {
-      left.forEach((r, i) => this._ratios[i] = (1 - ratio) / left.length);
+      left.forEach((_r, i) => this._ratios[i] = (1 - ratio) / left.length);
     }
     const right = this._ratios.slice(index + 1);
     const after = right.reduce((a, r) => a + r, 0);
@@ -128,7 +132,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
     if (factorAfter > 0) {
       right.forEach((r, i) => this._ratios[i + index + 1] = r * factorAfter);
     } else {
-      right.forEach((r, i) => this._ratios[i + index + 1] = ratio / right.length);
+      right.forEach((_r, i) => this._ratios[i + index + 1] = ratio / right.length);
     }
     this.updateRatios();
   }
@@ -144,6 +148,9 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
     this._ratios.forEach((r, i) => this._ratios[i] = r / sum); //normalize
     const act = this._ratios.map((r) => Math.round(r * 100));
     this.forEach((c, i) => {
+      if(!c.node.parentElement) {
+        return;
+      }
       const wrapper = c.node.parentElement.style;
       wrapper.flex = `${act[i]} ${act[i]} 0`;
       wrapper.display = act[i] <= 1 ? 'none' : null;
@@ -179,37 +186,46 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
 
   protected addedChild(child: ILayoutContainer, index: number) {
     super.addedChild(child, index);
-    if (index < 0 || index >= (this.length - 1)) {
-      //+1 since we already changed the children
-      this.node.appendChild(wrap(child));
-    } else if (index === 0) {
-      //assume we are in the replace mode
-      this.node.insertBefore(wrap(child), this.node.firstChild);
-    } else {
-      //assume we are in the replace mode -> consider separator
-      this.node.insertBefore(wrap(child), this._children[index + 1].node.parentElement.previousSibling);
+    const childNode = wrap(child);
+    if(childNode) {
+      if (index < 0 || index >= (this.length - 1)) {
+        //+1 since we already changed the children
+        this.node.appendChild(childNode);
+      } else if (index === 0) {
+        //assume we are in the replace mode
+        this.node.insertBefore(childNode, this.node.firstChild);
+      } else if(this._children[index+1].node.parentElement) {
+        //assume we are in the replace mode -> consider separator
+        this.node.insertBefore(childNode, (<HTMLElement>this._children[index + 1].node.parentElement).previousSibling);
+      }
     }
     if (this.length > 1) {
       this.node.insertAdjacentHTML('beforeend', SplitLayoutContainer.SEPARATOR);
       const separator = this.node.lastElementChild;
-      if(!this.options.fixed) {
-        separator.firstElementChild.addEventListener('click', (evt) => {
-          evt.preventDefault();
-          evt.stopPropagation();
-          this.squeeze(<HTMLElement>separator, 'left');
-        });
-        separator.lastElementChild.addEventListener('click', (evt) => {
-          evt.preventDefault();
-          evt.stopPropagation();
-          this.squeeze(<HTMLElement>separator, 'right');
-        });
-      } else {
-        separator.classList.add('fixed');
-      }
-      if (index > 0) {
-        this.node.insertBefore(separator, child.node.parentElement);
-      } else {
-        this.node.insertBefore(separator, child.node.parentElement.nextSibling);
+      if(separator) {
+        if (this.options.fixed) {
+          if(separator.firstElementChild) {
+            separator.firstElementChild.addEventListener('click', (evt) => {
+              evt.preventDefault();
+              evt.stopPropagation();
+              this.squeeze(<HTMLElement>separator, 'left');
+            });
+          }
+          if(separator.lastElementChild) {
+            separator.lastElementChild.addEventListener('click', (evt) => {
+              evt.preventDefault();
+              evt.stopPropagation();
+              this.squeeze(<HTMLElement>separator, 'right');
+            });
+          }
+        } else {
+          separator.classList.add('fixed');
+        }
+        if (index > 0) {
+          this.node.insertBefore(separator, child.node.parentElement);
+        } else if(child.node.parentElement) {
+          this.node.insertBefore(separator, child.node.parentElement.nextSibling);
+        }
       }
     }
     child.visible = this.visible;
@@ -218,7 +234,6 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
   replace(child: ILayoutContainer, replacement: ILayoutContainer) {
     const index = this._children.indexOf(child);
     console.assert(index >= 0);
-    const ratio = this._ratios[index];
     this.takeDownChild(child);
     this.setupChild(replacement);
     this._children.splice(index, 1, replacement);
@@ -229,12 +244,14 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
 
   protected takeDownChild(child: ILayoutContainer) {
     const wrapper = child.node.parentElement;
-    //in case of the first one use the next one since the next child is going to be the first one
-    const separator = wrapper.previousElementSibling || wrapper.nextElementSibling;
-    if (separator) {
-      separator.remove();
+    if(wrapper) {
+      //in case of the first one use the next one since the next child is going to be the first one
+      const separator = wrapper.previousElementSibling || wrapper.nextElementSibling;
+      if (separator) {
+        separator.remove();
+      }
+      wrapper.remove();
     }
-    wrapper.remove();
     super.takeDownChild(child);
   }
 
@@ -255,14 +272,14 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
   }
 
   static restore(dump: ILayoutDump, restore: (dump: ILayoutDump) => ILayoutContainer, doc: Document) {
-    console.assert(dump.children.length >= 2);
+    console.assert(dump.children && dump.children.length >= 2);
     const ratios = dump.ratios;
     const options = Object.assign(ALayoutContainer.restoreOptions(dump), {
-      orientation: EOrientation[<string>dump.orientation],
+      orientation: EOrientation[<any>dump.orientation],
       fixedLayout: dump.fixedLayout === true
     });
-    const r = new SplitLayoutContainer(doc, options, ratios[0], restore(dump.children[0]), restore(dump.children[1]));
-    dump.children.slice(2).forEach((d, i) => r.push(restore(d), ratios[i + 2]));
+    const r = new SplitLayoutContainer(doc, options, ratios[0], restore((<ILayoutDump[]>dump.children)[0]), restore((<ILayoutDump[]>dump.children)[1]));
+    (<ILayoutDump[]>dump.children).slice(2).forEach((d, i) => r.push(restore(d), ratios[i + 2]));
     //force specific ratios
     r.ratios = ratios;
     return r;
@@ -273,7 +290,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
     console.assert(children.length >= 2);
 
     const deriveOrientation = () => {
-      if (node.dataset.layout.startsWith('v') || (node.dataset.orientation && node.dataset.orientation.startsWith('v'))) {
+      if (node.dataset.layout && (node.dataset.layout.startsWith('v') || (node.dataset.orientation && node.dataset.orientation.startsWith('v')))) {
         return EOrientation.VERTICAL;
       }
       return EOrientation.HORIZONTAL;
@@ -308,8 +325,8 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
       fixedLayout: Boolean(node.dataset.fixedLayout)
     });
     const ratios = deriveRatios();
-    const r = new SplitLayoutContainer(node.ownerDocument, options);
-    children.forEach((c: HTMLElement) => r.push(derive(c)));
+    const r = new SplitLayoutContainer(<Document>node.ownerDocument, options);
+    children.forEach((c) => r.push(derive(<HTMLElement>c)));
     r.ratios = ratios;
     return r;
   }

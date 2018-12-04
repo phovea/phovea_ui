@@ -115,7 +115,7 @@ export interface IRootLayoutContainer extends ILayoutContainer {
   /**
    * restores the given dump inplace
    */
-  restore(dump: ILayoutDump, restoreView: (referenceId: number) => IView);
+  restore(dump: ILayoutDump, restoreView: (referenceId: number) => IView): void;
 }
 
 export interface ILayoutDump {
@@ -179,7 +179,7 @@ export interface ITabbingLayoutContainer extends ILayoutParentContainer {
   /**
    * get or set the active tab
    */
-  active: ILayoutContainer;
+  active: ILayoutContainer | null;
 }
 
 export interface ISplitLayoutContainer extends ILayoutParentContainer {

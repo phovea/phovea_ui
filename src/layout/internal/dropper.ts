@@ -48,6 +48,9 @@ export function dropViews(node: HTMLElement, reference: ALayoutContainer<any> & 
     const area = determineDropArea(e.offsetX / node.offsetWidth, e.offsetY / node.offsetHeight);
     const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
     console.assert(reference.parent != null);
+    if(!reference.parent) {
+      return false;
+    }
     const item = reference.parent.rootParent.find(id);
     if (item === null) {
       return false;
@@ -58,9 +61,12 @@ export function dropViews(node: HTMLElement, reference: ALayoutContainer<any> & 
   }, true);
 }
 
-function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & ILayoutContainer, area: IDropArea) {
+function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & ILayoutContainer, area: IDropArea): boolean {
   if (item instanceof AParentLayoutContainer && reference.parents.indexOf(item) >= 0) {
     //can drop item within one of its children
+    return false;
+  }
+  if(!reference.parent){
     return false;
   }
   const parent = reference.parent;
@@ -71,7 +77,7 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
     }
     return false; //already a child
   }
-  if (area === 'center' && item !== reference) {
+  if (area === 'center' && item !== reference && item.node.ownerDocument) {
     //replace myself with a tab container
     const p = new TabbingLayoutContainer(item.node.ownerDocument, {});
     parent.replace(reference, p);
@@ -90,7 +96,7 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
     return false;
   }
 
-  if (area === 'horizontal-scroll' || area === 'vertical-scroll') {
+  if ((area === 'horizontal-scroll' || area === 'vertical-scroll') && item.node.ownerDocument) {
     const orientation = area === 'horizontal-scroll'? EOrientation.HORIZONTAL : EOrientation.VERTICAL;
     const p = new LineUpLayoutContainer(item.node.ownerDocument, {
       orientation,
@@ -102,6 +108,9 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
     return true;
   }
 
+  if(!item.node.ownerDocument) {
+    return false;
+  }
 
   //replace myself with a split container
   const p = new SplitLayoutContainer(item.node.ownerDocument, {
@@ -122,7 +131,7 @@ function dropLogic(item: ILayoutContainer, reference: ALayoutContainer<any> & IL
 }
 
 function autoWrap(item: ILayoutContainer) {
-  if (item.autoWrapOnDrop) {
+  if (item.autoWrapOnDrop && item.node.ownerDocument) {
     return new TabbingLayoutContainer(item.node.ownerDocument, {name: typeof item.autoWrapOnDrop === 'string' ? item.autoWrapOnDrop : 'Side'}, item);
   }
   return item;

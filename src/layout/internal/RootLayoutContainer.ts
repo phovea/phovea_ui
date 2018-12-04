@@ -1,7 +1,7 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, LayoutContainerEvents, IView} from '../interfaces';
 import TabbingLayoutContainer from './TabbingLayoutContainer';
-import {default as ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
+import {ILayoutContainerOption} from './ALayoutContainer';
 import {IDropArea} from './interfaces';
 import {IBuildAbleOrViewLike} from '../builder';
 
@@ -28,7 +28,10 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     this.node.dataset.layout = 'root';
     this.visible = true;
 
-    this.on(LayoutContainerEvents.EVENT_MAXIMIZE, (_evt, view: ILayoutContainer) => {
+    this.on(LayoutContainerEvents.EVENT_MAXIMIZE, (_evt: any, view: ILayoutContainer) => {
+      if(!this.node.ownerDocument) {
+        return;
+      }
       const section = this.node.ownerDocument.createElement('section');
       section.classList.add('maximized-view');
 
@@ -50,15 +53,17 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
       view.resized();
     });
 
-    this.on(LayoutContainerEvents.EVENT_RESTORE_SIZE, (_evt, view: ILayoutContainer) => {
+    this.on(LayoutContainerEvents.EVENT_RESTORE_SIZE, (_evt: any, view: ILayoutContainer) => {
       if (!this.viewDump) {
         return;
       }
       this.viewDump.parent.viewParent.insertBefore(view.node, this.viewDump.sibling.viewSibling);
       this.viewDump.parent.headerParent.insertBefore(view.header, this.viewDump.sibling.headerSibling);
       this.viewDump = null;
-      this.node.querySelector('.maximized-view').remove();
-
+      const selector = this.node.querySelector('.maximized-view');
+      if(selector) {
+        selector.remove();
+      }
       view.resized();
     });
   }
@@ -89,7 +94,7 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
     child.visible = this.visible;
   }
 
-  place(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea) {
+  place(child: ILayoutContainer, _reference: ILayoutContainer, _area: IDropArea) {
     return this.push(child);
   }
 
@@ -119,7 +124,7 @@ export default class RootLayoutContainer extends AParentLayoutContainer<ILayoutC
   }
 
   static restore(dump: ILayoutDump, doc: Document, build: IBuildLayout, restorer: IRestoreLayout, restoreView: IViewRestorer) {
-    const r = new RootLayoutContainer(doc, (layout) => build(r, layout), restorer);
+    const r : RootLayoutContainer  = new RootLayoutContainer(doc, (layout) => build(r, layout), restorer);
     r.restore(dump, restoreView);
     return r;
   }

@@ -52,24 +52,25 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
       }, null, true);
     }
 
-    if(this.options.fixed) {
-      this.header.classList.add('fixed');
-      this.toggleFrozenLayout();
-
-      this.on(LayoutContainerEvents.EVENT_LAYOUT_CHANGED, () => {
-        this.toggleFrozenLayout();
-      });
+    if(!this.options.fixed) {
+      return;
     }
+    this.header.classList.add('fixed');
+    this.toggleFrozenLayout();
+
+    this.on(LayoutContainerEvents.EVENT_LAYOUT_CHANGED, () => {
+      this.toggleFrozenLayout();
+    });
   }
 
   canDrop(area: IDropArea) {
     return area === 'center';
   }
 
-  place(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea) {
+  place(child: ILayoutContainer, _reference: ILayoutContainer, area: IDropArea) {
     console.assert(area === 'center');
     return this.push(child);
-  };
+  }
 
   protected defaultOptions(): ITabbingLayoutContainerOptions {
     return Object.assign(super.defaultOptions(), {
@@ -77,11 +78,11 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
     });
   }
 
-  get active() {
+  get active(): ILayoutContainer | null {
     return this._active;
   }
 
-  set active(child: ILayoutContainer) {
+  set active(child: ILayoutContainer | null) {
     console.assert(!child || this._children.indexOf(child) >= 0);
     if (this._active === child) {
       return;
@@ -153,14 +154,18 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
     const reorder = child.header.previousSibling;
     if (atEnd) {
       //reorder
-      this.header.appendChild(reorder);
+      if(reorder) {
+        this.header.appendChild(reorder);
+      }
       this.header.appendChild(child.header);
       this.node.appendChild(child.node);
       return;
     }
     const next = this._children[index + 1];
     this.header.insertBefore(child.header, next.header.previousSibling); //2 extra items
-    this.header.insertBefore(reorder, child.header);
+    if(reorder) {
+      this.header.insertBefore(reorder, child.header);
+    }
     this.node.insertBefore(child.node, next.node);
     this.fire(withChanged(LayoutContainerEvents.EVENT_TAB_REORDED), child, index);
   }
@@ -181,7 +186,9 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
     }
     child.header.onclick = null;
     //reorder
-    this.header.removeChild(child.header.previousSibling);
+    if(child.header.previousSibling) {
+      this.header.removeChild(child.header.previousSibling);
+    }
     this.header.removeChild(child.header);
     this.node.removeChild(child.node);
     super.takeDownChild(child);
@@ -224,7 +231,9 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
 
   static restore(dump: ILayoutDump, restore: (dump: ILayoutDump) => ILayoutContainer, doc: Document) {
     const r = new TabbingLayoutContainer(doc, ALayoutContainer.restoreOptions(dump));
-    dump.children.forEach((d) => r.push(restore(d)));
+    if(dump.children) {
+      dump.children.forEach((d) => r.push(restore(d)));
+    }
     if (r.active != null) {
       r.active = r.children[<number>dump.active];
     }
@@ -232,12 +241,12 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
   }
 
   static derive(node: HTMLElement, derive: (node: HTMLElement) => ILayoutContainer) {
-    const r = new TabbingLayoutContainer(node.ownerDocument, ALayoutContainer.deriveOptions(node));
+    const r = new TabbingLayoutContainer(<Document>node.ownerDocument, ALayoutContainer.deriveOptions(node));
     const children = Array.from(node.children);
 
-    const activeIndex = children.findIndex((c: HTMLElement) => c.classList.contains('active'));
+    const activeIndex = children.findIndex((c: Element) => c.classList.contains('active'));
 
-    children.forEach((c: HTMLElement) => r.push(derive(c)));
+    children.forEach((c: Element) => r.push(derive(<HTMLElement>c)));
     if (activeIndex > 0) {
       r.active = r.children[activeIndex];
     }

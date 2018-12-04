@@ -13,8 +13,8 @@ export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutCon
   readonly type = 'view';
 
   constructor(public readonly view: IView, options: Partial<ILayoutContainerOption>) {
-    super(view.node.ownerDocument, options);
-    this.node = view.node.ownerDocument.createElement('article');
+    super(<Document>view.node.ownerDocument, options);
+    this.node = (<Document>view.node.ownerDocument).createElement('article');
     this.node.dataset.layout = 'view';
     this.node.appendChild(view.node);
 
@@ -33,8 +33,9 @@ export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutCon
     }
 
     this.updateTitle();
-
-    this.header.querySelector('.size-toggle').addEventListener('click', () => this.toggleMaximizedView());
+    if(this.header.querySelector('.size-toggle')) {
+      (<Element>this.header.querySelector('.size-toggle')).addEventListener('click', () => this.toggleMaximizedView());
+    }
     this.header.addEventListener('dblclick', () => this.toggleMaximizedView());
   }
 
@@ -119,7 +120,7 @@ export class HTMLView implements IView {
 
   dumpReference() {
     return -1;
-  };
+  }
 }
 
 
@@ -141,5 +142,5 @@ export class NodeView implements IView {
 
   dumpReference() {
     return -1;
-  };
+  }
 }

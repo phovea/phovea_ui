@@ -56,7 +56,7 @@ UserAgent | ${navigator.userAgent}
 Platform | ${navigator.platform}
 Screen Size | ${screen.width} x ${screen.height}
 Window Size | ${window.innerWidth} x ${window.innerHeight}
-      
+
 ~~~json\n${JSON.stringify(this.client, null, ' ')}\n${this.server ? `\n${JSON.stringify(this.server, null, ' ')}\n`: ''}~~~`;
   }
 
@@ -72,7 +72,7 @@ Window Size | ${window.innerWidth} x ${window.innerHeight}
 
 export default function build(): Promise<BuildInfo> {
   const buildInfos = Promise.all([
-    (<any>self).fetch('./buildInfo.json').then((response) => response.json()),
+    (<any>self).fetch('./buildInfo.json').then((response:any) => response.json()),
     offline ? null : getAPIJSON('/buildInfo.json')
   ]);
   return buildInfos.then((args: any[]) => new BuildInfo(args[0], args[1]));
