@@ -119,7 +119,7 @@ export class HTMLView implements IView {
 
   dumpReference() {
     return -1;
-  };
+  }
 }
 
 
@@ -141,5 +141,5 @@ export class NodeView implements IView {
 
   dumpReference() {
     return -1;
-  };
+  }
 }
