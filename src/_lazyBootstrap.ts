@@ -1,4 +1,4 @@
-import 'bootstrap-sass/assets/stylesheets/_bootstrap.scss';
+// import 'bootstrap-sass/assets/stylesheets/_bootstrap.scss';
 
 export default function loadBootstrap(): Promise<JQueryStatic> {
   return Promise.all([
