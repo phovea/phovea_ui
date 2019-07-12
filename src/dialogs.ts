@@ -215,12 +215,14 @@ export function choose(items: string[], options: IChooseOptions|string = {}): Pr
 export interface IAreYouSureOptions {
   title?: string;
   button?: string;
+  cancelButton?: string;
 }
 
 export function areyousure(msg: string = '', options: IAreYouSureOptions | string = {}): Promise<boolean> {
   const o = {
     title: 'Are you sure?',
-    button: `<i class="fa fa-trash" aria-hidden="true"></i> Delete`
+    button: `<i class="fa fa-trash" aria-hidden="true"></i> Delete`,
+    cancelButton: 'Cancel'
   };
   if (typeof options === 'string') {
     options = {title: options};
@@ -228,7 +230,7 @@ export function areyousure(msg: string = '', options: IAreYouSureOptions | strin
   mixin(o, options);
 
   return new Promise((resolve) => {
-    const dialog = generateDialog(o.title, 'Cancel');
+    const dialog = generateDialog(o.title, o.cancelButton);
     dialog.body.innerHTML = msg;
     $(`<button class="btn btn-danger">${o.button}</button>`).appendTo(dialog.footer);
     let clicked = false;
