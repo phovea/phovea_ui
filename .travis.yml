@@ -1,6 +1,7 @@
 language: node_js
 node_js:
 - 6
+dist: trusty
 addons:
   firefox: 49.0.1
 before_install:
