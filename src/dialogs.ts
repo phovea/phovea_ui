@@ -149,12 +149,22 @@ export function prompt(text: string, options: IPromptOptions|string = {}): Promi
     } else {
       dialog.body.innerHTML = `<form><input type="text" class="form-control" value="${text}" autofocus="autofocus" placeholder="${o.placeholder}"></form>`;
     }
-    (<HTMLFormElement>dialog.body.querySelector('form')).onsubmit = () => {
+    // Resolve with content of form
+    const submit = () => {
+      resolve((<HTMLInputElement>dialog.body.querySelector('input, textarea')).value);
       dialog.hide();
+    };
+    // Resolve when dialog is submitted (on button click)
+    dialog.onSubmit(submit);
+    // Resolve when form is submitted
+    (<HTMLFormElement>dialog.body.querySelector('form')).onsubmit = () => {
+      submit();
       return false;
     };
     dialog.onHide(() => {
-      resolve((<HTMLInputElement>dialog.body.querySelector('input, textarea')).value);
+      // Resolve with null if dialog is hidden (by clicking the x).
+      // This might be the second call to resolve after the actual form resolve, but it will not have any effect.
+      resolve(null);
       dialog.destroy();
     });
     dialog.show();
