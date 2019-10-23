@@ -1,7 +1,6 @@
 {
   "name": "phovea_ui",
   "description": "Wrapper for integration of Bootstrap and FontAwesome along with a common header for Phovea apps",
-  "homepage": "https://phovea.caleydo.org",
   "version": "2.1.4-SNAPSHOT",
   "author": {
     "name": "The Caleydo Team",
@@ -9,6 +8,7 @@
     "url": "https://caleydo.org"
   },
   "license": "BSD-3-Clause",
+  "homepage": "https://phovea.caleydo.org",
   "bugs": {
     "url": "https://github.com/phovea/phovea_ui/issues"
   },
