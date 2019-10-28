@@ -1,7 +1,6 @@
 {
   "name": "phovea_ui",
   "description": "Wrapper for integration of Bootstrap and FontAwesome along with a common header for Phovea apps",
-  "homepage": "https://phovea.caleydo.org",
   "version": "2.1.4-SNAPSHOT",
   "author": {
     "name": "The Caleydo Team",
