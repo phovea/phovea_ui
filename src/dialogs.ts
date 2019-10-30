@@ -12,12 +12,12 @@ export class Dialog {
   private bakKeyDownListener: (ev: KeyboardEvent) => any = null; // temporal for restoring an old keydown listener
   static openDialogs: number = 0;
 
-  constructor(title: string, primaryBtnText = 'OK') {
+  constructor(title: string, primaryBtnText = 'OK', additionalCSSClasses: string = '') {
     const dialog = document.createElement('div');
     dialog.setAttribute('role', 'dialog');
     dialog.classList.add('modal', 'fade');
     dialog.innerHTML = `
-       <div class="modal-dialog" role="document">
+       <div class="modal-dialog ${additionalCSSClasses}" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -61,6 +61,10 @@ export class Dialog {
     return <HTMLElement>this.$dialog.find('.modal-footer')[0];
   }
 
+  get header() {
+    return this.$dialog[0].querySelector<HTMLElement>('.modal-header');
+  }
+
 
   onHide(callback: () => void) {
     this.$dialog.on('hidden.bs.modal', callback);
@@ -83,8 +87,8 @@ export class Dialog {
 }
 
 export class FormDialog extends Dialog {
-  constructor(title: string, primaryBtnText = 'OK', private readonly formId = 'form' + randomId(5)) {
-    super(title, primaryBtnText);
+  constructor(title: string, primaryBtnText = 'OK', private readonly formId = 'form' + randomId(5), additionalCSSClasses: string = '') {
+    super(title, primaryBtnText, additionalCSSClasses);
 
     this.body.innerHTML = `<form id="${formId}"></form>`;
     const b = this.footer.querySelector('button');
@@ -105,8 +109,8 @@ export class FormDialog extends Dialog {
   }
 }
 
-export function generateDialog(title: string, primaryBtnText = 'OK') {
-  return new Dialog(title, primaryBtnText);
+export function generateDialog(title: string, primaryBtnText = 'OK', additionalCSSClasses: string = '') {
+  return new Dialog(title, primaryBtnText, additionalCSSClasses);
 }
 
 export function msg(text: string, category = 'info'): Promise<void> {
@@ -124,6 +128,8 @@ export interface IPromptOptions {
   title?: string;
   placeholder?: string;
   multiline?: boolean;
+  primaryBtnText?: string;
+  additionalCSSClasses?: string;
 }
 
 /**
@@ -143,7 +149,7 @@ export function prompt(text: string, options: IPromptOptions|string = {}): Promi
   }
   mixin(o, options);
   return new Promise((resolve) => {
-    const dialog = generateDialog(o.title);
+    const dialog = generateDialog(o.title, o.primaryBtnText, o.additionalCSSClasses);
     if (o.multiline) {
       dialog.body.innerHTML = `<form><textarea class="form-control" rows="5" placeholder="${o.placeholder}" autofocus="autofocus">${text}</textarea></form>`;
     } else {
@@ -175,6 +181,8 @@ export interface IChooseOptions {
   title?: string;
   placeholder?: string;
   editable?: boolean;
+  primaryBtnText?: string;
+  additionalCSSClasses?: string;
 }
 
 /**
@@ -195,7 +203,7 @@ export function choose(items: string[], options: IChooseOptions|string = {}): Pr
   mixin(o, options);
 
   return new Promise((resolve) => {
-    const dialog = generateDialog(o.title);
+    const dialog = generateDialog(o.title, o.primaryBtnText, o.additionalCSSClasses);
     const option = items.map((d) => `<option value="${d}">${d}</option>`).join('\n');
     if (o.editable) {
       dialog.body.innerHTML = `<form><input type="text" list="chooseList" class="form-control" autofocus="autofocus" placeholder="${o.placeholder}">
@@ -226,10 +234,11 @@ export interface IAreYouSureOptions {
   title?: string;
   button?: string;
   cancelButton?: string;
+  additionalCSSClasses?: string;
 }
 
 export function areyousure(msg: string = '', options: IAreYouSureOptions | string = {}): Promise<boolean> {
-  const o = {
+  const o: IAreYouSureOptions = {
     title: 'Are you sure?',
     button: `<i class="fa fa-trash" aria-hidden="true"></i> Delete`,
     cancelButton: 'Cancel'
@@ -240,7 +249,7 @@ export function areyousure(msg: string = '', options: IAreYouSureOptions | strin
   mixin(o, options);
 
   return new Promise((resolve) => {
-    const dialog = generateDialog(o.title, o.cancelButton);
+    const dialog = generateDialog(o.title, o.cancelButton, o.additionalCSSClasses);
     dialog.body.innerHTML = msg;
     $(`<button class="btn btn-danger">${o.button}</button>`).appendTo(dialog.footer);
     let clicked = false;

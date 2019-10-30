@@ -26,11 +26,11 @@ export function setGlobalErrorTemplate(template: (details: string) => string) {
  * @param error
  * @returns {Promise<any>|Promise}
  */
-export function showErrorModalDialog(error: any) {
+export function showErrorModalDialog(error: any, additionalCSSClasses: string = '') {
   function commonDialog(title: string, body: string) {
     // lazy import
-    return System.import('./dialogs').then(({generateDialog}: {generateDialog(title: string, primaryBtnText: string): Dialog}) => new Promise((resolve, reject) => {
-      const dialog = generateDialog(title, 'Dismiss');
+    return System.import('./dialogs').then(({generateDialog}: {generateDialog(title: string, primaryBtnText: string, additionalCSSClasses?: string): Dialog}) => new Promise((resolve, reject) => {
+      const dialog = generateDialog(title, 'Dismiss', additionalCSSClasses);
 
       dialog.body.innerHTML = globalErrorTemplate(body);
 
