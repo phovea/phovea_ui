@@ -27,7 +27,7 @@ export class Dialog {
 
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default btn-primary">${primaryBtnText}</button>
+            <button type="button" class="btn btn-default btn-primary submit-dialog">${primaryBtnText}</button>
           </div>
         </div>
       </div>`;
@@ -71,7 +71,7 @@ export class Dialog {
   }
 
   onSubmit(callback: () => any) {
-    return this.$dialog.find('.modal-footer > button').on('click', callback);
+    return this.$dialog.find('.modal-footer > .submit-dialog').on('click', callback);
   }
 
   hideOnSubmit() {
