@@ -62,7 +62,7 @@ export class Dialog {
   }
 
   get header() {
-    return this.$dialog[0].querySelector<HTMLElement>('.modal-header');
+    return <HTMLElement>this.$dialog[0].querySelector('.modal-header');
   }
 
 
