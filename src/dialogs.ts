@@ -124,12 +124,15 @@ export function msg(text: string, category = 'info'): Promise<void> {
   });
 }
 
-export interface IPromptOptions {
+export interface IDialogOptions {
   title?: string;
   placeholder?: string;
-  multiline?: boolean;
   primaryBtnText?: string;
   additionalCSSClasses?: string;
+}
+
+export interface IPromptOptions extends IDialogOptions {
+  multiline?: boolean;
 }
 
 /**
@@ -177,12 +180,9 @@ export function prompt(text: string, options: IPromptOptions|string = {}): Promi
   });
 }
 
-export interface IChooseOptions {
-  title?: string;
-  placeholder?: string;
+
+export interface IChooseOptions extends IDialogOptions {
   editable?: boolean;
-  primaryBtnText?: string;
-  additionalCSSClasses?: string;
 }
 
 /**
@@ -230,11 +230,9 @@ export function choose(items: string[], options: IChooseOptions|string = {}): Pr
   });
 }
 
-export interface IAreYouSureOptions {
-  title?: string;
+export interface IAreYouSureOptions extends Pick<IDialogOptions, 'title' | 'additionalCSSClasses'> {
   button?: string;
   cancelButton?: string;
-  additionalCSSClasses?: string;
 }
 
 export function areyousure(msg: string = '', options: IAreYouSureOptions | string = {}): Promise<boolean> {
