@@ -1,6 +1,6 @@
 module.exports = {
   transform: {
-    '^.+\\.(t|j)sx?$': 'ts-jest'
+    '^.+\\.[tj]sx?$': 'ts-jest'
   },
   testRegex: "tests/.*\\.(ts|tsx|js)$",
   moduleFileExtensions: [
@@ -8,12 +8,13 @@ module.exports = {
     'tsx',
     'js'
   ],
-  verbose: true,
+  verbose: false,
   globals: {
     'ts-jest': {
-      tsConfigFile: 'tsconfig.test.json',
-      enableTsDiagnostics: true,
-      skipBabel: true
+      tsConfig: 'tsconfig.test.json',
+      diagnostics: {
+        warnOnly: true,
+      },
     },
     __VERSION__: '1.0.0-test',
     __LICENSE__: 'Test-licence',
@@ -21,6 +22,7 @@ module.exports = {
     __DEBUG__: true,
     __TEST__: true,
     __PRODUCTION__: false,
-    __APP_CONTEXT__: '/'
-  }
+    __APP_CONTEXT__: '/',
+  },
+  preset: 'ts-jest',
 };

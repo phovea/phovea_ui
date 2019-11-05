@@ -11,5 +11,6 @@ import {register} from 'phovea_core/src/plugin';
  */
 //other modules
 import 'phovea_core/phovea_registry.js';
+
 //self
 register('phovea_ui',require('./phovea.js'));
