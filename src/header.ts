@@ -407,9 +407,10 @@ export class AppHeader {
 
   showAndFocusOn(selector: string, focusSelector: string) {
     lazyBootstrap().then(($) => {
-      $(selector).modal('show')
+      const $dialog = $(selector);
+      $dialog.modal('show')
         .on('shown.bs.modal', function () {
-          $(focusSelector, selector).focus();
+          $(focusSelector, $dialog).focus();
         });
     });
   }
