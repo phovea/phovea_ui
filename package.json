@@ -68,7 +68,7 @@
     "@types/jquery": "^3.3.22",
     "bootstrap-sass": "^3.3.7",
     "jquery": "^1.7.4",
-    "phovea_core": "git://github.com/phovea/phovea_core.git#release-3.0"
+    "phovea_core": "git://github.com/phovea/phovea_core.git#typescript_3.6"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
