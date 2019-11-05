@@ -30,6 +30,7 @@ declare module "raw-loader!*";
 declare module "url-loader!*";
 //allow html dependencies
 declare module "imports-loader!*";
+declare module "imports-loader?*";
 
 
 //define System.import as understood by webpack2
