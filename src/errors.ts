@@ -1,4 +1,5 @@
 import {Dialog} from './dialogs';
+import i18next from 'phovea_core/src/i18n';
 
 let globalErrorTemplate = (details: string) => details;
 
@@ -30,7 +31,7 @@ export function showErrorModalDialog(error: any, additionalCSSClasses: string = 
   function commonDialog(title: string, body: string) {
     // lazy import
     return System.import('./dialogs').then(({generateDialog}: {generateDialog(title: string, primaryBtnText: string, additionalCSSClasses?: string): Dialog}) => new Promise((resolve, reject) => {
-      const dialog = generateDialog(title, 'Dismiss', additionalCSSClasses);
+      const dialog = generateDialog(title, i18next.t('phovea:ui.dismiss'), additionalCSSClasses);
 
       dialog.body.innerHTML = globalErrorTemplate(body);
 
@@ -51,16 +52,16 @@ export function showErrorModalDialog(error: any, additionalCSSClasses: string = 
   if (error instanceof Response || error.response instanceof Response) {
     const xhr: Response = error instanceof Response ? error : error.response;
     return xhr.text().then((body: string) => {
-      const title = `Error ${xhr.status} (${xhr.statusText})`;
+      const title = i18next.t('phovea:ui.errorHeader', {status: xhr.status, statusText: xhr.statusText});
       if (xhr.status !== 400) {
         body = `${body}<hr>
-          The requested URL was:<br><a href="${xhr.url}" target="_blank">${(xhr.url.length > 100) ? xhr.url.substring(0, 100) + '...' : xhr.url}</a>`;
+        ${i18next.t('phovea:ui.errorBody')}<br><a href="${xhr.url}" target="_blank">${(xhr.url.length > 100) ? xhr.url.substring(0, 100) + '...' : xhr.url}</a>`;
       }
       return commonDialog(title, body);
     });
   } else if (error instanceof Error) {
     return commonDialog(error.name, error.message);
   } else {
-    return commonDialog('Unknown Error', error.toString());
+    return commonDialog(i18next.t('phovea:ui.unknownError'), error.toString());
   }
 }

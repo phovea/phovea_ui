@@ -54,7 +54,7 @@
     "jquery": "3.1.1",
     "@types/bootstrap": "3.3.32",
     "bootstrap-sass": "3.3.7",
-    "phovea_core": "github:phovea/phovea_core#develop"
+    "phovea_core": "github:phovea/phovea_core#thinkh/154_i18n-support"
   },
   "devDependencies": {
     "@types/jasmine": "2.5.41",

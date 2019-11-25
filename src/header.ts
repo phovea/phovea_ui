@@ -4,13 +4,125 @@
 
 import './_font-awesome';
 import './style.scss';
-import * as template from 'html-loader!./_header.html';
 
 import {mixin} from 'phovea_core/src/index';
 import lazyBootstrap from './_lazyBootstrap';
 import buildBuildInfo from './buildInfo';
 import getMetaData from './metaData';
+import i18next from 'phovea_core/src/i18n';
 
+
+/**
+ * header html template declared inline so we can use i18next
+ */
+const getTemplate = () => {
+  return (`<nav class="navbar">
+  <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#headerNavBar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#" data-header="appLink"></a>
+  </div>
+  <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav" data-header="mainMenu">
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right" data-header="rightMenu">
+          <li class="hidden" data-header="optionsLink">
+              <a href="#" data-toggle="modal" data-target="#headerOptionsDialog" title="${i18next.t('phovea:ui.options')}">
+                  <i class="fa fa-cog fa-fw" aria-hidden="true"></i>
+                  <span class="sr-only">${i18next.t('phovea:ui.openOptionsDialog')}</span>
+              </a>
+          </li>
+          <li class="hidden" data-header="aboutLink">
+              <a href="#" data-toggle="modal" data-target="#headerAboutDialog" title="${i18next.t('phovea:ui.about')}">
+                  <i class="fa fa-info fa-fw" aria-hidden="true"></i>
+                  <span class="sr-only">${i18next.t('phovea:ui.openAboutDialog')}</span>
+              </a>
+          </li>
+          <li class="hidden" data-header="bugLink">
+              <a href="#" data-toggle="modal" data-target="#headerReportBugDialog" title="${i18next.t('phovea:ui.reportBug')}">
+                  <i class="fa fa-bug fa-fw" aria-hidden="true"></i>
+                  <span class="sr-only">${i18next.t('phovea:ui.reportBug')}</span>
+              </a>
+          </li>
+          <li class="hidden" data-header="helpLink">
+              <a href="//caleydo.org" target="_blank" title="${i18next.t('phovea:ui.openHelpPage')}">
+                  <i class="fa fa-question fa-fw" aria-hidden="true"></i>
+                  <span class="sr-only">${i18next.t('phovea:ui.openHelpPage')}</span>
+              </a>
+          </li>
+      </ul>
+  </div>
+</nav>
+
+<!-- About Dialog -->
+<div class="modal fade" id="headerAboutDialog" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="${i18next.t('phovea:ui.close')}">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title">${i18next.t('phovea:ui.about')}</h4>
+          </div>
+          <div class="modal-body" data-header="about">
+              <div class="metaData">${i18next.t('phovea:ui.loading')}</div>
+              <div class="caleydoInfo">
+                  <a class="logo" href="https://phovea.caleydo.org" target="_blank"><img
+                          src="assets/caleydo_c.svg"></a>
+                  <p class="info">
+                  ${i18next.t('phovea:ui.infoPart1')}
+                   <strong><a href="http://phovea.caleydo.org/"  target="_blank"> ${i18next.t('phovea:ui.phoveaName')}</a></strong>
+                        ${i18next.t('phovea:ui.infoPart2')}
+                      <a href="http://phovea.caleydo.org" target="_blank"> ${i18next.t('phovea:ui.infoPart3')}</a>.
+                  </p>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Report A Bug Dialog -->
+<div class="modal fade" id="headerReportBugDialog" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label=" ${i18next.t('phovea:ui.close')}">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title"> ${i18next.t('phovea:ui.reportBug')}</h4>
+          </div>
+          <div class="modal-body" data-header="bug">
+          ${i18next.t('phovea:ui.loading')}
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Options Dialog -->
+<div class="modal fade" id="headerOptionsDialog" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label=" ${i18next.t('phovea:ui.close')}">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title"> ${i18next.t('phovea:ui.options')}</h4>
+          </div>
+          <div class="modal-body" data-header="options">
+          ${i18next.t('phovea:ui.loading')}
+          </div>
+      </div>
+  </div>
+</div>
+
+<div id="headerWaitingOverlay" class="phovea-busy hidden">
+</div>
+`);
+};
 
 // declare the function name of the `cookie-bar` for the TS compiler (see addEUCookieDisclaimer())
 declare var setupCookieBar: any;
@@ -88,19 +200,19 @@ export interface IAppHeaderOptions {
    */
   rightMenu?: IHeaderLink[];
 
-  showAboutLink?: boolean | ((title: HTMLElement, content: HTMLElement)=>void);
+  showAboutLink?: boolean | ((title: HTMLElement, content: HTMLElement) => void);
 
   /**
    * show/hide the options link
    * default: false
    */
-  showOptionsLink?: boolean | ((title: HTMLElement, content: HTMLElement)=>void);
+  showOptionsLink?: boolean | ((title: HTMLElement, content: HTMLElement) => void);
 
   /**
    * show/hide the bug report link
    * default: true
    */
-  showReportBugLink?: boolean | ((title: HTMLElement, content: HTMLElement)=>void);
+  showReportBugLink?: boolean | ((title: HTMLElement, content: HTMLElement) => void);
 
   /**
    * show/hide the EU cookie disclaimer bar from `cookie-bar.eu`
@@ -237,7 +349,7 @@ export class AppHeader {
 
     // create the content and copy it in the parent
     const helper = document.createElement('div');
-    helper.innerHTML = String(template);
+    helper.innerHTML = getTemplate();
     while (helper.lastChild) {
       this.parent.insertBefore(helper.lastChild, this.parent.firstChild);
     }
@@ -305,7 +417,7 @@ export class AppHeader {
     element.classList.toggle('hidden', !isVisible);
   }
 
-  toggleOptionsLink(isVisible: boolean, contentGenerator?: (title: HTMLElement, content: HTMLElement)=>void) {
+  toggleOptionsLink(isVisible: boolean, contentGenerator?: (title: HTMLElement, content: HTMLElement) => void) {
     const link = <HTMLElement>this.parent.querySelector('*[data-header="optionsLink"]');
     AppHeader.setVisibility(link, isVisible);
 
@@ -332,7 +444,7 @@ export class AppHeader {
     }
   }
 
-  toggleReportBugLink(isVisible: boolean, contentGenerator?: (title: HTMLElement, content: HTMLElement)=>void) {
+  toggleReportBugLink(isVisible: boolean, contentGenerator?: (title: HTMLElement, content: HTMLElement) => void) {
     const link = <HTMLElement>this.parent.querySelector('*[data-header="bugLink"]');
     AppHeader.setVisibility(link, isVisible);
 
@@ -350,7 +462,7 @@ export class AppHeader {
     }
   }
 
-  private toggleAboutLink(isVisible: boolean, contentGenerator?: (title: HTMLElement, content: HTMLElement)=>void) {
+  private toggleAboutLink(isVisible: boolean, contentGenerator?: (title: HTMLElement, content: HTMLElement) => void) {
     const link = <HTMLElement>this.parent.querySelector('*[data-header="aboutLink"]');
     AppHeader.setVisibility(link, isVisible);
     if (isVisible) {
@@ -402,9 +514,9 @@ function defaultAboutInfo(title: HTMLElement, content: HTMLElement) {
     title.innerHTML = (metaData.displayName || metaData.name).replace('_', ' ');
     let contentTpl = `<p class="description">${metaData.description}</p>`;
     if (metaData.homepage) {
-      contentTpl += `<p class="homepage"><strong>Homepage</strong>: <a href="${metaData.homepage}" target="_blank" rel="noopener">${metaData.homepage}</a></p>`;
+      contentTpl += `<p class="homepage"><strong>${i18next.t('phovea:ui.homepage')}</strong>: <a href="${metaData.homepage}" target="_blank" rel="noopener">${metaData.homepage}</a></p>`;
     }
-    contentTpl += `<p class="version"><strong>Version</strong>: ${metaData.version}</p>`;
+    contentTpl += `<p class="version"><strong>${i18next.t('phovea:ui.version')}</strong>: ${metaData.version}</p>`;
     if (metaData.screenshot) {
       contentTpl += `<img src="${metaData.screenshot}" class="center-block img-responsive img-thumbnail"/>`;
     }
@@ -413,5 +525,5 @@ function defaultAboutInfo(title: HTMLElement, content: HTMLElement) {
 }
 
 function defaultOptionsInfo(_title: HTMLElement, content: HTMLElement) {
-  content.innerHTML = 'No options available';
+  content.innerHTML = i18next.t('phovea:ui.noOptionsAvailable');
 }
