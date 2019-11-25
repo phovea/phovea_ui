@@ -55,8 +55,8 @@ export class BuildInfo {
     ${i18next.t('phovea:ui.urlRow', {pathname: location.pathname, hash: location.hash})}
     ${i18next.t('phovea:ui.userAgentRow', {userAgent: navigator.userAgent})}
     ${i18next.t('phovea:ui.platformRow', {platform: navigator.platform})}
-    ${i18next.t('phovea:ui.ScreenSizeRow', {width: screen.width, height: screen.height})}
-    ${i18next.t('phovea:ui.WindowSizeRow', {innerWidth: window.innerWidth, innerHeight: window.innerHeight})}
+    ${i18next.t('phovea:ui.screenSizeRow', {width: screen.width, height: screen.height})}
+    ${i18next.t('phovea:ui.windowSizeRow', {innerWidth: window.innerWidth, innerHeight: window.innerHeight})}
 
 ~~~json\n${JSON.stringify(this.client, null, ' ')}\n${this.server ? `\n${JSON.stringify(this.server, null, ' ')}\n` : ''}~~~`;
   }
