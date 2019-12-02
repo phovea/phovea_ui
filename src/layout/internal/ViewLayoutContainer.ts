@@ -7,6 +7,52 @@ export interface IViewLayoutContainerOptions extends ILayoutContainerOption {
   hideHeader: boolean;
 }
 
+
+export class HTMLView implements IView {
+  readonly minSize: ISize = [0, 0];
+  visible: boolean = true;
+  readonly node: HTMLElement;
+
+  constructor(html: string, doc: Document) {
+    //HTML
+    this.node = doc.createElement('div');
+    this.node.innerHTML = html;
+  }
+
+  destroy() {
+    //nothing to do
+  }
+
+  resized() {
+    //nothing to do
+  }
+
+  dumpReference() {
+    return -1;
+  }
+}
+
+
+export class NodeView implements IView {
+  readonly minSize: ISize = [0, 0];
+  visible: boolean = true;
+
+  constructor(public readonly node: HTMLElement) {
+  }
+
+  destroy() {
+    //nothing to do
+  }
+
+  resized() {
+    //nothing to do
+  }
+
+  dumpReference() {
+    return -1;
+  }
+}
+
 export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutContainerOptions> implements IViewLayoutContainer {
 
   readonly node: HTMLElement;
@@ -95,51 +141,5 @@ export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutCon
 
   static derive(view: IView) {
     return new ViewLayoutContainer(view, ALayoutContainer.deriveOptions(view.node));
-  }
-}
-
-export class HTMLView implements IView {
-  readonly minSize: ISize = [0, 0];
-  visible: boolean = true;
-  readonly node: HTMLElement;
-
-  constructor(html: string, doc: Document) {
-    //HTML
-    this.node = doc.createElement('div');
-    this.node.innerHTML = html;
-  }
-
-  destroy() {
-    //nothing to do
-  }
-
-  resized() {
-    //nothing to do
-  }
-
-  dumpReference() {
-    return -1;
-  }
-}
-
-
-
-export class NodeView implements IView {
-  readonly minSize: ISize = [0, 0];
-  visible: boolean = true;
-
-  constructor(public readonly node: HTMLElement) {
-  }
-
-  destroy() {
-    //nothing to do
-  }
-
-  resized() {
-    //nothing to do
-  }
-
-  dumpReference() {
-    return -1;
   }
 }

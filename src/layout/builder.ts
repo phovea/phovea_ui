@@ -11,13 +11,6 @@ import {ISequentialLayoutContainerOptions} from './internal/ASequentialLayoutCon
 
 export declare type IBuildAbleOrViewLike = ABuilder | IView | string;
 
-function toBuilder(view: IBuildAbleOrViewLike): ABuilder {
-  if (view instanceof ABuilder) {
-    return view;
-  }
-  return new ViewBuilder(<IView | string>view);
-}
-
 abstract class ABuilder {
   protected _name: string = 'View';
   protected _fixed: boolean = false;
@@ -73,6 +66,44 @@ abstract class ABuilder {
   }
 
   abstract build(root: RootLayoutContainer, doc: Document): ILayoutContainer;
+}
+
+export class ViewBuilder extends ABuilder {
+  private _hideHeader: boolean = false;
+
+  constructor(private readonly view: string | IView | HTMLElement) {
+    super();
+  }
+
+  hideHeader() {
+    this._hideHeader = true;
+    this._fixed = true;
+    return this;
+  }
+
+  protected buildOptions(): Partial<IViewLayoutContainerOptions> {
+    return Object.assign({
+      hideHeader: this._hideHeader
+    }, super.buildOptions());
+  }
+
+  build(root: RootLayoutContainer, doc: Document): ILayoutContainer {
+    const options = this.buildOptions();
+    if (typeof this.view === 'string') {
+      return new ViewLayoutContainer(new HTMLView(this.view, doc), options);
+    }
+    if ((<HTMLElement>this.view).nodeName !== undefined) {
+      return new ViewLayoutContainer(new NodeView(<HTMLElement>this.view), options);
+    }
+    return new ViewLayoutContainer(<IView>this.view, options);
+  }
+}
+
+function toBuilder(view: IBuildAbleOrViewLike): ABuilder {
+  if (view instanceof ABuilder) {
+    return view;
+  }
+  return new ViewBuilder(<IView | string>view);
 }
 
 abstract class AParentBuilder extends ABuilder {
@@ -186,37 +217,6 @@ class TabbingBuilder extends AParentBuilder {
   build(root: RootLayoutContainer, doc) {
     const built = this.buildChildren(root, doc);
     return new TabbingLayoutContainer(doc, this.buildOptions(), ...built);
-  }
-}
-
-export class ViewBuilder extends ABuilder {
-  private _hideHeader: boolean = false;
-
-  constructor(private readonly view: string | IView | HTMLElement) {
-    super();
-  }
-
-  hideHeader() {
-    this._hideHeader = true;
-    this._fixed = true;
-    return this;
-  }
-
-  protected buildOptions(): Partial<IViewLayoutContainerOptions> {
-    return Object.assign({
-      hideHeader: this._hideHeader
-    }, super.buildOptions());
-  }
-
-  build(root: RootLayoutContainer, doc: Document): ILayoutContainer {
-    const options = this.buildOptions();
-    if (typeof this.view === 'string') {
-      return new ViewLayoutContainer(new HTMLView(this.view, doc), options);
-    }
-    if ((<HTMLElement>this.view).nodeName !== undefined) {
-      return new ViewLayoutContainer(new NodeView(<HTMLElement>this.view), options);
-    }
-    return new ViewLayoutContainer(<IView>this.view, options);
   }
 }
 
