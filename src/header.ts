@@ -4,6 +4,7 @@
 
 import './_font-awesome';
 import './style.scss';
+import * as caleydoLogo from 'url-loader!./assets/caleydo_c.svg';
 
 import {mixin} from 'phovea_core/src/index';
 import lazyBootstrap from './_lazyBootstrap';
@@ -71,8 +72,7 @@ const getTemplate = () => {
           <div class="modal-body" data-header="about">
               <div class="metaData">${i18n.t('phovea:ui.loading')}</div>
               <div class="caleydoInfo">
-                  <a class="logo" href="https://phovea.caleydo.org" target="_blank"><img
-                          src="assets/caleydo_c.svg"></a>
+                  <a class="logo" href="https://phovea.caleydo.org" target="_blank"><img src="${caleydoLogo}"></a>
                   <p class="info">
                   ${i18n.t('phovea:ui.infoPart1')}
                    <strong><a href="http://phovea.caleydo.org/"  target="_blank"> ${i18n.t('phovea:ui.phoveaName')}</a></strong>
