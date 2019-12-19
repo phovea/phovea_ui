@@ -10,8 +10,8 @@
     "extensions": [],
     "sextensions": [],
     "libraries": [
-      "font-awesome",
       "jquery",
+      "font-awesome",
       "bootstrap"
     ],
     "unknown": {
@@ -26,10 +26,16 @@
     ],
     "today": "Thu, 03 Nov 2016 14:31:55 GMT",
     "libraryExternals": [
-      "font-awesome",
       "jquery",
+      "font-awesome",
       "bootstrap",
       "bootstrap-sass"
-    ]
+    ],
+    "promptValues": {
+      "authorName": "The Caleydo Team",
+      "authorEmail": "contact@caleydo.org",
+      "authorUrl": "https://caleydo.org",
+      "githubAccount": "phovea"
+    }
   }
 }

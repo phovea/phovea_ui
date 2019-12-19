@@ -6,28 +6,29 @@
 import './_bootstrap';
 import * as $ from 'jquery';
 import {mixin, randomId} from 'phovea_core/src';
+import i18n from 'phovea_core/src/i18n';
 
 export class Dialog {
   protected readonly $dialog: JQuery;
   private bakKeyDownListener: (ev: KeyboardEvent) => any = null; // temporal for restoring an old keydown listener
   static openDialogs: number = 0;
 
-  constructor(title: string, primaryBtnText = 'OK') {
+  constructor(title: string, primaryBtnText = 'OK', additionalCSSClasses: string = '') {
     const dialog = document.createElement('div');
     dialog.setAttribute('role', 'dialog');
     dialog.classList.add('modal', 'fade');
     dialog.innerHTML = `
-       <div class="modal-dialog" role="document">
+       <div class="modal-dialog ${additionalCSSClasses}" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="${i18n.t('phovea:ui.close')}"><span aria-hidden="true">×</span></button>
             <h4 class="modal-title">${title}</h4>
           </div>
           <div class="modal-body">
 
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default btn-primary">${primaryBtnText}</button>
+            <button type="button" class="btn btn-default btn-primary submit-dialog">${primaryBtnText}</button>
           </div>
         </div>
       </div>`;
@@ -61,13 +62,17 @@ export class Dialog {
     return <HTMLElement>this.$dialog.find('.modal-footer')[0];
   }
 
+  get header() {
+    return <HTMLElement>this.$dialog[0].querySelector('.modal-header');
+  }
+
 
   onHide(callback: () => void) {
     this.$dialog.on('hidden.bs.modal', callback);
   }
 
   onSubmit(callback: () => any) {
-    return this.$dialog.find('.modal-footer > button').on('click', callback);
+    return this.$dialog.find('.modal-footer > .submit-dialog').on('click', callback);
   }
 
   hideOnSubmit() {
@@ -75,7 +80,7 @@ export class Dialog {
   }
 
   destroy() {
-    if(--Dialog.openDialogs > 0) {
+    if (--Dialog.openDialogs > 0) {
       $('body').addClass('modal-open');
     }
     return this.$dialog.remove();
@@ -83,8 +88,8 @@ export class Dialog {
 }
 
 export class FormDialog extends Dialog {
-  constructor(title: string, primaryBtnText = 'OK', private readonly formId = 'form' + randomId(5)) {
-    super(title, primaryBtnText);
+  constructor(title: string, primaryBtnText = 'OK', private readonly formId = 'form' + randomId(5), additionalCSSClasses: string = '') {
+    super(title, primaryBtnText, additionalCSSClasses);
 
     this.body.innerHTML = `<form id="${formId}"></form>`;
     const b = this.footer.querySelector('button');
@@ -105,14 +110,14 @@ export class FormDialog extends Dialog {
   }
 }
 
-export function generateDialog(title: string, primaryBtnText = 'OK') {
-  return new Dialog(title, primaryBtnText);
+export function generateDialog(title: string, primaryBtnText = 'OK', additionalCSSClasses: string = '') {
+  return new Dialog(title, primaryBtnText, additionalCSSClasses);
 }
 
 export function msg(text: string, category = 'info'): Promise<void> {
   return new Promise<void>((resolve) => {
     const div = $(`<div class="alert alert-${category} alert-dismissible fade in" role="alert">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="${i18n.t('phovea:ui.close')}"><span aria-hidden="true">×</span></button>
         ${text}
     </div>`).appendTo('body');
     div.on('closed.bs.alert', () => resolve);
@@ -120,9 +125,14 @@ export function msg(text: string, category = 'info'): Promise<void> {
   });
 }
 
-export interface IPromptOptions {
+export interface IDialogOptions {
   title?: string;
   placeholder?: string;
+  primaryBtnText?: string;
+  additionalCSSClasses?: string;
+}
+
+export interface IPromptOptions extends IDialogOptions {
   multiline?: boolean;
 }
 
@@ -132,7 +142,7 @@ export interface IPromptOptions {
  * @param options
  * @returns {Promise}
  */
-export function prompt(text: string, options: IPromptOptions|string = {}): Promise<string> {
+export function prompt(text: string, options: IPromptOptions | string = {}): Promise<string> {
   const o: IPromptOptions = {
     title: 'Input',
     placeholder: 'Enter...',
@@ -143,7 +153,7 @@ export function prompt(text: string, options: IPromptOptions|string = {}): Promi
   }
   mixin(o, options);
   return new Promise((resolve) => {
-    const dialog = generateDialog(o.title);
+    const dialog = generateDialog(o.title, o.primaryBtnText, o.additionalCSSClasses);
     if (o.multiline) {
       dialog.body.innerHTML = `<form><textarea class="form-control" rows="5" placeholder="${o.placeholder}" autofocus="autofocus">${text}</textarea></form>`;
     } else {
@@ -171,9 +181,8 @@ export function prompt(text: string, options: IPromptOptions|string = {}): Promi
   });
 }
 
-export interface IChooseOptions {
-  title?: string;
-  placeholder?: string;
+
+export interface IChooseOptions extends IDialogOptions {
   editable?: boolean;
 }
 
@@ -183,7 +192,7 @@ export interface IChooseOptions {
  * @param options
  * @returns {Promise}
  */
-export function choose(items: string[], options: IChooseOptions|string = {}): Promise<string> {
+export function choose(items: string[], options: IChooseOptions | string = {}): Promise<string> {
   const o: IChooseOptions = {
     title: 'Choose',
     placeholder: 'Enter...',
@@ -195,7 +204,7 @@ export function choose(items: string[], options: IChooseOptions|string = {}): Pr
   mixin(o, options);
 
   return new Promise((resolve) => {
-    const dialog = generateDialog(o.title);
+    const dialog = generateDialog(o.title, o.primaryBtnText, o.additionalCSSClasses);
     const option = items.map((d) => `<option value="${d}">${d}</option>`).join('\n');
     if (o.editable) {
       dialog.body.innerHTML = `<form><input type="text" list="chooseList" class="form-control" autofocus="autofocus" placeholder="${o.placeholder}">
@@ -222,17 +231,16 @@ export function choose(items: string[], options: IChooseOptions|string = {}): Pr
   });
 }
 
-export interface IAreYouSureOptions {
-  title?: string;
+export interface IAreYouSureOptions extends Pick<IDialogOptions, 'title' | 'additionalCSSClasses'> {
   button?: string;
   cancelButton?: string;
 }
 
 export function areyousure(msg: string = '', options: IAreYouSureOptions | string = {}): Promise<boolean> {
-  const o = {
-    title: 'Are you sure?',
-    button: `<i class="fa fa-trash" aria-hidden="true"></i> Delete`,
-    cancelButton: 'Cancel'
+  const o: IAreYouSureOptions = {
+    title: i18n.t('phovea:ui.areYouSure'),
+    button: `<i class="fa fa-trash" aria-hidden="true"></i>  ${i18n.t('phovea:ui.delete')}`,
+    cancelButton:  i18n.t('phovea:ui.cancel')
   };
   if (typeof options === 'string') {
     options = {title: options};
@@ -240,7 +248,7 @@ export function areyousure(msg: string = '', options: IAreYouSureOptions | strin
   mixin(o, options);
 
   return new Promise((resolve) => {
-    const dialog = generateDialog(o.title, o.cancelButton);
+    const dialog = generateDialog(o.title, o.cancelButton, o.additionalCSSClasses);
     dialog.body.innerHTML = msg;
     $(`<button class="btn btn-danger">${o.button}</button>`).appendTo(dialog.footer);
     let clicked = false;
