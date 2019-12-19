@@ -18,7 +18,7 @@
     "userAgent": "UserAgent",
     "github": "Github",
     "submitIssue": "Submit Issue (include the build details below)",
-    "homePage": "Homepage",
+    "homepage": "Homepage",
     "noOptionsAvailable": "No options available",
 
     "issueHeader": "Key | Value",
