@@ -6,6 +6,7 @@
 import './_bootstrap';
 import * as $ from 'jquery';
 import {mixin, randomId} from 'phovea_core/src';
+import i18n from 'phovea_core/src/i18n';
 
 export class Dialog {
   protected readonly $dialog: JQuery;
@@ -20,7 +21,7 @@ export class Dialog {
        <div class="modal-dialog ${additionalCSSClasses}" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="${i18n.t('phovea:ui.close')}"><span aria-hidden="true">×</span></button>
             <h4 class="modal-title">${title}</h4>
           </div>
           <div class="modal-body">
@@ -79,7 +80,7 @@ export class Dialog {
   }
 
   destroy() {
-    if(--Dialog.openDialogs > 0) {
+    if (--Dialog.openDialogs > 0) {
       $('body').addClass('modal-open');
     }
     return this.$dialog.remove();
@@ -116,7 +117,7 @@ export function generateDialog(title: string, primaryBtnText = 'OK', additionalC
 export function msg(text: string, category = 'info'): Promise<void> {
   return new Promise<void>((resolve) => {
     const div = $(`<div class="alert alert-${category} alert-dismissible fade in" role="alert">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="${i18n.t('phovea:ui.close')}"><span aria-hidden="true">×</span></button>
         ${text}
     </div>`).appendTo('body');
     div.on('closed.bs.alert', () => resolve);
@@ -141,7 +142,7 @@ export interface IPromptOptions extends IDialogOptions {
  * @param options
  * @returns {Promise}
  */
-export function prompt(text: string, options: IPromptOptions|string = {}): Promise<string> {
+export function prompt(text: string, options: IPromptOptions | string = {}): Promise<string> {
   const o: IPromptOptions = {
     title: 'Input',
     placeholder: 'Enter...',
@@ -191,7 +192,7 @@ export interface IChooseOptions extends IDialogOptions {
  * @param options
  * @returns {Promise}
  */
-export function choose(items: string[], options: IChooseOptions|string = {}): Promise<string> {
+export function choose(items: string[], options: IChooseOptions | string = {}): Promise<string> {
   const o: IChooseOptions = {
     title: 'Choose',
     placeholder: 'Enter...',
@@ -237,9 +238,9 @@ export interface IAreYouSureOptions extends Pick<IDialogOptions, 'title' | 'addi
 
 export function areyousure(msg: string = '', options: IAreYouSureOptions | string = {}): Promise<boolean> {
   const o: IAreYouSureOptions = {
-    title: 'Are you sure?',
-    button: `<i class="fa fa-trash" aria-hidden="true"></i> Delete`,
-    cancelButton: 'Cancel'
+    title: i18n.t('phovea:ui.areYouSure'),
+    button: `<i class="fa fa-trash" aria-hidden="true"></i>  ${i18n.t('phovea:ui.delete')}`,
+    cancelButton:  i18n.t('phovea:ui.cancel')
   };
   if (typeof options === 'string') {
     options = {title: options};
