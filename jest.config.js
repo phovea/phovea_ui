@@ -18,7 +18,8 @@ const pluginsToTransform = [
  */
 module.exports = {
   transform: {
-    "^.+\\.tsx?$": "ts-jest"
+    "^.+\\.tsx?$": "ts-jest",
+    "\\.xml$": "jest-raw-loader"
   },
   testRegex: "(.*(test|spec))\\.(tsx?)$",
   testURL: "http://localhost/",
@@ -40,7 +41,6 @@ module.exports = {
     "__VERSION__": "TEST_VERSION",
     "__APP_CONTEXT__": "TEST_CONTEXT"
   },
-  // setupFiles: ['./jest.setupfiles.js'],
   moduleNameMapper: {
     "^.+\\.(css|less|scss|sass)$": "identity-obj-proxy",
     "imports-loader?.*": "imports-loader",
