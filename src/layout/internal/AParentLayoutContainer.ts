@@ -158,7 +158,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
 
   find(id: number|((container: ILayoutContainer)=>boolean)) {
     if (super.find(id) != null) {
-      return this;
+      return <ILayoutContainer>this;
     }
     for (const child of this._children) {
       const r = child.find(id);
