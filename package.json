@@ -51,10 +51,10 @@
   },
   "dependencies": {
     "@types/bootstrap": "3.3.32",
-    "@types/jquery": "~3.3.6",
+    "@types/jquery": "~3.3.33",
     "bootstrap-sass": "3.3.7",
     "font-awesome": "~4.7.0",
-    "jquery": "~3.3.1",
+    "jquery": "~3.4.1",
     "phovea_core": "github:phovea/phovea_core#stoiber/provenance_retrieval+typescript_3.8+update_dependencies_38"
   },
   "devDependencies": {
