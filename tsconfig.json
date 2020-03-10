@@ -17,8 +17,7 @@
     "baseUrl": "../",
     "noImplicitAny": false,
     "skipLibCheck": true,
-    "esModuleInterop": false,
-    "allowSyntheticDefaultImports": true
+    "esModuleInterop": true
   },
   "include": [
     "src/**/*.ts",
