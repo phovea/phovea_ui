@@ -1,7 +1,7 @@
 {
   "name": "phovea_ui",
   "description": "Wrapper for integration of Bootstrap and FontAwesome along with a common header for Phovea apps",
-  "version": "3.1.1-SNAPSHOT",
+  "version": "4.0.1-SNAPSHOT",
   "author": {
     "name": "The Caleydo Team",
     "email": "contact@caleydo.org",
@@ -49,14 +49,14 @@
     "release:minor": "npm version minor && npm publish && git push --follow-tags",
     "release:patch": "npm version patch && npm publish && git push --follow-tags",
     "predist": "npm run build && npm run docs",
-    "dist": "mkdirp dist && cd build && tar cvzf ../dist/phovea_ui.tar.gz *"
+    "dist": "mkdir dist && cd build && tar cvzf ../dist/phovea_ui.tar.gz *"
   },
   "dependencies": {
     "@types/bootstrap": "3.3.32",
-    "@types/jquery": "~3.3.6",
+    "@types/jquery": "~3.3.33",
     "bootstrap-sass": "3.3.7",
     "font-awesome": "~4.7.0",
-    "jquery": "~3.3.1",
+    "jquery": "~3.4.1",
     "phovea_core": "github:phovea/phovea_core#stoiber/testing_with_jest"
   },
   "devDependencies": {
@@ -70,8 +70,7 @@
     "jest": "^22.4.0",
     "identity-obj-proxy": "^3.0.0",
     "json-loader": "0.5.4",
-    "mkdirp": "0.5.1",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
     "null-loader": "0.1.1",
     "raw-loader": "0.5.1",
     "rimraf": "^3.0.0",
@@ -79,16 +78,16 @@
     "style-loader": "0.16.1",
     "tslint": "5.9.1",
     "ts-jest": "22.4.4",
-    "typedoc": "0.11.1",
-    "typescript": "2.8.1",
+    "typedoc": "~0.16.10",
+    "typescript": "~3.8.2",
     "url-loader": "0.5.8",
     "webpack": "2.3.3",
     "webpack-dev-server": "2.4.2",
     "extract-loader": "0.1.0",
-    "tslib": "1.9.0",
+    "tslib": "~1.11.0",
     "cache-loader": "1.2.0",
     "ifdef-loader": "2.0.0",
-    "fork-ts-checker-webpack-plugin": "0.4.1",
+    "fork-ts-checker-webpack-plugin": "0.4.4",
     "thread-loader": "1.1.2",
     "ts-loader": "4.0.1",
     "jest-raw-loader": "1.0.1"
