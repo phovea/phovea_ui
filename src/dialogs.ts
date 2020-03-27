@@ -4,7 +4,7 @@
 // to resolve the jquery extensions
 /// <reference types="bootstrap" />
 import './_bootstrap';
-import * as $ from 'jquery';
+import $ from 'jquery';
 import {mixin, randomId} from 'phovea_core/src';
 import i18n from 'phovea_core/src/i18n';
 
