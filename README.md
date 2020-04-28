@@ -42,7 +42,7 @@ This repository is part of **[Phovea](http://phovea.caleydo.org/)**, a platform 
 [phovea-url]: https://phovea.caleydo.org
 [npm-image]: https://badge.fury.io/js/phovea_ui.svg
 [npm-url]: https://npmjs.org/package/phovea_ui
-[travis-image]: https://travis-ci.org/phovea/phovea_ui.svg?branch=master
-[travis-url]: https://travis-ci.org/phovea/phovea_ui
+[circleci-image]: https://circleci.com/gh/phovea/phovea_ui.svg?style=shield
+[circleci-url]: https://circleci.com/gh/phovea/phovea_ui
 [daviddm-image]: https://david-dm.org/phovea/phovea_ui/status.svg
 [daviddm-url]: https://david-dm.org/phovea/phovea_ui
