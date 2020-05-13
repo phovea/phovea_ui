@@ -1,4 +1,4 @@
-phovea_ui [![Phovea][phovea-image]][phovea-url] [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+phovea_ui [![Phovea][phovea-image]][phovea-url] [![NPM version][npm-image]][npm-url] [![Build Status][circleci-image]][circleci-url]
 =====================
 
 This plugin is a utility plugin for including [Bootstrap](http://getbootstrap.com/) and [Font Awesome](http://fontawesome.io) into an Phovea application. In addition this repository includes the following modules:
@@ -44,5 +44,3 @@ This repository is part of **[Phovea](http://phovea.caleydo.org/)**, a platform 
 [npm-url]: https://npmjs.org/package/phovea_ui
 [circleci-image]: https://circleci.com/gh/phovea/phovea_ui.svg?style=shield
 [circleci-url]: https://circleci.com/gh/phovea/phovea_ui
-[daviddm-image]: https://david-dm.org/phovea/phovea_ui/status.svg
-[daviddm-url]: https://david-dm.org/phovea/phovea_ui
