@@ -1,7 +1,7 @@
 import {ILayoutDump, ISize, IView, IViewLayoutContainer} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption, withChanged} from './ALayoutContainer';
 import {dropViews} from './dropper';
-import {LayoutContainerEvents} from '../';
+import {LayoutContainerEvents} from '../interfaces';
 
 export interface IViewLayoutContainerOptions extends ILayoutContainerOption {
   hideHeader: boolean;

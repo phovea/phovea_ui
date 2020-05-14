@@ -3,7 +3,7 @@ import {ILayoutContainer, ILayoutDump, ISize, ITabbingLayoutContainer} from '../
 import {ALayoutContainer, ILayoutContainerOption, withChanged} from './ALayoutContainer';
 import {dropAble} from 'phovea_core/src';
 import {IDropArea} from './interfaces';
-import {LayoutContainerEvents} from '../';
+import {LayoutContainerEvents} from '../interfaces';
 
 
 export interface ITabbingLayoutContainerOptions extends ILayoutContainerOption {
