@@ -4,6 +4,7 @@
 
 import './style.scss';
 
-export {IView, ILayoutContainer, ILayoutParentContainer, ISize, LayoutContainerEvents, IRootLayoutContainer, ITabbingLayoutContainer, IViewLayoutContainer, ISplitLayoutContainer, ILayoutDump} from './interfaces';
-export {horizontalLineUp, verticalLineUp, tabbing, horizontalSplit, verticalSplit, root, view} from './builder';
+export * from './internal/internal';
+export * from './interfaces';
+export * from './builder';
 
