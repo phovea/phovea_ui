@@ -1,6 +1,6 @@
 export * from './interfaces';
 export * from './ALayoutContainer';
-export { default as ALayoutContainer } from './ALayoutContainer';
+export {default as ALayoutContainer} from './ALayoutContainer';
 export * from './AParentLayoutContainer';
 export {default as AParentLayoutContainer} from './AParentLayoutContainer';
 export {default as RootLayoutContainer} from './RootLayoutContainer';
