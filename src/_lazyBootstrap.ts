@@ -1,3 +1,6 @@
+/** NOTE: Will be removed entirely after migration to Webpack 4 and the update of the properties
+ * target and module in tsconfig.json
+ */
 import 'bootstrap-sass/assets/stylesheets/_bootstrap.scss';
 
 export default function loadBootstrap(): Promise<JQueryStatic> {
