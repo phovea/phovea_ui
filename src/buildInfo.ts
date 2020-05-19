@@ -69,12 +69,14 @@ export class BuildInfo {
       <textarea readonly="readonly">${this.buildIssuesContent()}</textarea>
     `;
   }
+
+  static build(): Promise<BuildInfo> {
+    const buildInfos = Promise.all([
+      (<any>self).fetch('./buildInfo.json').then((response) => response.json()),
+      offline ? null : getAPIJSON('/buildInfo.json')
+    ]);
+    return buildInfos.then((args: any[]) => new BuildInfo(args[0], args[1]));
+  }
 }
 
-export function build(): Promise<BuildInfo> {
-  const buildInfos = Promise.all([
-    (<any>self).fetch('./buildInfo.json').then((response) => response.json()),
-    offline ? null : getAPIJSON('/buildInfo.json')
-  ]);
-  return buildInfos.then((args: any[]) => new BuildInfo(args[0], args[1]));
-}
+

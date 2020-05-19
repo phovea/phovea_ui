@@ -1,6 +1,6 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {ILayoutContainer, ILayoutDump, ISize, ITabbingLayoutContainer} from '../interfaces';
-import {ALayoutContainer, ILayoutContainerOption, withChanged} from './ALayoutContainer';
+import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {dropAble} from 'phovea_core/src';
 import {IDropArea} from './interfaces';
 import {LayoutContainerEvents} from '../interfaces';
@@ -162,7 +162,7 @@ export class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayou
     this.header.insertBefore(child.header, next.header.previousSibling); //2 extra items
     this.header.insertBefore(reorder, child.header);
     this.node.insertBefore(child.node, next.node);
-    this.fire(withChanged(LayoutContainerEvents.EVENT_TAB_REORDED), child, index);
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_TAB_REORDED), child, index);
   }
 
   replace(child: ILayoutContainer, replacement: ILayoutContainer) {
@@ -206,7 +206,7 @@ export class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayou
       newActive.node.classList.add('active');
       newActive.visible = this.visible;
     }
-    this.fire(withChanged(LayoutContainerEvents.EVENT_CHANGE_ACTIVE_TAB), oldActive, newActive);
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_CHANGE_ACTIVE_TAB), oldActive, newActive);
   }
 
   protected visibilityChanged(visible: boolean): void {

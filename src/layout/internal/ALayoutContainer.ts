@@ -13,11 +13,6 @@ export interface ILayoutContainerOption {
   fixedLayout: boolean;
 
 }
-
-export function withChanged(event: string) {
-  return `${event}${EventHandler.MULTI_EVENT_SEPARATOR}${LayoutContainerEvents.EVENT_LAYOUT_CHANGED}`;
-}
-
 export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends EventHandler {
   static readonly MIME_TYPE = 'text/x-phovea-layout-container';
 
@@ -100,7 +95,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
   }
 
   destroy() {
-    this.fire(withChanged(LayoutContainerEvents.EVENT_DESTROYED), this);
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_DESTROYED), this);
   }
 
   get name() {
@@ -111,7 +106,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     if (this.options.name === name) {
       return;
     }
-    this.fire(withChanged(LayoutContainerEvents.EVENT_NAME_CHANGED), this.options.name, this.options.name = name);
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_NAME_CHANGED), this.options.name, this.options.name = name);
     this.updateName(name);
   }
 
@@ -199,5 +194,9 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
 
   protected updateTitle() {
     this.header.title = `Double click to ${this.isMaximized? 'restore default size' : 'expand view'}`;
+  }
+
+  static withChanged(event: string) {
+    return `${event}${EventHandler.MULTI_EVENT_SEPARATOR}${LayoutContainerEvents.EVENT_LAYOUT_CHANGED}`;
   }
 }

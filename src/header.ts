@@ -8,7 +8,7 @@ import * as caleydoLogo from 'url-loader!./assets/caleydo_c.svg';
 
 import {mixin} from 'phovea_core/src/index';
 import {loadBootstrap} from './_lazyBootstrap';
-import {buildBuildInfo} from './buildInfo';
+import {BuildInfo} from './buildInfo';
 import {getMetaData} from './metaData';
 import i18n from 'phovea_core/src/i18n';
 
@@ -502,7 +502,7 @@ export function create(parent: HTMLElement, options: IAppHeaderOptions = {}) {
 }
 
 function defaultBuildInfo(_title: HTMLElement, content: HTMLElement) {
-  buildBuildInfo().then((buildInfo) => {
+  BuildInfo.build().then((buildInfo) => {
     content.innerHTML = buildInfo.toHTML();
   }).catch((error) => {
     content.innerHTML = error.toString();

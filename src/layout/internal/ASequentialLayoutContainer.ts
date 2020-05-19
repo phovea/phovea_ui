@@ -57,13 +57,13 @@ export abstract class ASequentialLayoutContainer<T extends ISequentialLayoutCont
       orientation: EOrientation[this.options.orientation]
     });
   }
-}
 
-export function wrap(child: ILayoutContainer) {
-  const s = child.node.ownerDocument.createElement('section');
-  if (!child.hideAbleHeader) {
-    s.appendChild(child.header);
+  static wrap(child: ILayoutContainer) {
+    const s = child.node.ownerDocument.createElement('section');
+    if (!child.hideAbleHeader) {
+      s.appendChild(child.header);
+    }
+    s.appendChild(child.node);
+    return s;
   }
-  s.appendChild(child.node);
-  return s;
 }

@@ -1,5 +1,5 @@
 import {ILayoutDump, ISize, IView, IViewLayoutContainer} from '../interfaces';
-import {ALayoutContainer, ILayoutContainerOption, withChanged} from './ALayoutContainer';
+import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {dropViews} from './dropper';
 import {LayoutContainerEvents} from '../interfaces';
 
@@ -99,7 +99,7 @@ export class ViewLayoutContainer extends ALayoutContainer<IViewLayoutContainerOp
   }
 
   set visible(visible: boolean) {
-    this.fire(withChanged(LayoutContainerEvents.EVENT_VISIBILITY_CHANGED), this.view.visible, this.view.visible = visible);
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_VISIBILITY_CHANGED), this.view.visible, this.view.visible = visible);
   }
 
   get minSize() {
