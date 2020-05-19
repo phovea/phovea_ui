@@ -12,7 +12,7 @@ export interface IAppMetaData {
 
 let metaData: Promise<IAppMetaData> = null;
 
-export default function getMetaData() {
+export function getMetaData() {
   if (metaData === null) {
     metaData = self.fetch('./phoveaMetaData.json').then((r) => r.json()).catch((r) => {
       console.warn('cannot read phoveaMetaData.json file, generate dummy');

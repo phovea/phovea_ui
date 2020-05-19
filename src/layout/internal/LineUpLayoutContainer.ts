@@ -7,7 +7,7 @@ export interface ILineUpLayoutContainer extends ISequentialLayoutContainerOption
   stackLayout: boolean;
 }
 
-export default class LineUpLayoutContainer extends ASequentialLayoutContainer<ILineUpLayoutContainer> {
+export class LineUpLayoutContainer extends ASequentialLayoutContainer<ILineUpLayoutContainer> {
   readonly minChildCount = 1;
   readonly type = 'lineup';
 

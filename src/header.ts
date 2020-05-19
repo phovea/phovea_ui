@@ -7,9 +7,9 @@ import './style.scss';
 import * as caleydoLogo from 'url-loader!./assets/caleydo_c.svg';
 
 import {mixin} from 'phovea_core/src/index';
-import lazyBootstrap from './_lazyBootstrap';
-import buildBuildInfo from './buildInfo';
-import getMetaData from './metaData';
+import {loadBootstrap} from './_lazyBootstrap';
+import {buildBuildInfo} from './buildInfo';
+import {getMetaData} from './metaData';
 import i18n from 'phovea_core/src/i18n';
 
 
@@ -424,7 +424,7 @@ export class AppHeader {
     // set the URL to GitHub issues dynamically
     if (isVisible) {
       contentGenerator = contentGenerator || defaultOptionsInfo;
-      lazyBootstrap().then(($) => {
+      loadBootstrap().then(($) => {
         $('#headerOptionsDialog').one('show.bs.modal', () => {
           const content = <HTMLElement>this.parent.querySelector('*[data-header="options"]');
           const title = <HTMLElement>this.parent.querySelector('#headerOptionsDialog .modal-title');
@@ -451,7 +451,7 @@ export class AppHeader {
     // set the URL to GitHub issues dynamically
     if (isVisible) {
       contentGenerator = contentGenerator || defaultBuildInfo;
-      lazyBootstrap().then(($) => {
+      loadBootstrap().then(($) => {
         $('#headerReportBugDialog').one('show.bs.modal', () => {
           const content = <HTMLElement>this.parent.querySelector('*[data-header="bug"]');
           const title = <HTMLElement>this.parent.querySelector('#headerReportBugDialog .modal-title');
@@ -481,13 +481,13 @@ export class AppHeader {
   }
 
   hideDialog(selector: string) {
-    lazyBootstrap().then(($) => {
+    loadBootstrap().then(($) => {
       $(selector).modal('hide');
     });
   }
 
   showAndFocusOn(selector: string, focusSelector: string) {
-    lazyBootstrap().then(($) => {
+    loadBootstrap().then(($) => {
       const $selector = $(selector);
       $selector.modal('show')
         .on('shown.bs.modal', function () {

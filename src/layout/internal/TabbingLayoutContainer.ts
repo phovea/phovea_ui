@@ -10,7 +10,7 @@ export interface ITabbingLayoutContainerOptions extends ILayoutContainerOption {
   readonly active: number;
 }
 
-export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayoutContainerOptions> implements ITabbingLayoutContainer {
+export class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayoutContainerOptions> implements ITabbingLayoutContainer {
   private static readonly TAB_REORDER = `<div data-layout="tab-reorder">&nbsp;</div>`;
   readonly minChildCount = 0;
   readonly type = 'tabbing';

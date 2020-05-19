@@ -4,7 +4,7 @@ import {ALayoutContainer, withChanged} from './ALayoutContainer';
 import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} from './ASequentialLayoutContainer';
 import {LayoutContainerEvents} from '../interfaces';
 
-export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISequentialLayoutContainerOptions> implements ISplitLayoutContainer {
+export class SplitLayoutContainer extends ASequentialLayoutContainer<ISequentialLayoutContainerOptions> implements ISplitLayoutContainer {
   private static readonly SEPARATOR = `<div data-layout="separator"><span title="Squeeze Left"></span><span title="Squeeze Right"></span></div>`;
   private static readonly SEPARATOR_WIDTH = 5;
 

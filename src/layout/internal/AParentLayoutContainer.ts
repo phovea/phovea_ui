@@ -174,5 +174,3 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     return base.concat(...this._children.map((d) => d.findAll(predicate)));
   }
 }
-
-export default AParentLayoutContainer;

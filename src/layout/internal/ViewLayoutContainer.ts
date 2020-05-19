@@ -53,7 +53,7 @@ export class NodeView implements IView {
   }
 }
 
-export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutContainerOptions> implements IViewLayoutContainer {
+export class ViewLayoutContainer extends ALayoutContainer<IViewLayoutContainerOptions> implements IViewLayoutContainer {
 
   readonly node: HTMLElement;
   readonly type = 'view';

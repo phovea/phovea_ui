@@ -71,7 +71,7 @@ export class BuildInfo {
   }
 }
 
-export default function build(): Promise<BuildInfo> {
+export function build(): Promise<BuildInfo> {
   const buildInfos = Promise.all([
     (<any>self).fetch('./buildInfo.json').then((response) => response.json()),
     offline ? null : getAPIJSON('/buildInfo.json')

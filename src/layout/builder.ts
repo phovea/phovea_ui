@@ -1,10 +1,10 @@
 import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, IView} from './interfaces';
 import {EOrientation} from './internal/interfaces';
-import ViewLayoutContainer, {HTMLView, IViewLayoutContainerOptions, NodeView} from './internal/ViewLayoutContainer';
-import SplitLayoutContainer from './internal/SplitLayoutContainer';
-import LineUpLayoutContainer from './internal/LineUpLayoutContainer';
-import TabbingLayoutContainer, {ITabbingLayoutContainerOptions} from './internal/TabbingLayoutContainer';
-import RootLayoutContainer from './internal/RootLayoutContainer';
+import {ViewLayoutContainer, HTMLView, IViewLayoutContainerOptions, NodeView} from './internal/ViewLayoutContainer';
+import {SplitLayoutContainer} from './internal/SplitLayoutContainer';
+import {LineUpLayoutContainer} from './internal/LineUpLayoutContainer';
+import {TabbingLayoutContainer, ITabbingLayoutContainerOptions} from './internal/TabbingLayoutContainer';
+import {RootLayoutContainer} from './internal/RootLayoutContainer';
 import {ILayoutContainerOption} from './internal/ALayoutContainer';
 import {ISequentialLayoutContainerOptions} from './internal/ASequentialLayoutContainer';
 

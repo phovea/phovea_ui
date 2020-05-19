@@ -201,5 +201,3 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     this.header.title = `Double click to ${this.isMaximized? 'restore default size' : 'expand view'}`;
   }
 }
-
-export default ALayoutContainer;
