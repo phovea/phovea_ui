@@ -5,4 +5,4 @@ export * from './ASequentialLayoutContainer';
 export * from './TabbingLayoutContainer';
 export * from './ViewLayoutContainer';
 export * from './LineUpLayoutContainer';
-export * from './dropper';
+export * from './Dropper';

@@ -1,6 +1,6 @@
 import {ILayoutDump, ISize, IView, IViewLayoutContainer} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
-import {dropViews} from './dropper';
+import {Dropper} from './Dropper';
 import {LayoutContainerEvents} from '../interfaces';
 
 export interface IViewLayoutContainerOptions extends ILayoutContainerOption {
@@ -75,7 +75,7 @@ export class ViewLayoutContainer extends ALayoutContainer<IViewLayoutContainerOp
     }
 
     if (!this.options.fixedLayout) {
-      dropViews(this.node, this);
+      Dropper.dropViews(this.node, this);
     }
 
     this.updateTitle();
