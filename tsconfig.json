@@ -5,6 +5,7 @@
     "importHelpers": true,
     "sourceMap": true,
     "moduleResolution": "node",
+    "allowJs": true,
     "jsx": "react",
     "experimentalDecorators": true,
     "downlevelIteration": true, // required as long as target is `es5`
