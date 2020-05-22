@@ -114,6 +114,73 @@ function toBuilder(view: IBuildAbleOrViewLike): ABuilder {
   return new ViewBuilder(<IView | string>view);
 }
 
+export class LayoutUtils {
+
+  /**
+   * restores the given layout dump
+   * @param {ILayoutDump} dump the dump
+   * @param {(referenceId: number) => IView} restoreView lookup function for getting the underlying view given the dumped reference id
+   * @param {Document} doc root document
+   * @return {ILayoutContainer} the root element
+   */
+  static restore(dump: ILayoutDump, restoreView: (referenceId: number) => IView, doc = document): ILayoutContainer {
+    const restorer = (d: ILayoutDump) => LayoutUtils.restore(d, restoreView, doc);
+    switch (dump.type) {
+      case 'root':
+        return RootLayoutContainer.restore(dump, doc, (r, child) => toBuilder(child).build(r, doc), (dump, restoreView) => LayoutUtils.restore(dump, restoreView, doc), restoreView);
+      case 'split':
+        return SplitLayoutContainer.restore(dump, restorer, doc);
+      case 'lineup':
+        return LineUpLayoutContainer.restore(dump, restorer, doc);
+      case 'tabbing':
+        return TabbingLayoutContainer.restore(dump, restorer, doc);
+      case 'view':
+        return ViewLayoutContainer.restore(dump, restoreView, doc);
+      default:
+        throw new Error(`invalid type: ${dump.type}`);
+    }
+  }
+
+  /**
+   * derives from an existing html scaffolded layout the phovea layout and replaced the nodes with it
+   * @param {HTMLElement} node the root node
+   * @param {(node: HTMLElement) => IView} viewFactory how to build a view from a node
+   */
+  static derive(node: HTMLElement, viewFactory: (node: HTMLElement) => IView = (node) => new NodeView(node)): IRootLayoutContainer {
+    const doc = node.ownerDocument;
+    const r = new RootLayoutContainer(doc, (child) => toBuilder(child).build(r, doc), (dump, restoreView) => LayoutUtils.restore(dump, restoreView, doc));
+
+    const deriveImpl = (node: HTMLElement): ILayoutContainer => {
+      switch (node.dataset.layout || 'view') {
+        case 'hsplit':
+        case 'vsplit':
+        case 'split':
+          return SplitLayoutContainer.derive(node, deriveImpl);
+        case 'lineup':
+        case 'vlineup':
+        case 'hlineup':
+        case 'stack':
+        case 'hstack':
+        case 'vstack':
+          return LineUpLayoutContainer.derive(node, deriveImpl);
+        case 'tabbing':
+          return TabbingLayoutContainer.derive(node, deriveImpl);
+        default:
+          // interpret as view
+          return ViewLayoutContainer.derive(viewFactory(node) || new NodeView(node));
+      }
+    };
+
+    r.root = deriveImpl(node);
+
+    if (node.parentElement) {
+      //replace old node with new root
+      node.parentElement.replaceChild(r.node, node);
+    }
+    return r;
+  }
+}
+
 export abstract class AParentBuilder extends ABuilder {
   protected readonly children: ABuilder[] = [];
 
@@ -306,72 +373,5 @@ class TabbingBuilder extends AParentBuilder {
    */
   static tabbing(...children: IBuildAbleOrViewLike[]): TabbingBuilder {
     return new TabbingBuilder(children);
-  }
-}
-
-export class LayoutUtils {
-
-  /**
-   * restores the given layout dump
-   * @param {ILayoutDump} dump the dump
-   * @param {(referenceId: number) => IView} restoreView lookup function for getting the underlying view given the dumped reference id
-   * @param {Document} doc root document
-   * @return {ILayoutContainer} the root element
-   */
-  static restore(dump: ILayoutDump, restoreView: (referenceId: number) => IView, doc = document): ILayoutContainer {
-    const restorer = (d: ILayoutDump) => LayoutUtils.restore(d, restoreView, doc);
-    switch (dump.type) {
-      case 'root':
-        return RootLayoutContainer.restore(dump, doc, (r, child) => toBuilder(child).build(r, doc), (dump, restoreView) => LayoutUtils.restore(dump, restoreView, doc), restoreView);
-      case 'split':
-        return SplitLayoutContainer.restore(dump, restorer, doc);
-      case 'lineup':
-        return LineUpLayoutContainer.restore(dump, restorer, doc);
-      case 'tabbing':
-        return TabbingLayoutContainer.restore(dump, restorer, doc);
-      case 'view':
-        return ViewLayoutContainer.restore(dump, restoreView, doc);
-      default:
-        throw new Error(`invalid type: ${dump.type}`);
-    }
-  }
-
-  /**
-   * derives from an existing html scaffolded layout the phovea layout and replaced the nodes with it
-   * @param {HTMLElement} node the root node
-   * @param {(node: HTMLElement) => IView} viewFactory how to build a view from a node
-   */
-  static derive(node: HTMLElement, viewFactory: (node: HTMLElement) => IView = (node) => new NodeView(node)): IRootLayoutContainer {
-    const doc = node.ownerDocument;
-    const r = new RootLayoutContainer(doc, (child) => toBuilder(child).build(r, doc), (dump, restoreView) => LayoutUtils.restore(dump, restoreView, doc));
-
-    const deriveImpl = (node: HTMLElement): ILayoutContainer => {
-      switch (node.dataset.layout || 'view') {
-        case 'hsplit':
-        case 'vsplit':
-        case 'split':
-          return SplitLayoutContainer.derive(node, deriveImpl);
-        case 'lineup':
-        case 'vlineup':
-        case 'hlineup':
-        case 'stack':
-        case 'hstack':
-        case 'vstack':
-          return LineUpLayoutContainer.derive(node, deriveImpl);
-        case 'tabbing':
-          return TabbingLayoutContainer.derive(node, deriveImpl);
-        default:
-          // interpret as view
-          return ViewLayoutContainer.derive(viewFactory(node) || new NodeView(node));
-      }
-    };
-
-    r.root = deriveImpl(node);
-
-    if (node.parentElement) {
-      //replace old node with new root
-      node.parentElement.replaceChild(r.node, node);
-    }
-    return r;
   }
 }
