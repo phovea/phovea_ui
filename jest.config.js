@@ -29,7 +29,7 @@ module.exports = {
     "json",
     "node"
   ],
-  "moduleDirectories": [
+  moduleDirectories: [
     "node_modules",
     "src"
   ],
