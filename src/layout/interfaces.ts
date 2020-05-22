@@ -1,6 +1,5 @@
-import {IEventHandler} from 'phovea_core/src/event';
-import {IHasUniqueId} from 'phovea_core/src/idtype';
 import {IBuildAbleOrViewLike} from './builder';
+import {IEventHandler, IHasUniqueId} from 'phovea_core';
 
 /**
  * [width, height]

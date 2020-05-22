@@ -17,7 +17,7 @@ if(pluginsToTransform.length > 0) {
  */
 module.exports = {
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.(js|ts|tsx)$": "ts-jest",
     "\\.xml$": "jest-raw-loader"
   },
   testRegex: "(.*(test|spec))\\.(tsx?)$",
@@ -29,20 +29,18 @@ module.exports = {
     "json",
     "node"
   ],
-  modulePaths: [
-    "src",
-    "../node_modules",
-    "../"
+  "moduleDirectories": [
+    "node_modules",
+    "src"
   ],
-  transformIgnorePatterns: [`../node_modules/${pluginsToTransform}`, `node_modules/${pluginsToTransform}`],
+  roots: ['<rootDir>/src', '<rootDir>/tests'],
+  transformIgnorePatterns: ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
   globals: {
     "__VERSION__": "TEST_VERSION",
     "__APP_CONTEXT__": "TEST_CONTEXT",
-    'ts-jest': {
-      // has to be set to true, otherwise i18n import fails
-      "tsConfig": {
-        "esModuleInterop": true,
-      }
+    // has to be set to true, otherwise i18n import fails
+    "tsConfig": {
+      "esModuleInterop": true
     }
   },
   moduleNameMapper: {
@@ -53,3 +51,4 @@ module.exports = {
     "script-loader?.*": "script-loader"
   }
 }
+console.log(module.exports)

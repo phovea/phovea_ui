@@ -1,5 +1,5 @@
 import {Dialog} from './dialogs';
-import i18n from 'phovea_core/src/i18n';
+import {I18nextManager} from 'phovea_core';
 
 let globalErrorTemplate = (details: string) => details;
 
@@ -32,7 +32,7 @@ export class Errors {
     function commonDialog(title: string, body: string) {
       // lazy import
       return System.import('./dialogs').then(({generateDialog}: {generateDialog(title: string, primaryBtnText: string, additionalCSSClasses?: string): Dialog}) => new Promise((resolve, reject) => {
-        const dialog = generateDialog(title, i18n.t('phovea:ui.dismiss'), additionalCSSClasses);
+        const dialog = generateDialog(title, I18nextManager.getInstance().i18n.t('phovea:ui.dismiss'), additionalCSSClasses);
 
         dialog.body.innerHTML = globalErrorTemplate(body);
 
@@ -53,17 +53,17 @@ export class Errors {
     if (error instanceof Response || error.response instanceof Response) {
       const xhr: Response = error instanceof Response ? error : error.response;
       return xhr.text().then((body: string) => {
-        const title = i18n.t('phovea:ui.errorHeader', {status: xhr.status, statusText: xhr.statusText});
+        const title = I18nextManager.getInstance().i18n.t('phovea:ui.errorHeader', {status: xhr.status, statusText: xhr.statusText});
         if (xhr.status !== 400) {
           body = `${body}<hr>
-          ${i18n.t('phovea:ui.errorBody')}<br><a href="${xhr.url}" target="_blank">${(xhr.url.length > 100) ? xhr.url.substring(0, 100) + '...' : xhr.url}</a>`;
+          ${I18nextManager.getInstance().i18n.t('phovea:ui.errorBody')}<br><a href="${xhr.url}" target="_blank">${(xhr.url.length > 100) ? xhr.url.substring(0, 100) + '...' : xhr.url}</a>`;
         }
         return commonDialog(title, body);
       });
     } else if (error instanceof Error) {
       return commonDialog(error.name, error.message);
     } else {
-      return commonDialog(i18n.t('phovea:ui.unknownError'), error.toString());
+      return commonDialog(I18nextManager.getInstance().i18n.t('phovea:ui.unknownError'), error.toString());
     }
   }
 }

@@ -6,11 +6,10 @@ import './_font-awesome';
 import './style.scss';
 import * as caleydoLogo from 'url-loader!./assets/caleydo_c.svg';
 
-import {mixin} from 'phovea_core/src/index';
+import {BaseUtils, I18nextManager} from 'phovea_core';
 import {loadBootstrap} from './_lazyBootstrap';
 import {BuildInfo} from './buildInfo';
-import {getMetaData} from './metaData';
-import i18n from 'phovea_core/src/i18n';
+import {AppMetaDataUtils} from './metaData';
 
 
 /**
@@ -32,27 +31,27 @@ const getTemplate = () => {
       </ul>
       <ul class="nav navbar-nav navbar-right" data-header="rightMenu">
           <li class="hidden" data-header="optionsLink">
-              <a href="#" data-toggle="modal" data-target="#headerOptionsDialog" title="${i18n.t('phovea:ui.options')}">
+              <a href="#" data-toggle="modal" data-target="#headerOptionsDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.options')}">
                   <i class="fa fa-cog fa-fw" aria-hidden="true"></i>
-                  <span class="sr-only">${i18n.t('phovea:ui.openOptionsDialog')}</span>
+                  <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openOptionsDialog')}</span>
               </a>
           </li>
           <li class="hidden" data-header="aboutLink">
-              <a href="#" data-toggle="modal" data-target="#headerAboutDialog" title="${i18n.t('phovea:ui.about')}">
+              <a href="#" data-toggle="modal" data-target="#headerAboutDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.about')}">
                   <i class="fa fa-info fa-fw" aria-hidden="true"></i>
-                  <span class="sr-only">${i18n.t('phovea:ui.openAboutDialog')}</span>
+                  <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openAboutDialog')}</span>
               </a>
           </li>
           <li class="hidden" data-header="bugLink">
-              <a href="#" data-toggle="modal" data-target="#headerReportBugDialog" title="${i18n.t('phovea:ui.reportBug')}">
+              <a href="#" data-toggle="modal" data-target="#headerReportBugDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}">
                   <i class="fa fa-bug fa-fw" aria-hidden="true"></i>
-                  <span class="sr-only">${i18n.t('phovea:ui.reportBug')}</span>
+                  <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}</span>
               </a>
           </li>
           <li class="hidden" data-header="helpLink">
-              <a href="//caleydo.org" target="_blank" title="${i18n.t('phovea:ui.openHelpPage')}">
+              <a href="//caleydo.org" target="_blank" title="${I18nextManager.getInstance().i18n.t('phovea:ui.openHelpPage')}">
                   <i class="fa fa-question fa-fw" aria-hidden="true"></i>
-                  <span class="sr-only">${i18n.t('phovea:ui.openHelpPage')}</span>
+                  <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openHelpPage')}</span>
               </a>
           </li>
       </ul>
@@ -64,20 +63,20 @@ const getTemplate = () => {
   <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="${i18n.t('phovea:ui.close')}">
+              <button type="button" class="close" data-dismiss="modal" aria-label="${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
                   <span aria-hidden="true">&times;</span>
               </button>
-              <h4 class="modal-title">${i18n.t('phovea:ui.about')}</h4>
+              <h4 class="modal-title">${I18nextManager.getInstance().i18n.t('phovea:ui.about')}</h4>
           </div>
           <div class="modal-body" data-header="about">
-              <div class="metaData">${i18n.t('phovea:ui.loading')}</div>
+              <div class="metaData">${I18nextManager.getInstance().i18n.t('phovea:ui.loading')}</div>
               <div class="caleydoInfo">
                   <a class="logo" href="https://phovea.caleydo.org" target="_blank"><img src="${caleydoLogo}"></a>
                   <p class="info">
-                  ${i18n.t('phovea:ui.infoPart1')}
-                   <strong><a href="http://phovea.caleydo.org/"  target="_blank"> ${i18n.t('phovea:ui.phoveaName')}</a></strong>
-                        ${i18n.t('phovea:ui.infoPart2')}
-                      <a href="http://phovea.caleydo.org" target="_blank"> ${i18n.t('phovea:ui.infoPart3')}</a>.
+                  ${I18nextManager.getInstance().i18n.t('phovea:ui.infoPart1')}
+                   <strong><a href="http://phovea.caleydo.org/"  target="_blank"> ${I18nextManager.getInstance().i18n.t('phovea:ui.phoveaName')}</a></strong>
+                        ${I18nextManager.getInstance().i18n.t('phovea:ui.infoPart2')}
+                      <a href="http://phovea.caleydo.org" target="_blank"> ${I18nextManager.getInstance().i18n.t('phovea:ui.infoPart3')}</a>.
                   </p>
               </div>
           </div>
@@ -90,13 +89,13 @@ const getTemplate = () => {
   <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label=" ${i18n.t('phovea:ui.close')}">
+              <button type="button" class="close" data-dismiss="modal" aria-label=" ${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
                   <span aria-hidden="true">&times;</span>
               </button>
-              <h4 class="modal-title"> ${i18n.t('phovea:ui.reportBug')}</h4>
+              <h4 class="modal-title"> ${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}</h4>
           </div>
           <div class="modal-body" data-header="bug">
-          ${i18n.t('phovea:ui.loading')}
+          ${I18nextManager.getInstance().i18n.t('phovea:ui.loading')}
           </div>
       </div>
   </div>
@@ -107,13 +106,13 @@ const getTemplate = () => {
   <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label=" ${i18n.t('phovea:ui.close')}">
+              <button type="button" class="close" data-dismiss="modal" aria-label=" ${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
                   <span aria-hidden="true">&times;</span>
               </button>
-              <h4 class="modal-title"> ${i18n.t('phovea:ui.options')}</h4>
+              <h4 class="modal-title"> ${I18nextManager.getInstance().i18n.t('phovea:ui.options')}</h4>
           </div>
           <div class="modal-body" data-header="options">
-          ${i18n.t('phovea:ui.loading')}
+          ${I18nextManager.getInstance().i18n.t('phovea:ui.loading')}
           </div>
       </div>
   </div>
@@ -318,7 +317,7 @@ export class AppHeader {
    * @param options
    */
   constructor(private parent: HTMLElement, options: IAppHeaderOptions = {}) {
-    mixin(this.options, options);
+    BaseUtils.mixin(this.options, options);
     this.addEUCookieDisclaimer();
     this.build();
   }
@@ -495,11 +494,13 @@ export class AppHeader {
         });
     });
   }
+
+  static create(parent: HTMLElement, options: IAppHeaderOptions = {}) {
+    return new AppHeader(parent, options);
+  }
 }
 
-export function create(parent: HTMLElement, options: IAppHeaderOptions = {}) {
-  return new AppHeader(parent, options);
-}
+
 
 function defaultBuildInfo(_title: HTMLElement, content: HTMLElement) {
   BuildInfo.build().then((buildInfo) => {
@@ -511,13 +512,13 @@ function defaultBuildInfo(_title: HTMLElement, content: HTMLElement) {
 
 function defaultAboutInfo(title: HTMLElement, content: HTMLElement) {
   content = <HTMLElement>content.querySelector('.metaData');
-  getMetaData().then((metaData) => {
+  AppMetaDataUtils.getMetaData().then((metaData) => {
     title.innerHTML = (metaData.displayName || metaData.name).replace('_', ' ');
     let contentTpl = `<p class="description">${metaData.description}</p>`;
     if (metaData.homepage) {
-      contentTpl += `<p class="homepage"><strong>${i18n.t('phovea:ui.homepage')}</strong>: <a href="${metaData.homepage}" target="_blank" rel="noopener">${metaData.homepage}</a></p>`;
+      contentTpl += `<p class="homepage"><strong>${I18nextManager.getInstance().i18n.t('phovea:ui.homepage')}</strong>: <a href="${metaData.homepage}" target="_blank" rel="noopener">${metaData.homepage}</a></p>`;
     }
-    contentTpl += `<p class="version"><strong>${i18n.t('phovea:ui.version')}</strong>: ${metaData.version}</p>`;
+    contentTpl += `<p class="version"><strong>${I18nextManager.getInstance().i18n.t('phovea:ui.version')}</strong>: ${metaData.version}</p>`;
     if (metaData.screenshot) {
       contentTpl += `<img src="${metaData.screenshot}" class="center-block img-responsive img-thumbnail"/>`;
     }
@@ -526,5 +527,5 @@ function defaultAboutInfo(title: HTMLElement, content: HTMLElement) {
 }
 
 function defaultOptionsInfo(_title: HTMLElement, content: HTMLElement) {
-  content.innerHTML = i18n.t('phovea:ui.noOptionsAvailable');
+  content.innerHTML = I18nextManager.getInstance().i18n.t('phovea:ui.noOptionsAvailable');
 }

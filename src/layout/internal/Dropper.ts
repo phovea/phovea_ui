@@ -4,7 +4,7 @@
 import {ALayoutContainer} from './ALayoutContainer';
 import {TabbingLayoutContainer} from './TabbingLayoutContainer';
 import {SplitLayoutContainer} from './SplitLayoutContainer';
-import {dropAble} from 'phovea_core/src/internal/dnd';
+import {DnDUtils} from 'phovea_core';
 import {EOrientation, IDropArea} from './interfaces';
 import {ILayoutContainer} from '../interfaces';
 import {AParentLayoutContainer} from './AParentLayoutContainer';
@@ -46,7 +46,7 @@ export class Dropper {
       </div>
     `);
 
-    dropAble(node, [ALayoutContainer.MIME_TYPE], (result, e) => {
+    DnDUtils.getInstance().dropAble(node, [ALayoutContainer.MIME_TYPE], (result, e) => {
       const area = Dropper.determineDropArea(e.offsetX / node.offsetWidth, e.offsetY / node.offsetHeight);
       const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
       console.assert(reference.parent != null);

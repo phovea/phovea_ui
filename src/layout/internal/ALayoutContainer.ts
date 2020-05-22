@@ -1,6 +1,6 @@
-import {EventHandler} from 'phovea_core/src/event';
+import {EventHandler, UniqueIdManager} from 'phovea_core';
 import {ILayoutDump, LayoutContainerEvents, ILayoutContainer, ILayoutParentContainer} from '../interfaces';
-import {dragAble, uniqueId} from 'phovea_core/src';
+import {DnDUtils} from 'phovea_core';
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 
 export interface ILayoutContainerOption {
@@ -21,7 +21,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
   protected readonly options: T;
   readonly header: HTMLElement;
 
-  readonly id = uniqueId(ALayoutContainer.MIME_TYPE);
+  readonly id = UniqueIdManager.getInstance().uniqueId(ALayoutContainer.MIME_TYPE);
 
   private readonly keyDownListener = (evt: KeyboardEvent) => {
     if (evt.keyCode === 27) { // Escape
@@ -54,7 +54,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
 
     //drag
     if (!this.options.fixedLayout) {
-      dragAble(this.header, () => {
+      DnDUtils.getInstance().dragAble(this.header, () => {
         return {
           effectAllowed: 'move',
           data: {

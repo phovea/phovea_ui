@@ -1,7 +1,7 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {ILayoutContainer, ILayoutDump, ISize, ITabbingLayoutContainer} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
-import {dropAble} from 'phovea_core/src';
+import {DnDUtils} from 'phovea_core';
 import {IDropArea} from './interfaces';
 import {LayoutContainerEvents} from '../interfaces';
 
@@ -31,7 +31,7 @@ export class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayou
     }
 
     if (!this.options.fixedLayout) {
-      dropAble(this.header, [ALayoutContainer.MIME_TYPE], (result) => {
+      DnDUtils.getInstance().dropAble(this.header, [ALayoutContainer.MIME_TYPE], (result) => {
         const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
         console.assert(id >= 0);
         //find id and move it here
@@ -90,7 +90,7 @@ export class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayou
   }
 
   private reorderAble(reorder: HTMLElement) {
-     dropAble(reorder, [ALayoutContainer.MIME_TYPE], (result) => {
+    DnDUtils.getInstance().dropAble(reorder, [ALayoutContainer.MIME_TYPE], (result) => {
       const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
       console.assert(id >= 0);
       //find id and move it here

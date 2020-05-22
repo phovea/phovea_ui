@@ -5,8 +5,8 @@
 /// <reference types="bootstrap" />
 import './_bootstrap';
 import $ from 'jquery';
-import {mixin, randomId} from 'phovea_core/src';
-import i18n from 'phovea_core/src/i18n';
+import {BaseUtils, I18nextManager} from 'phovea_core';
+
 
 export interface IDialogOptions {
   title?: string;
@@ -41,7 +41,7 @@ export class Dialog {
        <div class="modal-dialog ${additionalCSSClasses}" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="${i18n.t('phovea:ui.close')}"><span aria-hidden="true">×</span></button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="${I18nextManager.getInstance().i18n.t('phovea:ui.close')}"><span aria-hidden="true">×</span></button>
             <h4 class="modal-title">${title}</h4>
           </div>
           <div class="modal-body">
@@ -113,7 +113,7 @@ export class Dialog {
   static msg(text: string, category = 'info'): Promise<void> {
     return new Promise<void>((resolve) => {
       const div = $(`<div class="alert alert-${category} alert-dismissible fade in" role="alert">
-          <button type="button" class="close" data-dismiss="modal" aria-label="${i18n.t('phovea:ui.close')}"><span aria-hidden="true">×</span></button>
+          <button type="button" class="close" data-dismiss="modal" aria-label="${I18nextManager.getInstance().i18n.t('phovea:ui.close')}"><span aria-hidden="true">×</span></button>
           ${text}
       </div>`).appendTo('body');
       div.on('closed.bs.alert', () => resolve);
@@ -136,7 +136,7 @@ export class Dialog {
     if (typeof options === 'string') {
       options = {title: options};
     }
-    mixin(o, options);
+    BaseUtils.mixin(o, options);
     return new Promise((resolve) => {
       const dialog = Dialog.generateDialog(o.title, o.primaryBtnText, o.additionalCSSClasses);
       if (o.multiline) {
@@ -168,7 +168,7 @@ export class Dialog {
 }
 
 export class FormDialog extends Dialog {
-  constructor(title: string, primaryBtnText = 'OK', private readonly formId = 'form' + randomId(5), additionalCSSClasses: string = '') {
+  constructor(title: string, primaryBtnText = 'OK', private readonly formId = 'form' + BaseUtils.randomId(5), additionalCSSClasses: string = '') {
     super(title, primaryBtnText, additionalCSSClasses);
 
     this.body.innerHTML = `<form id="${formId}"></form>`;
@@ -204,7 +204,7 @@ export class FormDialog extends Dialog {
     if (typeof options === 'string') {
       options = {title: options};
     }
-    mixin(o, options);
+    BaseUtils.mixin(o, options);
 
     return new Promise((resolve) => {
       const dialog = Dialog.generateDialog(o.title, o.primaryBtnText, o.additionalCSSClasses);
@@ -236,14 +236,14 @@ export class FormDialog extends Dialog {
 
   static areyousure(msg: string = '', options: IAreYouSureOptions | string = {}): Promise<boolean> {
     const o: IAreYouSureOptions = {
-      title: i18n.t('phovea:ui.areYouSure'),
-      button: `<i class="fa fa-trash" aria-hidden="true"></i>  ${i18n.t('phovea:ui.delete')}`,
-      cancelButton:  i18n.t('phovea:ui.cancel')
+      title: I18nextManager.getInstance().i18n.t('phovea:ui.areYouSure'),
+      button: `<i class="fa fa-trash" aria-hidden="true"></i>  ${I18nextManager.getInstance().i18n.t('phovea:ui.delete')}`,
+      cancelButton:  I18nextManager.getInstance().i18n.t('phovea:ui.cancel')
     };
     if (typeof options === 'string') {
       options = {title: options};
     }
-    mixin(o, options);
+    BaseUtils.mixin(o, options);
 
     return new Promise((resolve) => {
       const dialog = Dialog.generateDialog(o.title, o.cancelButton, o.additionalCSSClasses);

@@ -14,17 +14,19 @@
       "es2016.array.include",
       "es2017.object"
     ],
-    "baseUrl": "../",
+    "baseUrl": ".",
     "noImplicitAny": false,
     "skipLibCheck": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true
   },
+
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
     "tests/**/*.ts",
     "index.ts",
     "tsd.d.ts"
-  ]
+  ],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }
