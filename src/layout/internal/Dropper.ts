@@ -1,7 +1,7 @@
 /**
  * Created by Samuel Gratzl on 01.08.2017.
  */
-import {ALayoutContainer} from './ALayoutContainer';
+import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {TabbingLayoutContainer} from './TabbingLayoutContainer';
 import {SplitLayoutContainer} from './SplitLayoutContainer';
 import {DnDUtils} from 'phovea_core';
@@ -87,7 +87,7 @@ export class Dropper {
       return Dropper.dropLogic(item, parent, area);
     }
 
-    if (parent === reference || item === reference) {
+    if (<AParentLayoutContainer<ILayoutContainerOption>>parent === reference || item === reference) {
       //can't split my parent with my parent
       return false;
     }
