@@ -34,7 +34,8 @@ module.exports = {
     "src"
   ],
   roots: ['<rootDir>/src', '<rootDir>/tests'],
-  transformIgnorePatterns: ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
+  // "[/\\\\]node_modules/(?!MODULE_NAME_HERE).+\\.js$
+  transformIgnorePatterns: [`[/\\\\]node_modules/${pluginsToTransform}`],
   globals: {
     "__VERSION__": "TEST_VERSION",
     "__APP_CONTEXT__": "TEST_CONTEXT",
