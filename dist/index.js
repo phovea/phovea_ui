@@ -4,6 +4,5 @@ export * from './dialogs';
 export * from './Errors';
 export * from './header';
 export * from './metaData';
-export * from './_bootstrap';
-export * from './_font-awesome';
 export * from './_lazyBootstrap';
+//# sourceMappingURL=index.js.map
