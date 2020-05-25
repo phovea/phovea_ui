@@ -1,7 +1,8 @@
 import {EventHandler, UniqueIdManager} from 'phovea_core';
 import {ILayoutDump, LayoutContainerEvents, ILayoutContainer, ILayoutParentContainer} from '../interfaces';
 import {DnDUtils} from 'phovea_core';
-import {AParentLayoutContainer} from './AParentLayoutContainer';
+import {IParentLayoutContainer} from './IParentLayoutContainer';
+import {IDropArea} from './interfaces';
 
 export interface ILayoutContainerOption {
   name: string;
@@ -16,7 +17,7 @@ export interface ILayoutContainerOption {
 export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends EventHandler {
   static readonly MIME_TYPE = 'text/x-phovea-layout-container';
 
-  parent: AParentLayoutContainer<any> | null = null;
+  parent: IParentLayoutContainer | null = null;
 
   protected readonly options: T;
   readonly header: HTMLElement;
@@ -67,7 +68,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
   }
 
   get parents() {
-    const r: AParentLayoutContainer<any>[] = [];
+    const r: IParentLayoutContainer[] = [];
     let p = this.parent;
     while (p !== null) {
       r.push(p);
