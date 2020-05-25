@@ -1,4 +1,4 @@
-import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, IView} from './interfaces';
+import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, IView, IBuilder, IBuildAbleOrViewLike} from './interfaces';
 import {EOrientation} from './internal/interfaces';
 import {ViewLayoutContainer, HTMLView, IViewLayoutContainerOptions, NodeView} from './internal/ViewLayoutContainer';
 import {SplitLayoutContainer} from './internal/SplitLayoutContainer';
@@ -9,9 +9,7 @@ import {ILayoutContainerOption} from './internal/ALayoutContainer';
 import {ISequentialLayoutContainerOptions} from './internal/ASequentialLayoutContainer';
 
 
-export declare type IBuildAbleOrViewLike = ABuilder | IView | string;
-
-export abstract class ABuilder {
+export abstract class ABuilder implements IBuilder {
   protected _name: string = 'View';
   protected _fixed: boolean = false;
   protected _autoWrap: boolean | string = false;

@@ -1,10 +1,20 @@
-import {IBuildAbleOrViewLike} from './builder';
 import {IEventHandler, IHasUniqueId} from 'phovea_core';
 
 /**
  * [width, height]
  */
 export declare type ISize = [number, number];
+
+
+export interface IBuilder {
+  autoWrap(name?: string): IBuilder;
+  name(name: string): IBuilder;
+  fixed():IBuilder;
+  fixedLayout():IBuilder;
+}
+
+export declare type IBuildAbleOrViewLike = IBuilder | IView | string;
+
 
 export class LayoutContainerEvents {
   static readonly EVENT_LAYOUT_CHANGED = 'changed';
