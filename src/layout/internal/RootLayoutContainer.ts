@@ -1,9 +1,8 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
-import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, LayoutContainerEvents, IView} from '../interfaces';
+import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, LayoutContainerEvents, IView, IBuildAbleOrViewLike} from '../interfaces';
 import {TabbingLayoutContainer} from './TabbingLayoutContainer';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {IDropArea} from './interfaces';
-import {IBuildAbleOrViewLike} from '../builder';
 
 export class RootLayoutContainer extends AParentLayoutContainer<ILayoutContainerOption> implements IRootLayoutContainer {
   readonly minChildCount = 0;
