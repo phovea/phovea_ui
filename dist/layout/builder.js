@@ -1,4 +1,4 @@
-import { EOrientation } from './internal/interfaces';
+import { EOrientation } from './interfaces';
 import { ViewLayoutContainer, HTMLView, NodeView } from './internal/ViewLayoutContainer';
 import { SplitLayoutContainer } from './internal/SplitLayoutContainer';
 import { LineUpLayoutContainer } from './internal/LineUpLayoutContainer';

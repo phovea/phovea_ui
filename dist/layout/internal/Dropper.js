@@ -5,7 +5,7 @@ import { ALayoutContainer } from './ALayoutContainer';
 import { TabbingLayoutContainer } from './TabbingLayoutContainer';
 import { SplitLayoutContainer } from './SplitLayoutContainer';
 import { DnDUtils } from 'phovea_core';
-import { EOrientation } from './interfaces';
+import { EOrientation } from '../interfaces';
 import { AParentLayoutContainer } from './AParentLayoutContainer';
 import { LineUpLayoutContainer } from './LineUpLayoutContainer';
 export class Dropper {

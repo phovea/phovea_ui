@@ -1,4 +1,4 @@
-import {Dialog} from '../src/dialogs';
+import {Dialog} from '../src/components/dialogs';
 
 describe('generateDialog', () => {
   it('dummy', () => {

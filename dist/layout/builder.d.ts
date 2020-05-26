@@ -1,5 +1,5 @@
 import { ILayoutContainer, ILayoutDump, IRootLayoutContainer, IView, IBuilder, IBuildAbleOrViewLike } from './interfaces';
-import { EOrientation } from './internal/interfaces';
+import { EOrientation } from './interfaces';
 import { IViewLayoutContainerOptions } from './internal/ViewLayoutContainer';
 import { SplitLayoutContainer } from './internal/SplitLayoutContainer';
 import { RootLayoutContainer } from './internal/RootLayoutContainer';

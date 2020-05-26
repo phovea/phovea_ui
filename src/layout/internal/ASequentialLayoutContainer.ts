@@ -1,7 +1,7 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {ILayoutContainer, ISize} from '../interfaces';
 import {ILayoutContainerOption} from './ALayoutContainer';
-import {EOrientation, IDropArea} from './interfaces';
+import {EOrientation, IDropArea} from '../interfaces';
 
 export interface ISequentialLayoutContainerOptions extends ILayoutContainerOption {
   readonly orientation: EOrientation;

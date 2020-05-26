@@ -1,8 +1,8 @@
 /**
  * Created by Samuel Gratzl on 24.11.2014.
  */
-import './_font-awesome';
-import './style.scss';
+import '../webpack/_font-awesome';
+import '../scss/style.scss';
 /**
  * Defines a header link
  */

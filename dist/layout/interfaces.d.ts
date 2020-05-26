@@ -1,5 +1,4 @@
 import { IEventHandler, IHasUniqueId } from 'phovea_core';
-import { IDropArea } from './internal/interfaces';
 /**
  * [width, height]
  */
@@ -126,6 +125,11 @@ export interface ILayoutDump {
     children?: ILayoutDump[];
     [key: string]: any;
 }
+export declare enum EOrientation {
+    HORIZONTAL = 0,
+    VERTICAL = 1
+}
+export declare type IDropArea = 'center' | 'left' | 'right' | 'top' | 'bottom' | 'horizontal-scroll' | 'vertical-scroll';
 export interface ILayoutParentContainer extends ILayoutContainer, Iterable<ILayoutContainer> {
     /**
      * children of this container

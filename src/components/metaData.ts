@@ -1,5 +1,3 @@
-
-
 export interface IAppMetaData {
   name: string;
   displayName?: string;

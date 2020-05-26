@@ -3,7 +3,7 @@
  */
 // to resolve the jquery extensions
 /// <reference types="bootstrap" />
-import './_bootstrap';
+import '../webpack/_bootstrap';
 import $ from 'jquery';
 import { BaseUtils, I18nextManager } from 'phovea_core';
 export class Dialog {

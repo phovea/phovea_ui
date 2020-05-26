@@ -2,7 +2,7 @@ import {EventHandler, UniqueIdManager} from 'phovea_core';
 import {ILayoutDump, LayoutContainerEvents, ILayoutContainer, ILayoutParentContainer} from '../interfaces';
 import {DnDUtils} from 'phovea_core';
 import {IParentLayoutContainer} from './IParentLayoutContainer';
-import {IDropArea} from './interfaces';
+
 
 export interface ILayoutContainerOption {
   name: string;

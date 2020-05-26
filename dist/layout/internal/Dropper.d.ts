@@ -3,7 +3,7 @@
  */
 import { ALayoutContainer } from './ALayoutContainer';
 import { TabbingLayoutContainer } from './TabbingLayoutContainer';
-import { IDropArea } from './interfaces';
+import { IDropArea } from '../interfaces';
 import { ILayoutContainer } from '../interfaces';
 export declare class Dropper {
     static determineDropArea(x: number, y: number): IDropArea;

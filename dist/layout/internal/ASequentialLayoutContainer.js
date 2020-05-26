@@ -1,5 +1,5 @@
 import { AParentLayoutContainer } from './AParentLayoutContainer';
-import { EOrientation } from './interfaces';
+import { EOrientation } from '../interfaces';
 export class ASequentialLayoutContainer extends AParentLayoutContainer {
     constructor(document, options) {
         super(document, options);

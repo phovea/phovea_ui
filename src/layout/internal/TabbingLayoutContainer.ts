@@ -2,7 +2,7 @@ import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {ILayoutContainer, ILayoutDump, ISize, ITabbingLayoutContainer} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {DnDUtils} from 'phovea_core';
-import {IDropArea} from './interfaces';
+import {IDropArea} from '../interfaces';
 import {LayoutContainerEvents} from '../interfaces';
 
 

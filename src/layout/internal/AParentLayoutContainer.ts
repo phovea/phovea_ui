@@ -3,7 +3,7 @@ import {
   LayoutContainerEvents
 } from '../interfaces';
 import {IParentLayoutContainer} from './IParentLayoutContainer';
-import {IDropArea} from './interfaces';
+import {IDropArea} from '../interfaces';
 import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
 export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> extends ALayoutContainer<T> implements IParentLayoutContainer {

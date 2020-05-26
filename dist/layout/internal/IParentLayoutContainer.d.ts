@@ -1,5 +1,5 @@
 import { ILayoutContainer, ILayoutDump, ILayoutParentContainer, IRootLayoutContainer } from '../interfaces';
-import { IDropArea } from './interfaces';
+import { IDropArea } from '../interfaces';
 import { IEventListener } from 'phovea_core';
 export interface IParentLayoutContainer extends ILayoutParentContainer {
     id: number;

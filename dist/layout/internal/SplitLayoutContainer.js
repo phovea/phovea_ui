@@ -1,4 +1,4 @@
-import { EOrientation } from './interfaces';
+import { EOrientation } from '../interfaces';
 import { ALayoutContainer } from './ALayoutContainer';
 import { ASequentialLayoutContainer } from './ASequentialLayoutContainer';
 import { LayoutContainerEvents } from '../interfaces';

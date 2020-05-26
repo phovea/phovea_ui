@@ -5,7 +5,7 @@
 /**
  * Created by Samuel Gratzl on 19.11.2015.
  */
-import './_bootstrap';
+import '../webpack/_bootstrap';
 export interface IDialogOptions {
     title?: string;
     placeholder?: string;
