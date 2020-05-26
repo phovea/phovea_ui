@@ -4,10 +4,11 @@
 
 import '../webpack/_font-awesome';
 import '../scss/style.scss';
-import * as caleydoLogo from 'url-loader!./assets/caleydo_c.svg';
+import * as caleydoLogo from './assets/caleydo_c.svg';
 
 import {BaseUtils, I18nextManager} from 'phovea_core';
-import {loadBootstrap} from '../webpack/_lazyBootstrap';
+import 'bootstrap-sass/assets/stylesheets/_bootstrap.scss';
+import 'imports-loader?jQuery=jquery!bootstrap-sass/assets/javascripts/bootstrap.js';
 import {BuildInfo} from './buildInfo';
 import {AppMetaDataUtils} from './metaData';
 
@@ -423,7 +424,7 @@ export class AppHeader {
     // set the URL to GitHub issues dynamically
     if (isVisible) {
       contentGenerator = contentGenerator || defaultOptionsInfo;
-      loadBootstrap().then(($) => {
+      import('jquery').then((jquery) => {
         $('#headerOptionsDialog').one('show.bs.modal', () => {
           const content = <HTMLElement>this.parent.querySelector('*[data-header="options"]');
           const title = <HTMLElement>this.parent.querySelector('#headerOptionsDialog .modal-title');
@@ -450,7 +451,7 @@ export class AppHeader {
     // set the URL to GitHub issues dynamically
     if (isVisible) {
       contentGenerator = contentGenerator || defaultBuildInfo;
-      loadBootstrap().then(($) => {
+      import('jquery').then((jquery) => {
         $('#headerReportBugDialog').one('show.bs.modal', () => {
           const content = <HTMLElement>this.parent.querySelector('*[data-header="bug"]');
           const title = <HTMLElement>this.parent.querySelector('#headerReportBugDialog .modal-title');
@@ -480,13 +481,13 @@ export class AppHeader {
   }
 
   hideDialog(selector: string) {
-    loadBootstrap().then(($) => {
+    import('jquery').then((jquery) => {
       $(selector).modal('hide');
     });
   }
 
   showAndFocusOn(selector: string, focusSelector: string) {
-    loadBootstrap().then(($) => {
+    import('jquery').then((jquery) => {
       const $selector = $(selector);
       $selector.modal('show')
         .on('shown.bs.modal', function () {

@@ -1,7 +1,5 @@
 /// <reference types="jquery" />
 /// <reference types="bootstrap" />
-/// <reference types="ion.rangeslider" />
-/// <reference types="select2" />
 /**
  * Created by Samuel Gratzl on 19.11.2015.
  */

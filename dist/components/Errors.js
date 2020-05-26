@@ -26,8 +26,7 @@ export class Errors {
      */
     static showErrorModalDialog(error, additionalCSSClasses = '') {
         function commonDialog(title, body) {
-            // lazy import
-            return System.import('./dialogs').then(({ generateDialog }) => new Promise((resolve, reject) => {
+            return import('./dialogs').then(() => ({ generateDialog }) => new Promise((resolve, reject) => {
                 const dialog = generateDialog(title, I18nextManager.getInstance().i18n.t('phovea:ui.dismiss'), additionalCSSClasses);
                 dialog.body.innerHTML = globalErrorTemplate(body);
                 dialog.onSubmit(() => {
