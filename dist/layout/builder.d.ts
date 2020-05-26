@@ -3,6 +3,7 @@ import { EOrientation } from './interfaces';
 import { IViewLayoutContainerOptions } from './internal/ViewLayoutContainer';
 import { SplitLayoutContainer } from './internal/SplitLayoutContainer';
 import { LineUpLayoutContainer } from './internal/LineUpLayoutContainer';
+import { TabbingLayoutContainer, ITabbingLayoutContainerOptions } from './internal/TabbingLayoutContainer';
 import { RootLayoutContainer } from './internal/RootLayoutContainer';
 import { ILayoutContainerOption } from './internal/ALayoutContainer';
 import { ISequentialLayoutContainerOptions } from './internal/ASequentialLayoutContainer';
@@ -43,12 +44,6 @@ export declare class ViewBuilder extends ABuilder {
     hideHeader(): this;
     protected buildOptions(): Partial<IViewLayoutContainerOptions>;
     build(root: RootLayoutContainer, doc: Document): ILayoutContainer;
-    /**
-     * builder for creating a view
-     * @param {string | IView} view possible view content
-     * @return {ViewBuilder} a view builder
-     */
-    static view(view: string | IView | HTMLElement): ViewBuilder;
 }
 export declare class LayoutUtils {
     /**
@@ -65,19 +60,13 @@ export declare class LayoutUtils {
      * @param {(node: HTMLElement) => IView} viewFactory how to build a view from a node
      */
     static derive(node: HTMLElement, viewFactory?: (node: HTMLElement) => IView): IRootLayoutContainer;
+    static toBuilder(view: IBuildAbleOrViewLike): ABuilder;
 }
 export declare abstract class AParentBuilder extends ABuilder {
     protected readonly children: ABuilder[];
     constructor(children: IBuildAbleOrViewLike[]);
     protected push(view: IBuildAbleOrViewLike): this;
     protected buildChildren(root: RootLayoutContainer, doc: Document): ILayoutContainer[];
-    /**
-     * creates the root of a new layout
-     * @param {IBuildAbleOrViewLike} child the only child of the root
-     * @param {Document} doc root Document
-     * @return {IRootLayoutContainer} the root element
-     */
-    static root(child: IBuildAbleOrViewLike, doc?: Document): IRootLayoutContainer;
 }
 export declare class SplitBuilder extends AParentBuilder {
     private readonly orientation;
@@ -91,6 +80,51 @@ export declare class SplitBuilder extends AParentBuilder {
     ratio(ratio: number): this;
     protected buildOptions(): Partial<ISequentialLayoutContainerOptions>;
     build(root: RootLayoutContainer, doc?: Document): SplitLayoutContainer;
+}
+declare class LineUpBuilder extends AParentBuilder {
+    private readonly orientation;
+    private readonly stackLayout;
+    constructor(orientation: EOrientation, children: IBuildAbleOrViewLike[], stackLayout?: boolean);
+    /**
+     * push another child
+     * @param {IBuildAbleOrViewLike} view the view to add
+     * @return {LineUpBuilder} itself
+     */
+    push(view: IBuildAbleOrViewLike): this;
+    protected buildOptions(): Partial<ISequentialLayoutContainerOptions>;
+    build(root: RootLayoutContainer, doc?: Document): LineUpLayoutContainer;
+}
+declare class TabbingBuilder extends AParentBuilder {
+    private _active;
+    /**
+     * push another tab
+     * @param {IBuildAbleOrViewLike} view the tab
+     * @return {TabbingBuilder} itself
+     */
+    push(view: IBuildAbleOrViewLike): this;
+    /**
+     * adds another child and specify it should be the active one
+     * @param {IBuildAbleOrViewLike} view the active tab
+     * @return {AParentBuilder} itself
+     */
+    active(view: IBuildAbleOrViewLike): this;
+    protected buildOptions(): Partial<ITabbingLayoutContainerOptions>;
+    build(root: RootLayoutContainer, doc: any): TabbingLayoutContainer;
+}
+export declare class BuilderUtils {
+    /**
+     * builder for creating a view
+     * @param {string | IView} view possible view content
+     * @return {ViewBuilder} a view builder
+     */
+    static view(view: string | IView | HTMLElement): ViewBuilder;
+    /**
+     * creates the root of a new layout
+     * @param {IBuildAbleOrViewLike} child the only child of the root
+     * @param {Document} doc root Document
+     * @return {IRootLayoutContainer} the root element
+     */
+    static root(child: IBuildAbleOrViewLike, doc?: Document): IRootLayoutContainer;
     /**
      * builder for creating a horizontal split layout (moveable splitter)
      * @param {number} ratio ratio between the two given elements
@@ -107,19 +141,6 @@ export declare class SplitBuilder extends AParentBuilder {
      * @return {SplitBuilder} a split builder
      */
     static verticalSplit(ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike): SplitBuilder;
-}
-export declare class LineUpBuilder extends AParentBuilder {
-    private readonly orientation;
-    private readonly stackLayout;
-    constructor(orientation: EOrientation, children: IBuildAbleOrViewLike[], stackLayout?: boolean);
-    /**
-     * push another child
-     * @param {IBuildAbleOrViewLike} view the view to add
-     * @return {LineUpBuilder} itself
-     */
-    push(view: IBuildAbleOrViewLike): this;
-    protected buildOptions(): Partial<ISequentialLayoutContainerOptions>;
-    build(root: RootLayoutContainer, doc?: Document): LineUpLayoutContainer;
     /**
      * builder for creating a horizontal lineup layout (each container has the same full size with scrollbars)
      * @param {IBuildAbleOrViewLike} children the children of the layout
@@ -144,4 +165,11 @@ export declare class LineUpBuilder extends AParentBuilder {
      * @return {LineUpBuilder} a lineup builder
      */
     static verticalStackedLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder;
+    /**
+     * builder for creating a tab layout
+     * @param {IBuildAbleOrViewLike} children the children of the layout
+     * @return {TabbingBuilder} a tabbing builder
+     */
+    static tabbing(...children: IBuildAbleOrViewLike[]): TabbingBuilder;
 }
+export {};
