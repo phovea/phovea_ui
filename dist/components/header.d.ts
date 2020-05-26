@@ -3,6 +3,8 @@
  */
 import '../webpack/_font-awesome';
 import '../scss/style.scss';
+import 'bootstrap-sass/assets/stylesheets/_bootstrap.scss';
+import 'imports-loader?jQuery=jquery!bootstrap-sass/assets/javascripts/bootstrap.js';
 /**
  * Defines a header link
  */

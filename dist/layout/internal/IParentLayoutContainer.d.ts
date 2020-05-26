@@ -10,7 +10,7 @@ export interface IParentLayoutContainer extends ILayoutParentContainer {
         [key: string]: IEventListener;
     }, handler?: IEventListener): any;
     forEach(callback: (child: ILayoutContainer, index: number) => void): any;
-    canDrop(area: IDropArea): boolean;
+    canDrop?(area: IDropArea): boolean;
     closest(id: number | ((container: ILayoutParentContainer) => boolean)): any;
     push(child: ILayoutContainer): boolean;
     push(child: ILayoutContainer, index: number): boolean;
@@ -19,10 +19,10 @@ export interface IParentLayoutContainer extends ILayoutParentContainer {
     resized(): any;
     destroy(): any;
     persist(): ILayoutDump;
-    place(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea): boolean;
+    place?(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea): boolean;
     find(id: number | ((container: ILayoutContainer) => boolean)): any;
     findAll(predicate: (container: ILayoutContainer) => boolean): any;
-    rootParent: IRootLayoutContainer & ILayoutParentContainer;
+    rootParent?: IRootLayoutContainer & ILayoutParentContainer;
 }
 export declare abstract class IParentLayoutContainerUtils {
     static canDrop(area: IDropArea): boolean;

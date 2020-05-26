@@ -3,4 +3,3 @@
  */
 export * from './_bootstrap';
 export * from './_font-awesome';
-export * from './_lazyBootstrap';
