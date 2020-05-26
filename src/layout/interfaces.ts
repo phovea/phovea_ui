@@ -188,9 +188,9 @@ export interface ILayoutParentContainer extends ILayoutContainer, Iterable<ILayo
    * @return {boolean} true if successful
    */
   remove(child: ILayoutContainer): boolean;
-  rootParent: IRootLayoutContainer&ILayoutParentContainer;
-  canDrop(area: IDropArea): boolean;
-  place(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea): boolean;
+  rootParent?: IRootLayoutContainer&ILayoutParentContainer;
+  canDrop?(area: IDropArea): boolean;
+  place?(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea): boolean;
 }
 
 
