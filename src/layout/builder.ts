@@ -265,7 +265,7 @@ export class SplitBuilder extends AParentBuilder {
   }
 }
 
-class LineUpBuilder extends AParentBuilder {
+export class LineUpBuilder extends AParentBuilder {
 
   constructor(private readonly orientation: EOrientation, children: IBuildAbleOrViewLike[], private readonly stackLayout: boolean = false) {
     super(children);

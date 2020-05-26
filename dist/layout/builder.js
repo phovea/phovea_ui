@@ -233,7 +233,7 @@ export class SplitBuilder extends AParentBuilder {
         return new SplitBuilder(EOrientation.VERTICAL, ratio, left, right);
     }
 }
-class LineUpBuilder extends AParentBuilder {
+export class LineUpBuilder extends AParentBuilder {
     constructor(orientation, children, stackLayout = false) {
         super(children);
         this.orientation = orientation;

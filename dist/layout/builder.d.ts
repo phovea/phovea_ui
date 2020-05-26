@@ -2,6 +2,7 @@ import { ILayoutContainer, ILayoutDump, IRootLayoutContainer, IView, IBuilder, I
 import { EOrientation } from './interfaces';
 import { IViewLayoutContainerOptions } from './internal/ViewLayoutContainer';
 import { SplitLayoutContainer } from './internal/SplitLayoutContainer';
+import { LineUpLayoutContainer } from './internal/LineUpLayoutContainer';
 import { RootLayoutContainer } from './internal/RootLayoutContainer';
 import { ILayoutContainerOption } from './internal/ALayoutContainer';
 import { ISequentialLayoutContainerOptions } from './internal/ASequentialLayoutContainer';
@@ -106,4 +107,41 @@ export declare class SplitBuilder extends AParentBuilder {
      * @return {SplitBuilder} a split builder
      */
     static verticalSplit(ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike): SplitBuilder;
+}
+export declare class LineUpBuilder extends AParentBuilder {
+    private readonly orientation;
+    private readonly stackLayout;
+    constructor(orientation: EOrientation, children: IBuildAbleOrViewLike[], stackLayout?: boolean);
+    /**
+     * push another child
+     * @param {IBuildAbleOrViewLike} view the view to add
+     * @return {LineUpBuilder} itself
+     */
+    push(view: IBuildAbleOrViewLike): this;
+    protected buildOptions(): Partial<ISequentialLayoutContainerOptions>;
+    build(root: RootLayoutContainer, doc?: Document): LineUpLayoutContainer;
+    /**
+     * builder for creating a horizontal lineup layout (each container has the same full size with scrollbars)
+     * @param {IBuildAbleOrViewLike} children the children of the layout
+     * @return {LineUpBuilder} a lineup builder
+     */
+    static horizontalLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder;
+    /**
+     * builder for creating a vertical lineup layout (each container has the same full size with scrollbars)
+     * @param {IBuildAbleOrViewLike} children the children of the layout
+     * @return {LineUpBuilder} a lineup builder
+     */
+    static verticalLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder;
+    /**
+     * similar to the horizontalLineUp, except that each container takes its own amount of space
+     * @param {IBuildAbleOrViewLike} children the children of the layout
+     * @return {LineUpBuilder} a lineup builder
+     */
+    static horizontalStackedLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder;
+    /**
+     * similar to the verticalLineUp, except that each container takes its own amount of space
+     * @param {IBuildAbleOrViewLike} children the children of the layout
+     * @return {LineUpBuilder} a lineup builder
+     */
+    static verticalStackedLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder;
 }
