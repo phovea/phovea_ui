@@ -2,8 +2,8 @@
  * Created by Samuel Gratzl on 27.08.2014.
  */
 
-$boostrapAssetDir: './assets' !default;
+$boostrapAssetDir: '../assets' !default;
 
-@import "./styles/colors";
-@import "./styles/base";
-@import "./styles/header_navbar";
+@import "./colors";
+@import "./base";
+@import "./header_navbar";
