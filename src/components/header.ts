@@ -3,8 +3,8 @@
  */
 
 import '../webpack/_font-awesome';
-import '../scss/style.scss';
-import * as caleydoLogo from './assets/caleydo_c.svg';
+import '../scss/main.scss';
+import * as caleydoLogo from '../assets/caleydo_c.svg';
 
 import {BaseUtils, I18nextManager} from 'phovea_core';
 import 'bootstrap-sass/assets/stylesheets/_bootstrap.scss';

@@ -1,5 +1,5 @@
 
-$phovea_ui_assset_dir: '~phovea_ui/src/assets' !default;
+$phovea_ui_assset_dir: '~phovea_ui/dist/assets' !default;
 
 @function capitalize($string) {
   @return to-upper-case(str-slice($string, 1, 1)) + str-slice($string, 2);
