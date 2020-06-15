@@ -1,3 +1,4 @@
+/// <reference types="jest" />
 import {Dialog} from '../src/components/dialogs';
 
 describe('generateDialog', () => {
