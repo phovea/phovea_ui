@@ -30,6 +30,7 @@
   },
   "scripts": {
     "clean": "rimraf dist lib",
+    "delete-dependencies": "rimraf node_modules",
     "compile": "tsc",
     "compile:watch": "tsc -w",
     "postcompile": "npm run copy",
@@ -53,7 +54,7 @@
     "bootstrap-sass": "3.4.1",
     "font-awesome": "~4.7.0",
     "jquery": "~3.5.1",
-    "phovea_core": "github:phovea/phovea_core#asteiner/refactoring"
+    "phovea_core": "github:phovea/phovea_core#develop"
   },
   "devDependencies": {
     "@types/bootstrap": "~4.5.0",

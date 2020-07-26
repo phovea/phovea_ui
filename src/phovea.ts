@@ -5,7 +5,7 @@ import {EP_PHOVEA_CORE_LOCALE, ILocaleEPDesc} from 'phovea_core';
 export default function (registry: IRegistry) {
   //registry.push('extension-type', 'extension-id', function() { return import('./src/extension_impl'); }, {});
   registry.push(EP_PHOVEA_CORE_LOCALE, 'phoveaUiLocaleEN', function () {
-    return import('./assets/locales/en/phovea.json').then(PluginRegistry.getInstance().asResource);
+    return import('./locales/en/phovea.json').then(PluginRegistry.getInstance().asResource);
   }, <ILocaleEPDesc>{
     ns: 'phovea',
   });
