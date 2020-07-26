@@ -19,7 +19,6 @@ export class BuildInfo {
               ${this.server ? `<tr><th>Server</th><td>${this.server.version}</td></tr>` : ''}
               <tr><th>${I18nextManager.getInstance().i18n.t('phovea:ui.url')}</th><td><code>${location.pathname}${location.hash}</code></td></tr>
               <tr><th>${I18nextManager.getInstance().i18n.t('phovea:ui.userAgent')}</th><td>${navigator.userAgent}</td></tr>
-              <tr><th>${I18nextManager.getInstance().i18n.t('phovea:ui.github')}</th><td><a href="${build.resolved.replace(/(\.git|\/commit\/).*/, '/issues/new')}" target="_blank">${I18nextManager.getInstance().i18n.t('phovea:ui.submitIssue')}</a></td></tr>
             </tbody>
             </table>`;
     }
