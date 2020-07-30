@@ -1,10 +1,10 @@
 import {ILayoutContainer, ILayoutDump, ISplitLayoutContainer} from '../interfaces';
-import {EOrientation, IDropArea} from './interfaces';
-import {ALayoutContainer, withChanged} from './ALayoutContainer';
-import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} from './ASequentialLayoutContainer';
-import {LayoutContainerEvents} from '../';
+import {EOrientation, IDropArea} from '../interfaces';
+import {ALayoutContainer} from './ALayoutContainer';
+import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions} from './ASequentialLayoutContainer';
+import {LayoutContainerEvents} from '../interfaces';
 
-export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISequentialLayoutContainerOptions> implements ISplitLayoutContainer {
+export class SplitLayoutContainer extends ASequentialLayoutContainer<ISequentialLayoutContainerOptions> implements ISplitLayoutContainer {
   private static readonly SEPARATOR = `<div data-layout="separator"><span title="Squeeze Left"></span><span title="Squeeze Right"></span></div>`;
   private static readonly SEPARATOR_WIDTH = 5;
 
@@ -73,7 +73,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
       const act = this._ratios.slice();
       if (!bak.every((b,i) => act[i] === b)) {
         //changed fire event just once
-       this.fire(withChanged(LayoutContainerEvents.EVENT_CHANGE_SPLIT_RATIOS), bak, act);
+       this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_CHANGE_SPLIT_RATIOS), bak, act);
       }
     };
 
@@ -86,7 +86,7 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
   setRatio(index: number, ratio: number) {
     const bak = this._ratios.slice();
     this.setRatioImpl(index, ratio);
-    this.fire(withChanged(LayoutContainerEvents.EVENT_CHANGE_SPLIT_RATIOS), bak, this._ratios.slice());
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_CHANGE_SPLIT_RATIOS), bak, this._ratios.slice());
   }
 
   private setRatioImpl(index: number, ratio: number) {
@@ -181,13 +181,13 @@ export default class SplitLayoutContainer extends ASequentialLayoutContainer<ISe
     super.addedChild(child, index);
     if (index < 0 || index >= (this.length - 1)) {
       //+1 since we already changed the children
-      this.node.appendChild(wrap(child));
+      this.node.appendChild(ASequentialLayoutContainer.wrap(child));
     } else if (index === 0) {
       //assume we are in the replace mode
-      this.node.insertBefore(wrap(child), this.node.firstChild);
+      this.node.insertBefore(ASequentialLayoutContainer.wrap(child), this.node.firstChild);
     } else {
       //assume we are in the replace mode -> consider separator
-      this.node.insertBefore(wrap(child), this._children[index + 1].node.parentElement.previousSibling);
+      this.node.insertBefore(ASequentialLayoutContainer.wrap(child), this._children[index + 1].node.parentElement.previousSibling);
     }
     if (this.length > 1) {
       this.node.insertAdjacentHTML('beforeend', SplitLayoutContainer.SEPARATOR);

@@ -1,11 +1,20 @@
-import {IEventHandler} from 'phovea_core/src/event';
-import {IHasUniqueId} from 'phovea_core/src/idtype';
-import {IBuildAbleOrViewLike} from './builder';
+import {IEventHandler, IHasUniqueId} from 'phovea_core';
 
 /**
  * [width, height]
  */
 export declare type ISize = [number, number];
+
+
+export interface IBuilder {
+  autoWrap(name?: string): IBuilder;
+  name(name: string): IBuilder;
+  fixed():IBuilder;
+  fixedLayout():IBuilder;
+}
+
+export declare type IBuildAbleOrViewLike = IBuilder | IView | string;
+
 
 export class LayoutContainerEvents {
   static readonly EVENT_LAYOUT_CHANGED = 'changed';
@@ -135,6 +144,13 @@ export interface ILayoutDump {
   [key: string]: any;
 }
 
+export enum EOrientation {
+  HORIZONTAL,
+  VERTICAL
+}
+
+export type IDropArea = 'center' | 'left' | 'right' | 'top' | 'bottom' | 'horizontal-scroll' | 'vertical-scroll';
+
 export interface ILayoutParentContainer extends ILayoutContainer, Iterable<ILayoutContainer> {
   /**
    * children of this container
@@ -172,6 +188,9 @@ export interface ILayoutParentContainer extends ILayoutContainer, Iterable<ILayo
    * @return {boolean} true if successful
    */
   remove(child: ILayoutContainer): boolean;
+  rootParent?: IRootLayoutContainer&ILayoutParentContainer;
+  canDrop?(area: IDropArea): boolean;
+  place?(child: ILayoutContainer, reference: ILayoutContainer, area: IDropArea): boolean;
 }
 
 

@@ -1,7 +1,7 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {ILayoutContainer, ISize} from '../interfaces';
 import {ILayoutContainerOption} from './ALayoutContainer';
-import {EOrientation, IDropArea} from './interfaces';
+import {EOrientation, IDropArea} from '../interfaces';
 
 export interface ISequentialLayoutContainerOptions extends ILayoutContainerOption {
   readonly orientation: EOrientation;
@@ -57,15 +57,13 @@ export abstract class ASequentialLayoutContainer<T extends ISequentialLayoutCont
       orientation: EOrientation[this.options.orientation]
     });
   }
-}
 
-export default ASequentialLayoutContainer;
-
-export function wrap(child: ILayoutContainer) {
-  const s = child.node.ownerDocument.createElement('section');
-  if (!child.hideAbleHeader) {
-    s.appendChild(child.header);
+  static wrap(child: ILayoutContainer) {
+    const s = child.node.ownerDocument.createElement('section');
+    if (!child.hideAbleHeader) {
+      s.appendChild(child.header);
+    }
+    s.appendChild(child.node);
+    return s;
   }
-  s.appendChild(child.node);
-  return s;
 }

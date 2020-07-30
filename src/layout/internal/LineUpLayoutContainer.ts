@@ -1,13 +1,13 @@
 import {ILayoutContainer, ILayoutDump} from '../interfaces';
-import {EOrientation, IDropArea} from './interfaces';
+import {EOrientation, IDropArea} from '../interfaces';
 import {ALayoutContainer} from './ALayoutContainer';
-import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions, wrap} from './ASequentialLayoutContainer';
+import {ASequentialLayoutContainer, ISequentialLayoutContainerOptions} from './ASequentialLayoutContainer';
 
 export interface ILineUpLayoutContainer extends ISequentialLayoutContainerOptions {
   stackLayout: boolean;
 }
 
-export default class LineUpLayoutContainer extends ASequentialLayoutContainer<ILineUpLayoutContainer> {
+export class LineUpLayoutContainer extends ASequentialLayoutContainer<ILineUpLayoutContainer> {
   readonly minChildCount = 1;
   readonly type = 'lineup';
 
@@ -31,9 +31,9 @@ export default class LineUpLayoutContainer extends ASequentialLayoutContainer<IL
     super.addedChild(child, index);
     if (index < 0 || index >= (this._children.length - 1)) {
       //+1 since we already chanded the children
-      this.node.appendChild(wrap(child));
+      this.node.appendChild(ASequentialLayoutContainer.wrap(child));
     } else {
-      this.node.insertBefore(wrap(child), this.node.children[index]);
+      this.node.insertBefore(ASequentialLayoutContainer.wrap(child), this.node.children[index]);
     }
 
     if(this.options.stackLayout) {
