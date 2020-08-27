@@ -1,4 +1,5 @@
 /// <reference types="jquery" />
+/// <reference types="select2" />
 /// <reference types="bootstrap" />
 /**
  * Created by Samuel Gratzl on 19.11.2015.

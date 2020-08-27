@@ -4,6 +4,10 @@
 
 $boostrapAssetDir: '../assets' !default;
 
+
+@import "./vendors/bootstrap";
+@import "./vendors/font-awesome";
+
 @import "./colors";
 @import "./base";
 @import "./header_navbar";
