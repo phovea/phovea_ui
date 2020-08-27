@@ -4,11 +4,14 @@
 
 $boostrapAssetDir: '../assets' !default;
 
+@import "./abstracts/variables";
+@import "./abstracts/colors";
 
 @import "./vendors/bootstrap";
 @import "./vendors/font-awesome";
 
-@import "./colors";
-@import "./base";
-@import "./header_navbar";
+@import "./base/base";
+
+@import "./components/header_navbar";
+
 @import "./layout/layout";
