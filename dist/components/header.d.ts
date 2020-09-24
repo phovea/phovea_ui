@@ -1,7 +1,6 @@
 /**
  * Created by Samuel Gratzl on 24.11.2014.
  */
-import '../scss/main.scss';
 import '../webpack/_bootstrap';
 /**
  * Defines a header link

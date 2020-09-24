@@ -1,4 +1,5 @@
 /// <reference types="jquery" />
+/// <reference types="jquery.scrollto" />
 /// <reference types="select2" />
 /// <reference types="bootstrap" />
 /**

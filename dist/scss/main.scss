@@ -2,13 +2,13 @@
  * Created by Samuel Gratzl on 27.08.2014.
  */
 
-$boostrapAssetDir: '../assets' !default;
-
 @import "./abstracts/variables";
 @import "./abstracts/colors";
 
 @import "./vendors/bootstrap";
 @import "./vendors/font-awesome";
+@import "./fonts/yantramanav";
+@import "./fonts/monda";
 
 @import "./base/base";
 
