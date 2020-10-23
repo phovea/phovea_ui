@@ -1,4 +1,5 @@
 /// <reference types="jquery" />
+/// <reference types="select2" />
 /// <reference types="bootstrap" />
 /**
  * Created by Samuel Gratzl on 19.11.2015.
@@ -24,7 +25,7 @@ export declare class Dialog {
     protected readonly $dialog: JQuery;
     private bakKeyDownListener;
     static openDialogs: number;
-    constructor(title: string, primaryBtnText?: string, additionalCSSClasses?: string);
+    constructor(title: string, primaryBtnText?: string, additionalCSSClasses?: string, backdrop?: boolean | 'static');
     show(): JQuery<HTMLElement>;
     hide(): JQuery<HTMLElement>;
     get body(): HTMLElement;
