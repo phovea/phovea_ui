@@ -7,11 +7,13 @@ import '../webpack/_bootstrap';
 import $ from 'jquery';
 import { BaseUtils, I18nextManager } from 'phovea_core';
 export class Dialog {
-    constructor(title, primaryBtnText = 'OK', additionalCSSClasses = '') {
+    constructor(title, primaryBtnText = 'OK', additionalCSSClasses = '', backdrop = true) {
         this.bakKeyDownListener = null; // temporal for restoring an old keydown listener
         const dialog = document.createElement('div');
         dialog.setAttribute('role', 'dialog');
         dialog.classList.add('modal', 'fade');
+        console.log("--->", backdrop);
+        $(dialog).modal({ backdrop });
         dialog.innerHTML = `
        <div class="modal-dialog ${additionalCSSClasses}" role="document">
         <div class="modal-content">
