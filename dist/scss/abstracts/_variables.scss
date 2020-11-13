@@ -1,5 +1,25 @@
 
-$boostrapAssetDir: '../../assets' !default;
+$boostrapAssetDir: '~phovea_ui/dist/assets' !default;
 $phovea-loading-icon: rgba(255, 255, 255, 0.26) url('#{$boostrapAssetDir}/caleydo_c_anim.svg') no-repeat fixed center !default;
 $phovea-brand-logo: transparent url('#{$boostrapAssetDir}/caleydo_c.svg') no-repeat 0.6em 45% !default;
 
+// header navbar color (the inverse colors will be computed using sass `invert($color)`)
+$header-bg-color: #f0f0f0 !default;
+$header-border-color: #ddd !default;
+$header-link-color: #333 !default;
+$header-dropdown-link-color: $header-link-color !default;
+
+$select-color: orange !default;
+$select-color-bright: #ffdca3 !default;
+$hover-color: black !default;
+
+$hover-presentation-color: #f0bb00 !default;
+
+$annotation_color: #009ACD !default;
+$annotation_color_hover: #006b90 !default;
+
+$anchor_color: red !default;
+$anchor_color_hover: darkred !default;
+
+$select-data-color: orange !default;
+$hover-data-color: #ffc46b !default;
