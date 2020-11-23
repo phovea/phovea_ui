@@ -1,5 +1,4 @@
 /// <reference types="jquery" />
-/// <reference types="jquery.scrollto" />
 /// <reference types="select2" />
 /// <reference types="bootstrap" />
 /**
@@ -26,7 +25,20 @@ export declare class Dialog {
     protected readonly $dialog: JQuery;
     private bakKeyDownListener;
     static openDialogs: number;
-    constructor(title: string, primaryBtnText?: string, additionalCSSClasses?: string);
+    /**
+     * @param title Dialog title
+     * @param primaryBtnText Label for primary button
+     * @param additionalCSSClasses additional css classes for the dialog
+     * @param backdrop sets backdrop option for bootstrap modal
+     *
+     * false: show no backdrop;
+     *
+     * true: show backdrop, dialog closes on click outside;
+     *
+     * static: show backdrop, dialog does not close on click outside;
+     * @default backdrop true
+     */
+    constructor(title: string, primaryBtnText?: string, additionalCSSClasses?: string, backdrop?: boolean | 'static');
     show(): JQuery<HTMLElement>;
     hide(): JQuery<HTMLElement>;
     get body(): HTMLElement;

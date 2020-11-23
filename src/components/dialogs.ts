@@ -33,10 +33,24 @@ export class Dialog {
   private bakKeyDownListener: (ev: KeyboardEvent) => any = null; // temporal for restoring an old keydown listener
   static openDialogs: number = 0;
 
-  constructor(title: string, primaryBtnText = 'OK', additionalCSSClasses: string = '') {
+  /**
+   * @param title Dialog title
+   * @param primaryBtnText Label for primary button
+   * @param additionalCSSClasses additional css classes for the dialog
+   * @param backdrop sets backdrop option for bootstrap modal
+   *
+   * false: show no backdrop;
+   *
+   * true: show backdrop, dialog closes on click outside;
+   *
+   * static: show backdrop, dialog does not close on click outside;
+   * @default backdrop true
+   */
+  constructor(title: string, primaryBtnText = 'OK', additionalCSSClasses: string = '', backdrop: boolean | 'static' = true) {
     const dialog = document.createElement('div');
     dialog.setAttribute('role', 'dialog');
     dialog.classList.add('modal', 'fade');
+    $(dialog).modal({backdrop});
     dialog.innerHTML = `
        <div class="modal-dialog ${additionalCSSClasses}" role="document">
         <div class="modal-content">
