@@ -54,7 +54,7 @@
     "bootstrap-sass": "3.4.1",
     "font-awesome": "~4.7.0",
     "jquery": "~3.5.1",
-    "phovea_core": "github:phovea/phovea_core#develop"
+    "phovea_core": "github:phovea/phovea_core#vstoiber/update_dependencies"
   },
   "devDependencies": {
     "@types/bootstrap": "~4.5.0",
