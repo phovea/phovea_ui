@@ -45,6 +45,7 @@ export class ASequentialLayoutContainer extends AParentLayoutContainer {
     }
     static wrap(child) {
         const s = child.node.ownerDocument.createElement('section');
+        s.classList.add('layout-container-wrapper');
         if (!child.hideAbleHeader) {
             s.appendChild(child.header);
         }

@@ -60,6 +60,8 @@ export class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayou
         this.toggleFrozenLayout();
       });
     }
+
+    this.node.classList.add('layout-container-wrapper');
   }
 
   canDrop(area: IDropArea) {
@@ -125,6 +127,8 @@ export class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayou
     this.reorderAble(reorder);
     if (index < 0 || index >= this.length - 1) {
       this.header.appendChild(child.header);
+      const parametersHeader = this.node.ownerDocument.createElement('header');
+      this.node.appendChild(parametersHeader);
       this.node.appendChild(child.node);
     } else {
       this.header.insertBefore(child.header, this._children[index + 1].header.previousSibling);
