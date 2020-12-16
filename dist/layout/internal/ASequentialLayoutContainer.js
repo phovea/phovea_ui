@@ -1,5 +1,6 @@
 import { AParentLayoutContainer } from './AParentLayoutContainer';
 import { EOrientation } from '../interfaces';
+import { LAYOUT_CONTAINER_WRAPPER } from '../constants';
 export class ASequentialLayoutContainer extends AParentLayoutContainer {
     constructor(document, options) {
         super(document, options);
@@ -45,7 +46,7 @@ export class ASequentialLayoutContainer extends AParentLayoutContainer {
     }
     static wrap(child) {
         const s = child.node.ownerDocument.createElement('section');
-        s.classList.add('layout-container-wrapper');
+        s.classList.add(LAYOUT_CONTAINER_WRAPPER);
         if (!child.hideAbleHeader) {
             s.appendChild(child.header);
         }

@@ -4,6 +4,7 @@ import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 import {DnDUtils} from 'phovea_core';
 import {IDropArea} from '../interfaces';
 import {LayoutContainerEvents} from '../interfaces';
+import {LAYOUT_CONTAINER_WRAPPER} from '../constants';
 
 
 export interface ITabbingLayoutContainerOptions extends ILayoutContainerOption {
@@ -61,7 +62,7 @@ export class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayou
       });
     }
 
-    this.node.classList.add('layout-container-wrapper');
+    this.node.classList.add(LAYOUT_CONTAINER_WRAPPER);
   }
 
   canDrop(area: IDropArea) {

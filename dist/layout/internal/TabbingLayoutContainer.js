@@ -2,6 +2,7 @@ import { AParentLayoutContainer } from './AParentLayoutContainer';
 import { ALayoutContainer } from './ALayoutContainer';
 import { DnDUtils } from 'phovea_core';
 import { LayoutContainerEvents } from '../interfaces';
+import { LAYOUT_CONTAINER_WRAPPER } from '../constants';
 export class TabbingLayoutContainer extends AParentLayoutContainer {
     constructor(document, options, ...children) {
         super(document, options);
@@ -45,7 +46,7 @@ export class TabbingLayoutContainer extends AParentLayoutContainer {
                 this.toggleFrozenLayout();
             });
         }
-        this.node.classList.add('layout-container-wrapper');
+        this.node.classList.add(LAYOUT_CONTAINER_WRAPPER);
     }
     canDrop(area) {
         return area === 'center';
