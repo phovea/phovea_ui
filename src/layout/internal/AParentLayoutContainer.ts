@@ -2,10 +2,11 @@ import {
   ILayoutContainer, ILayoutDump, ILayoutParentContainer, IRootLayoutContainer, ISize,
   LayoutContainerEvents
 } from '../interfaces';
-import {ALayoutContainer, ILayoutContainerOption, withChanged} from './ALayoutContainer';
-import {IDropArea} from './interfaces';
+import {IParentLayoutContainer} from './IParentLayoutContainer';
+import {IDropArea} from '../interfaces';
+import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
 
-export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> extends ALayoutContainer<T> implements ILayoutParentContainer {
+export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> extends ALayoutContainer<T> implements IParentLayoutContainer {
   readonly node: HTMLElement;
   abstract readonly minChildCount: number;
   protected readonly _children: ILayoutContainer[] = [];
@@ -54,7 +55,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     if (this._visible === visible) {
       return;
     }
-    this.fire(withChanged(LayoutContainerEvents.EVENT_VISIBILITY_CHANGED), this._visible, this._visible = visible);
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_VISIBILITY_CHANGED), this._visible, this._visible = visible);
     this.visibilityChanged(visible);
   }
 
@@ -88,7 +89,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
   protected addedChild(child: ILayoutContainer, index: number) {
     child.resized();
     this.propagate(child, LayoutContainerEvents.EVENT_LAYOUT_CHANGED, LayoutContainerEvents.EVENT_MAXIMIZE, LayoutContainerEvents.EVENT_RESTORE_SIZE);
-    this.fire(withChanged(LayoutContainerEvents.EVENT_CHILD_ADDED), child, index);
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_CHILD_ADDED), child, index);
   }
 
   replace(child: ILayoutContainer, replacement: ILayoutContainer) {
@@ -96,7 +97,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     console.assert(index >= 0);
 
     this.takeDownChild(child);
-    this.fire(withChanged(LayoutContainerEvents.EVENT_CHILD_REMOVED), child);
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_CHILD_REMOVED), child);
     this.setupChild(replacement);
     this._children.splice(index, 1, replacement);
     this.addedChild(replacement, index);
@@ -116,7 +117,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
         this.parent.remove(this);
       }
     }
-    this.fire(withChanged(LayoutContainerEvents.EVENT_CHILD_REMOVED), child);
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_CHILD_REMOVED), child);
     return true;
   }
 
@@ -129,7 +130,7 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     if (this.minChildCount > this.length && this.parent) {
       this.parent.remove(this);
     }
-    this.fire(withChanged(LayoutContainerEvents.EVENT_CHILD_REMOVED));
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_CHILD_REMOVED));
   }
 
   protected takeDownChild(child: ILayoutContainer) {
@@ -174,5 +175,3 @@ export abstract class AParentLayoutContainer<T extends ILayoutContainerOption> e
     return base.concat(...this._children.map((d) => d.findAll(predicate)));
   }
 }
-
-export default AParentLayoutContainer;

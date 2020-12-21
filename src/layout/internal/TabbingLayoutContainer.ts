@@ -1,16 +1,17 @@
 import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {ILayoutContainer, ILayoutDump, ISize, ITabbingLayoutContainer} from '../interfaces';
-import {ALayoutContainer, ILayoutContainerOption, withChanged} from './ALayoutContainer';
-import {dropAble} from 'phovea_core/src';
-import {IDropArea} from './interfaces';
-import {LayoutContainerEvents} from '../';
+import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
+import {DnDUtils} from 'phovea_core';
+import {IDropArea} from '../interfaces';
+import {LayoutContainerEvents} from '../interfaces';
+import {LAYOUT_CONTAINER_WRAPPER} from '../constants';
 
 
 export interface ITabbingLayoutContainerOptions extends ILayoutContainerOption {
   readonly active: number;
 }
 
-export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayoutContainerOptions> implements ITabbingLayoutContainer {
+export class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayoutContainerOptions> implements ITabbingLayoutContainer {
   private static readonly TAB_REORDER = `<div data-layout="tab-reorder">&nbsp;</div>`;
   readonly minChildCount = 0;
   readonly type = 'tabbing';
@@ -31,7 +32,7 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
     }
 
     if (!this.options.fixedLayout) {
-      dropAble(this.header, [ALayoutContainer.MIME_TYPE], (result) => {
+      DnDUtils.getInstance().dropAble(this.header, [ALayoutContainer.MIME_TYPE], (result) => {
         const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
         console.assert(id >= 0);
         //find id and move it here
@@ -60,6 +61,8 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
         this.toggleFrozenLayout();
       });
     }
+
+    this.node.classList.add(LAYOUT_CONTAINER_WRAPPER);
   }
 
   canDrop(area: IDropArea) {
@@ -90,7 +93,7 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
   }
 
   private reorderAble(reorder: HTMLElement) {
-     dropAble(reorder, [ALayoutContainer.MIME_TYPE], (result) => {
+    DnDUtils.getInstance().dropAble(reorder, [ALayoutContainer.MIME_TYPE], (result) => {
       const id = parseInt(result.data[ALayoutContainer.MIME_TYPE], 10);
       console.assert(id >= 0);
       //find id and move it here
@@ -125,6 +128,8 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
     this.reorderAble(reorder);
     if (index < 0 || index >= this.length - 1) {
       this.header.appendChild(child.header);
+      const parametersHeader = this.node.ownerDocument.createElement('header');
+      this.node.appendChild(parametersHeader);
       this.node.appendChild(child.node);
     } else {
       this.header.insertBefore(child.header, this._children[index + 1].header.previousSibling);
@@ -162,7 +167,7 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
     this.header.insertBefore(child.header, next.header.previousSibling); //2 extra items
     this.header.insertBefore(reorder, child.header);
     this.node.insertBefore(child.node, next.node);
-    this.fire(withChanged(LayoutContainerEvents.EVENT_TAB_REORDED), child, index);
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_TAB_REORDED), child, index);
   }
 
   replace(child: ILayoutContainer, replacement: ILayoutContainer) {
@@ -206,7 +211,7 @@ export default class TabbingLayoutContainer extends AParentLayoutContainer<ITabb
       newActive.node.classList.add('active');
       newActive.visible = this.visible;
     }
-    this.fire(withChanged(LayoutContainerEvents.EVENT_CHANGE_ACTIVE_TAB), oldActive, newActive);
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_CHANGE_ACTIVE_TAB), oldActive, newActive);
   }
 
   protected visibilityChanged(visible: boolean): void {

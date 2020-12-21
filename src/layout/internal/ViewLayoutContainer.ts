@@ -1,7 +1,7 @@
 import {ILayoutDump, ISize, IView, IViewLayoutContainer} from '../interfaces';
-import {ALayoutContainer, ILayoutContainerOption, withChanged} from './ALayoutContainer';
-import {dropViews} from './dropper';
-import {LayoutContainerEvents} from '../';
+import {ALayoutContainer, ILayoutContainerOption} from './ALayoutContainer';
+import {Dropper} from './Dropper';
+import {LayoutContainerEvents} from '../interfaces';
 
 export interface IViewLayoutContainerOptions extends ILayoutContainerOption {
   hideHeader: boolean;
@@ -53,7 +53,7 @@ export class NodeView implements IView {
   }
 }
 
-export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutContainerOptions> implements IViewLayoutContainer {
+export class ViewLayoutContainer extends ALayoutContainer<IViewLayoutContainerOptions> implements IViewLayoutContainer {
 
   readonly node: HTMLElement;
   readonly type = 'view';
@@ -75,7 +75,7 @@ export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutCon
     }
 
     if (!this.options.fixedLayout) {
-      dropViews(this.node, this);
+      Dropper.dropViews(this.node, this);
     }
 
     this.updateTitle();
@@ -99,7 +99,7 @@ export default class ViewLayoutContainer extends ALayoutContainer<IViewLayoutCon
   }
 
   set visible(visible: boolean) {
-    this.fire(withChanged(LayoutContainerEvents.EVENT_VISIBILITY_CHANGED), this.view.visible, this.view.visible = visible);
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_VISIBILITY_CHANGED), this.view.visible, this.view.visible = visible);
   }
 
   get minSize() {

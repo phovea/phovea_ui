@@ -1,20 +1,18 @@
-import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, IView} from './interfaces';
-import {EOrientation} from './internal/interfaces';
-import ViewLayoutContainer, {HTMLView, IViewLayoutContainerOptions, NodeView} from './internal/ViewLayoutContainer';
-import SplitLayoutContainer from './internal/SplitLayoutContainer';
-import LineUpLayoutContainer from './internal/LineUpLayoutContainer';
-import TabbingLayoutContainer, {ITabbingLayoutContainerOptions} from './internal/TabbingLayoutContainer';
-import RootLayoutContainer from './internal/RootLayoutContainer';
+import {ILayoutContainer, ILayoutDump, IRootLayoutContainer, IView, IBuilder, IBuildAbleOrViewLike} from './interfaces';
+import {EOrientation} from './interfaces';
+import {ViewLayoutContainer, HTMLView, IViewLayoutContainerOptions, NodeView} from './internal/ViewLayoutContainer';
+import {SplitLayoutContainer} from './internal/SplitLayoutContainer';
+import {LineUpLayoutContainer} from './internal/LineUpLayoutContainer';
+import {TabbingLayoutContainer, ITabbingLayoutContainerOptions} from './internal/TabbingLayoutContainer';
+import {RootLayoutContainer} from './internal/RootLayoutContainer';
 import {ILayoutContainerOption} from './internal/ALayoutContainer';
 import {ISequentialLayoutContainerOptions} from './internal/ASequentialLayoutContainer';
 
 
-export declare type IBuildAbleOrViewLike = ABuilder | IView | string;
-
-abstract class ABuilder {
+export abstract class ABuilder implements IBuilder {
   protected _name: string = 'View';
   protected _fixed: boolean = false;
-  protected _autoWrap: boolean|string = false;
+  protected _autoWrap: boolean | string = false;
   protected _fixedLayout: boolean = false;
 
   /**
@@ -99,14 +97,81 @@ export class ViewBuilder extends ABuilder {
   }
 }
 
-function toBuilder(view: IBuildAbleOrViewLike): ABuilder {
-  if (view instanceof ABuilder) {
-    return view;
+export class LayoutUtils {
+
+  /**
+   * restores the given layout dump
+   * @param {ILayoutDump} dump the dump
+   * @param {(referenceId: number) => IView} restoreView lookup function for getting the underlying view given the dumped reference id
+   * @param {Document} doc root document
+   * @return {ILayoutContainer} the root element
+   */
+  static restore(dump: ILayoutDump, restoreView: (referenceId: number) => IView, doc = document): ILayoutContainer {
+    const restorer = (d: ILayoutDump) => LayoutUtils.restore(d, restoreView, doc);
+    switch (dump.type) {
+      case 'root':
+        return RootLayoutContainer.restore(dump, doc, (r, child) => this.toBuilder(child).build(r, doc), (dump, restoreView) => LayoutUtils.restore(dump, restoreView, doc), restoreView);
+      case 'split':
+        return SplitLayoutContainer.restore(dump, restorer, doc);
+      case 'lineup':
+        return LineUpLayoutContainer.restore(dump, restorer, doc);
+      case 'tabbing':
+        return TabbingLayoutContainer.restore(dump, restorer, doc);
+      case 'view':
+        return ViewLayoutContainer.restore(dump, restoreView, doc);
+      default:
+        throw new Error(`invalid type: ${dump.type}`);
+    }
   }
-  return new ViewBuilder(<IView | string>view);
+
+  /**
+   * derives from an existing html scaffolded layout the phovea layout and replaced the nodes with it
+   * @param {HTMLElement} node the root node
+   * @param {(node: HTMLElement) => IView} viewFactory how to build a view from a node
+   */
+  static derive(node: HTMLElement, viewFactory: (node: HTMLElement) => IView = (node) => new NodeView(node)): IRootLayoutContainer {
+    const doc = node.ownerDocument;
+    const r = new RootLayoutContainer(doc, (child) => this.toBuilder(child).build(r, doc), (dump, restoreView) => LayoutUtils.restore(dump, restoreView, doc));
+
+    const deriveImpl = (node: HTMLElement): ILayoutContainer => {
+      switch (node.dataset.layout || 'view') {
+        case 'hsplit':
+        case 'vsplit':
+        case 'split':
+          return SplitLayoutContainer.derive(node, deriveImpl);
+        case 'lineup':
+        case 'vlineup':
+        case 'hlineup':
+        case 'stack':
+        case 'hstack':
+        case 'vstack':
+          return LineUpLayoutContainer.derive(node, deriveImpl);
+        case 'tabbing':
+          return TabbingLayoutContainer.derive(node, deriveImpl);
+        default:
+          // interpret as view
+          return ViewLayoutContainer.derive(viewFactory(node) || new NodeView(node));
+      }
+    };
+
+    r.root = deriveImpl(node);
+
+    if (node.parentElement) {
+      //replace old node with new root
+      node.parentElement.replaceChild(r.node, node);
+    }
+    return r;
+  }
+
+  static toBuilder(view: IBuildAbleOrViewLike): ABuilder {
+    if (view instanceof ABuilder) {
+      return view;
+    }
+    return new ViewBuilder(<IView | string>view);
+  }
 }
 
-abstract class AParentBuilder extends ABuilder {
+export abstract class AParentBuilder extends ABuilder {
   protected readonly children: ABuilder[] = [];
 
   constructor(children: IBuildAbleOrViewLike[]) {
@@ -116,7 +181,7 @@ abstract class AParentBuilder extends ABuilder {
   }
 
   protected push(view: IBuildAbleOrViewLike): this {
-    this.children.push(toBuilder(view));
+    this.children.push(LayoutUtils.toBuilder(view));
     return this;
   }
 
@@ -125,7 +190,7 @@ abstract class AParentBuilder extends ABuilder {
   }
 }
 
-class SplitBuilder extends AParentBuilder {
+export class SplitBuilder extends AParentBuilder {
   private _ratio: number = 0.5;
 
   constructor(private readonly orientation: EOrientation, ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike) {
@@ -156,6 +221,7 @@ class SplitBuilder extends AParentBuilder {
     built.slice(2).forEach((c) => r.push(c));
     return r;
   }
+
 }
 
 class LineUpBuilder extends AParentBuilder {
@@ -220,157 +286,94 @@ class TabbingBuilder extends AParentBuilder {
   }
 }
 
-/**
- * builder for creating a horizontal split layout (moveable splitter)
- * @param {number} ratio ratio between the two given elements
- * @param {IBuildAbleOrViewLike} left left container
- * @param {IBuildAbleOrViewLike} right right container
- * @return {SplitBuilder} a split builder
- */
-export function horizontalSplit(ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike): SplitBuilder {
-  return new SplitBuilder(EOrientation.HORIZONTAL, ratio, left, right);
-}
-
-/**
- * builder for creating a vertical split layout (moveable splitter)
- * @param {number} ratio ratio between the two given elements
- * @param {IBuildAbleOrViewLike} left left container
- * @param {IBuildAbleOrViewLike} right right container
- * @return {SplitBuilder} a split builder
- */
-export function verticalSplit(ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike): SplitBuilder {
-  return new SplitBuilder(EOrientation.VERTICAL, ratio, left, right);
-}
-
-/**
- * builder for creating a horizontal lineup layout (each container has the same full size with scrollbars)
- * @param {IBuildAbleOrViewLike} children the children of the layout
- * @return {LineUpBuilder} a lineup builder
- */
-export function horizontalLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder {
-  return new LineUpBuilder(EOrientation.HORIZONTAL, children);
-}
-
-
-/**
- * builder for creating a vertical lineup layout (each container has the same full size with scrollbars)
- * @param {IBuildAbleOrViewLike} children the children of the layout
- * @return {LineUpBuilder} a lineup builder
- */
-export function verticalLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder {
-  return new LineUpBuilder(EOrientation.VERTICAL, children);
-}
-
-/**
- * similar to the horizontalLineUp, except that each container takes its own amount of space
- * @param {IBuildAbleOrViewLike} children the children of the layout
- * @return {LineUpBuilder} a lineup builder
- */
-export function horizontalStackedLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder {
-  return new LineUpBuilder(EOrientation.HORIZONTAL, children, true);
-}
-
-
-/**
- * similar to the verticalLineUp, except that each container takes its own amount of space
- * @param {IBuildAbleOrViewLike} children the children of the layout
- * @return {LineUpBuilder} a lineup builder
- */
-export function verticalStackedLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder {
-  return new LineUpBuilder(EOrientation.VERTICAL, children, true);
-}
-
-/**
- * builder for creating a tab layout
- * @param {IBuildAbleOrViewLike} children the children of the layout
- * @return {TabbingBuilder} a tabbing builder
- */
-export function tabbing(...children: IBuildAbleOrViewLike[]): TabbingBuilder {
-  return new TabbingBuilder(children);
-}
-
-/**
- * builder for creating a view
- * @param {string | IView} view possible view content
- * @return {ViewBuilder} a view builder
- */
-export function view(view: string | IView | HTMLElement): ViewBuilder {
-  return new ViewBuilder(view);
-}
-
-/**
- * creates the root of a new layout
- * @param {IBuildAbleOrViewLike} child the only child of the root
- * @param {Document} doc root Document
- * @return {IRootLayoutContainer} the root element
- */
-export function root(child: IBuildAbleOrViewLike, doc = document): IRootLayoutContainer {
-  const b = toBuilder(child);
-  const r = new RootLayoutContainer(doc, (child) => toBuilder(child).build(r, doc), (dump, restoreView) => restore(dump, restoreView, doc));
-  r.root = b.build(r, doc);
-  return r;
-}
-
-/**
- * restores the given layout dump
- * @param {ILayoutDump} dump the dump
- * @param {(referenceId: number) => IView} restoreView lookup function for getting the underlying view given the dumped reference id
- * @param {Document} doc root document
- * @return {ILayoutContainer} the root element
- */
-export function restore(dump: ILayoutDump, restoreView: (referenceId: number) => IView, doc = document): ILayoutContainer {
-  const restorer = (d: ILayoutDump) => restore(d, restoreView, doc);
-  switch (dump.type) {
-    case 'root':
-      return RootLayoutContainer.restore(dump, doc, (r, child) => toBuilder(child).build(r, doc), (dump, restoreView) => restore(dump, restoreView, doc), restoreView);
-    case 'split':
-      return SplitLayoutContainer.restore(dump, restorer, doc);
-    case 'lineup':
-      return LineUpLayoutContainer.restore(dump, restorer, doc);
-    case 'tabbing':
-      return TabbingLayoutContainer.restore(dump, restorer, doc);
-    case 'view':
-      return ViewLayoutContainer.restore(dump, restoreView, doc);
-    default:
-      throw new Error(`invalid type: ${dump.type}`);
+export class BuilderUtils {
+  /**
+   * builder for creating a view
+   * @param {string | IView} view possible view content
+   * @return {ViewBuilder} a view builder
+   */
+  static view(view: string | IView | HTMLElement): ViewBuilder {
+    return new ViewBuilder(view);
   }
-}
 
-/**
- * derives from an existing html scaffolded layout the phovea layout and replaced the nodes with it
- * @param {HTMLElement} node the root node
- * @param {(node: HTMLElement) => IView} viewFactory how to build a view from a node
- */
-export function derive(node: HTMLElement, viewFactory: (node: HTMLElement) => IView = (node) => new NodeView(node)): IRootLayoutContainer {
-  const doc = node.ownerDocument;
-  const r = new RootLayoutContainer(doc, (child) => toBuilder(child).build(r, doc), (dump, restoreView) => restore(dump, restoreView, doc));
-
-  const deriveImpl = (node: HTMLElement): ILayoutContainer => {
-    switch (node.dataset.layout || 'view') {
-      case 'hsplit':
-      case 'vsplit':
-      case 'split':
-        return SplitLayoutContainer.derive(node, deriveImpl);
-      case 'lineup':
-      case 'vlineup':
-      case 'hlineup':
-      case 'stack':
-      case 'hstack':
-      case 'vstack':
-        return LineUpLayoutContainer.derive(node, deriveImpl);
-      case 'tabbing':
-        return TabbingLayoutContainer.derive(node, deriveImpl);
-      default:
-        // interpret as view
-        return ViewLayoutContainer.derive(viewFactory(node) || new NodeView(node));
-    }
-  };
-
-  r.root = deriveImpl(node);
-
-  if (node.parentElement) {
-    //replace old node with new root
-    node.parentElement.replaceChild(r.node, node);
+  /**
+   * creates the root of a new layout
+   * @param {IBuildAbleOrViewLike} child the only child of the root
+   * @param {Document} doc root Document
+   * @return {IRootLayoutContainer} the root element
+   */
+  static root(child: IBuildAbleOrViewLike, doc = document): IRootLayoutContainer {
+    const b = LayoutUtils.toBuilder(child);
+    const r = new RootLayoutContainer(doc, (child) => LayoutUtils.toBuilder(child).build(r, doc), (dump, restoreView) => LayoutUtils.restore(dump, restoreView, doc));
+    r.root = b.build(r, doc);
+    return r;
   }
-  return r;
+
+  /**
+   * builder for creating a horizontal split layout (moveable splitter)
+   * @param {number} ratio ratio between the two given elements
+   * @param {IBuildAbleOrViewLike} left left container
+   * @param {IBuildAbleOrViewLike} right right container
+   * @return {SplitBuilder} a split builder
+   */
+  static horizontalSplit(ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike): SplitBuilder {
+    return new SplitBuilder(EOrientation.HORIZONTAL, ratio, left, right);
+  }
+
+  /**
+   * builder for creating a vertical split layout (moveable splitter)
+   * @param {number} ratio ratio between the two given elements
+   * @param {IBuildAbleOrViewLike} left left container
+   * @param {IBuildAbleOrViewLike} right right container
+   * @return {SplitBuilder} a split builder
+   */
+  static verticalSplit(ratio: number, left: IBuildAbleOrViewLike, right: IBuildAbleOrViewLike): SplitBuilder {
+    return new SplitBuilder(EOrientation.VERTICAL, ratio, left, right);
+  }
+  /**
+   * builder for creating a horizontal lineup layout (each container has the same full size with scrollbars)
+   * @param {IBuildAbleOrViewLike} children the children of the layout
+   * @return {LineUpBuilder} a lineup builder
+   */
+  static horizontalLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder {
+    return new LineUpBuilder(EOrientation.HORIZONTAL, children);
+  }
+
+
+  /**
+   * builder for creating a vertical lineup layout (each container has the same full size with scrollbars)
+   * @param {IBuildAbleOrViewLike} children the children of the layout
+   * @return {LineUpBuilder} a lineup builder
+   */
+  static verticalLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder {
+    return new LineUpBuilder(EOrientation.VERTICAL, children);
+  }
+
+  /**
+   * similar to the horizontalLineUp, except that each container takes its own amount of space
+   * @param {IBuildAbleOrViewLike} children the children of the layout
+   * @return {LineUpBuilder} a lineup builder
+   */
+  static horizontalStackedLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder {
+    return new LineUpBuilder(EOrientation.HORIZONTAL, children, true);
+  }
+
+
+  /**
+   * similar to the verticalLineUp, except that each container takes its own amount of space
+   * @param {IBuildAbleOrViewLike} children the children of the layout
+   * @return {LineUpBuilder} a lineup builder
+   */
+  static verticalStackedLineUp(...children: IBuildAbleOrViewLike[]): LineUpBuilder {
+    return new LineUpBuilder(EOrientation.VERTICAL, children, true);
+  }
+
+  /**
+   * builder for creating a tab layout
+   * @param {IBuildAbleOrViewLike} children the children of the layout
+   * @return {TabbingBuilder} a tabbing builder
+   */
+  static tabbing(...children: IBuildAbleOrViewLike[]): TabbingBuilder {
+    return new TabbingBuilder(children);
+  }
 }

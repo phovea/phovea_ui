@@ -1,7 +1,8 @@
-import {EventHandler} from 'phovea_core/src/event';
+import {EventHandler, UniqueIdManager} from 'phovea_core';
 import {ILayoutDump, LayoutContainerEvents, ILayoutContainer, ILayoutParentContainer} from '../interfaces';
-import {dragAble, uniqueId} from 'phovea_core/src';
-import {AParentLayoutContainer} from './AParentLayoutContainer';
+import {DnDUtils} from 'phovea_core';
+import {IParentLayoutContainer} from './IParentLayoutContainer';
+
 
 export interface ILayoutContainerOption {
   name: string;
@@ -13,20 +14,15 @@ export interface ILayoutContainerOption {
   fixedLayout: boolean;
 
 }
-
-export function withChanged(event: string) {
-  return `${event}${EventHandler.MULTI_EVENT_SEPARATOR}${LayoutContainerEvents.EVENT_LAYOUT_CHANGED}`;
-}
-
 export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends EventHandler {
   static readonly MIME_TYPE = 'text/x-phovea-layout-container';
 
-  parent: AParentLayoutContainer<any> | null = null;
+  parent: IParentLayoutContainer | null = null;
 
   protected readonly options: T;
   readonly header: HTMLElement;
 
-  readonly id = uniqueId(ALayoutContainer.MIME_TYPE);
+  readonly id = UniqueIdManager.getInstance().uniqueId(ALayoutContainer.MIME_TYPE);
 
   private readonly keyDownListener = (evt: KeyboardEvent) => {
     if (evt.keyCode === 27) { // Escape
@@ -59,7 +55,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
 
     //drag
     if (!this.options.fixedLayout) {
-      dragAble(this.header, () => {
+      DnDUtils.getInstance().dragAble(this.header, () => {
         return {
           effectAllowed: 'move',
           data: {
@@ -72,7 +68,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
   }
 
   get parents() {
-    const r: AParentLayoutContainer<any>[] = [];
+    const r: IParentLayoutContainer[] = [];
     let p = this.parent;
     while (p !== null) {
       r.push(p);
@@ -100,7 +96,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
   }
 
   destroy() {
-    this.fire(withChanged(LayoutContainerEvents.EVENT_DESTROYED), this);
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_DESTROYED), this);
   }
 
   get name() {
@@ -111,7 +107,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     if (this.options.name === name) {
       return;
     }
-    this.fire(withChanged(LayoutContainerEvents.EVENT_NAME_CHANGED), this.options.name, this.options.name = name);
+    this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_NAME_CHANGED), this.options.name, this.options.name = name);
     this.updateName(name);
   }
 
@@ -200,6 +196,8 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
   protected updateTitle() {
     this.header.title = `Double click to ${this.isMaximized? 'restore default size' : 'expand view'}`;
   }
-}
 
-export default ALayoutContainer;
+  static withChanged(event: string) {
+    return `${event}${EventHandler.MULTI_EVENT_SEPARATOR}${LayoutContainerEvents.EVENT_LAYOUT_CHANGED}`;
+  }
+}

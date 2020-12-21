@@ -1,7 +1,8 @@
-import {generateDialog} from '../src/dialogs';
+/// <reference types="jest" />
+import {Dialog} from '../src/components/dialogs';
 
 describe('generateDialog', () => {
   it('dummy', () => {
-    expect(generateDialog('hello')).toBeDefined();
+    expect(Dialog.generateDialog('hello')).toBeDefined();
   });
 });
