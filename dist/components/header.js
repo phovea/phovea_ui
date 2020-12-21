@@ -1,8 +1,6 @@
 /**
  * Created by Samuel Gratzl on 24.11.2014.
  */
-import '../webpack/_font-awesome';
-import '../scss/main.scss';
 import * as caleydoLogo from '../assets/caleydo_c.svg';
 import { BaseUtils, I18nextManager } from 'phovea_core';
 import '../webpack/_bootstrap';
