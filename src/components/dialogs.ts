@@ -251,7 +251,7 @@ export class FormDialog extends Dialog {
   static areyousure(msg: string = '', options: IAreYouSureOptions | string = {}): Promise<boolean> {
     const o: IAreYouSureOptions = {
       title: I18nextManager.getInstance().i18n.t('phovea:ui.areYouSure'),
-      button: `<i class="fa fa-trash" aria-hidden="true"></i>  ${I18nextManager.getInstance().i18n.t('phovea:ui.delete')}`,
+      button: `<i class="fas fa-trash" aria-hidden="true"></i>  ${I18nextManager.getInstance().i18n.t('phovea:ui.delete')}`,
       cancelButton:  I18nextManager.getInstance().i18n.t('phovea:ui.cancel')
     };
     if (typeof options === 'string') {

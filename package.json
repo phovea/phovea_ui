@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "bootstrap-sass": "3.4.1",
-    "font-awesome": "~4.7.0",
+    "@fortawesome/fontawesome-free": "^5.15.1",
     "jquery": "~3.5.1",
     "phovea_core": "github:phovea/phovea_core#thinkh/provenance_retrieval"
   },
