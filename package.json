@@ -51,7 +51,7 @@
     "dist": "mkdir lib && cd dist && tar cvzf ../lib/phovea_ui.tar.gz *"
   },
   "dependencies": {
-    "bootstrap-sass": "3.4.1",
+    "bootstrap": "^4.5.3",
     "@fortawesome/fontawesome-free": "^5.15.1",
     "jquery": "~3.5.1",
     "phovea_core": "github:phovea/phovea_core#develop"
