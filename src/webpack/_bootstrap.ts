@@ -6,11 +6,11 @@ import './jquery-global'; // we still need jquery, as a lot of code (especially 
 // Mock some Bootstrap functions that we use from Bootstrap v3 to prevent errors
 $.fn.modal = function() {
   return this;
-}
+};
 
 $.fn.button = function() {
   return this;
-}
+};
 
 // IMPORTANT: No import of Bootstrap v4 JavaScript code!
 // Use `React Bootstrap` for Bootstrap v4 components.
