@@ -8,6 +8,7 @@ import {BaseUtils, I18nextManager} from 'phovea_core';
 import '../webpack/_bootstrap';
 import {BuildInfo} from './buildInfo';
 import {AppMetaDataUtils} from './metaData';
+import {Dialog} from './dialogs';
 
 
 /**
@@ -29,19 +30,19 @@ const getTemplate = () => {
       </ul>
       <ul class="nav navbar-nav navbar-right" data-header="rightMenu">
           <li class="hidden" data-header="optionsLink">
-              <a href="#" data-toggle="modal" data-target="#headerOptionsDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.options')}">
+              <a href="#" data-toggle="modal" title="${I18nextManager.getInstance().i18n.t('phovea:ui.options')}">
                   <i class="fas fa-cog fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openOptionsDialog')}</span>
               </a>
           </li>
           <li class="hidden" data-header="aboutLink">
-              <a href="#" data-toggle="modal" data-target="#headerAboutDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.about')}">
+              <a href="#" title="${I18nextManager.getInstance().i18n.t('phovea:ui.about')}">
                   <i class="fas fa-info fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openAboutDialog')}</span>
               </a>
           </li>
           <li class="hidden" data-header="bugLink">
-              <a href="#" data-toggle="modal" data-target="#headerReportBugDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}">
+              <a href="#" data-toggle="modal" title="${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}">
                   <i class="fas fa-bug fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}</span>
               </a>
@@ -56,68 +57,7 @@ const getTemplate = () => {
   </div>
 </nav>
 
-<!-- About Dialog -->
-<div class="modal fade" id="headerAboutDialog" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-      <div class="modal-content">
-          <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-              <h4 class="modal-title">${I18nextManager.getInstance().i18n.t('phovea:ui.about')}</h4>
-          </div>
-          <div class="modal-body" data-header="about">
-              <div class="metaData">${I18nextManager.getInstance().i18n.t('phovea:ui.loading')}</div>
-              <div class="caleydoInfo">
-                  <a class="logo" href="https://phovea.caleydo.org" target="_blank"><img src="${caleydoLogo}"></a>
-                  <p class="info">
-                  ${I18nextManager.getInstance().i18n.t('phovea:ui.infoPart1')}
-                   <strong><a href="http://phovea.caleydo.org/"  target="_blank"> ${I18nextManager.getInstance().i18n.t('phovea:ui.phoveaName')}</a></strong>
-                        ${I18nextManager.getInstance().i18n.t('phovea:ui.infoPart2')}
-                      <a href="http://phovea.caleydo.org" target="_blank"> ${I18nextManager.getInstance().i18n.t('phovea:ui.infoPart3')}</a>.
-                  </p>
-              </div>
-          </div>
-      </div>
-  </div>
-</div>
-
-<!-- Report A Bug Dialog -->
-<div class="modal fade" id="headerReportBugDialog" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-      <div class="modal-content">
-          <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label=" ${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-              <h4 class="modal-title"> ${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}</h4>
-          </div>
-          <div class="modal-body" data-header="bug">
-          ${I18nextManager.getInstance().i18n.t('phovea:ui.loading')}
-          </div>
-      </div>
-  </div>
-</div>
-
-<!-- Options Dialog -->
-<div class="modal fade" id="headerOptionsDialog" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-      <div class="modal-content">
-          <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label=" ${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-              <h4 class="modal-title"> ${I18nextManager.getInstance().i18n.t('phovea:ui.options')}</h4>
-          </div>
-          <div class="modal-body" data-header="options">
-          ${I18nextManager.getInstance().i18n.t('phovea:ui.loading')}
-          </div>
-      </div>
-  </div>
-</div>
-
-<div id="headerWaitingOverlay" class="phovea-busy hidden">
-</div>
+<div id="headerWaitingOverlay" class="phovea-busy hidden"></div>
 `);
 };
 
@@ -197,28 +137,33 @@ export interface IAppHeaderOptions {
    */
   rightMenu?: IHeaderLink[];
 
+  /**
+   * show/hide the about dialog link
+   * @default true
+   */
   showAboutLink?: boolean | ((title: HTMLElement, content: HTMLElement) => void);
 
   /**
    * show/hide the options link
-   * default: false
+   * @default false
    */
   showOptionsLink?: boolean | ((title: HTMLElement, content: HTMLElement) => void);
 
   /**
    * show/hide the bug report link
-   * default: true
+   * @default true
    */
   showReportBugLink?: boolean | ((title: HTMLElement, content: HTMLElement) => void);
 
   /**
    * show/hide the EU cookie disclaimer bar from `cookie-bar.eu`
+   * @default false
    */
   showCookieDisclaimer?: boolean;
 
   /**
    * show help link true or the url to link
-   * default: false
+   * @default false
    */
   showHelpLink?: boolean | string;
 }
@@ -271,6 +216,11 @@ export class AppHeader {
     /**
      * show/hide the options link
      */
+    showAboutLink: true,
+
+    /**
+     * show/hide the options link
+     */
     showOptionsLink: false,
 
     /**
@@ -298,16 +248,6 @@ export class AppHeader {
    * Right menu is positioned to the right of the document
    */
   rightMenu: HTMLElement;
-
-  /**
-   * About dialog
-   */
-  aboutDialog: HTMLElement;
-
-  /**
-   * Options dialog
-   */
-  optionsDialog: HTMLElement;
 
   /**
    * Constructor overrides the default options with the given options
@@ -369,14 +309,12 @@ export class AppHeader {
 
     this.mainMenu = <HTMLElement>this.parent.querySelector('*[data-header="mainMenu"]');
     this.rightMenu = <HTMLElement>this.parent.querySelector('*[data-header="rightMenu"]');
-    this.aboutDialog = <HTMLElement>this.parent.querySelector('*[data-header="about"]');
-    this.optionsDialog = <HTMLElement>this.parent.querySelector('*[data-header="options"]');
 
     // show/hide links
-    this.toggleOptionsLink(this.options.showOptionsLink !== false, typeof this.options.showOptionsLink === 'function' ? this.options.showOptionsLink : null);
-    this.toggleAboutLink(this.options.showAboutLink !== false, typeof this.options.showAboutLink === 'function' ? this.options.showAboutLink : null);
-    this.toggleReportBugLink(this.options.showReportBugLink !== false, typeof this.options.showReportBugLink === 'function' ? this.options.showReportBugLink : null);
-    this.toggleHelpLink(this.options.showHelpLink !== false, typeof this.options.showHelpLink === 'string' ? this.options.showHelpLink : null);
+    this.toggleOptionsLink(this.options.showOptionsLink);
+    this.toggleAboutLink(this.options.showAboutLink);
+    this.toggleReportBugLink(this.options.showReportBugLink);
+    this.toggleHelpLink(this.options.showHelpLink);
 
     this.options.mainMenu.forEach((l) => this.addMainMenu(l.name, l.action, l.href));
     this.options.rightMenu.forEach((l) => this.addRightMenu(l.name, l.action, l.href));
@@ -414,66 +352,74 @@ export class AppHeader {
     element.classList.toggle('hidden', !isVisible);
   }
 
-  toggleOptionsLink(isVisible: boolean, contentGenerator?: (title: HTMLElement, content: HTMLElement) => void) {
-    const link = <HTMLElement>this.parent.querySelector('*[data-header="optionsLink"]');
-    AppHeader.setVisibility(link, isVisible);
+  private openModalDialog({link, contentGenerator, title, cssClass}: {link: HTMLAnchorElement, contentGenerator: (title: HTMLElement, content: HTMLElement) => void, title: string, cssClass?: string}) {
+    link.addEventListener('click', (evt) => {
+      // stop event from jQuery/Bootstrap propagation
+      evt.preventDefault();
+      evt.stopPropagation();
+
+      const dialog = Dialog.generateDialog(title, I18nextManager.getInstance().i18n.t('phovea:ui.close'), cssClass);
+      contentGenerator(<HTMLElement>dialog.header.querySelector('.modal-title'), dialog.body);
+      dialog.show();
+
+      return false;
+    });
+  }
+
+  private toggleOptionsLink(link: boolean | ((title: HTMLElement, content: HTMLElement) => void)) {
+    const isVisible = !!link; // cast to boolean
+    const listItem = <HTMLElement>this.parent.querySelector('[data-header="optionsLink"]');
+    AppHeader.setVisibility(listItem, isVisible);
 
     // set the URL to GitHub issues dynamically
     if (isVisible) {
-      contentGenerator = contentGenerator || defaultOptionsInfo;
-      import('jquery').then((jquery) => {
-        $('#headerOptionsDialog').one('show.bs.modal', () => {
-          const content = <HTMLElement>this.parent.querySelector('*[data-header="options"]');
-          const title = <HTMLElement>this.parent.querySelector('#headerOptionsDialog .modal-title');
-          content.innerHTML = 'Loading...';
-          contentGenerator(title, content);
-        });
+      this.openModalDialog({
+        link: listItem.querySelector('a'),
+        title: I18nextManager.getInstance().i18n.t('phovea:ui.options'),
+        contentGenerator: (typeof link === 'function') ? link : defaultOptionsInfo,
+        cssClass: 'header-options-dialog'
       });
     }
   }
 
-  toggleHelpLink(isVisible: boolean, helpUrl?: string) {
-    const link = <HTMLElement>this.parent.querySelector('*[data-header="helpLink"]');
-    AppHeader.setVisibility(link, isVisible);
+  private toggleHelpLink(link: boolean | string) {
+    const isVisible = !!link; // cast to boolean
+    const listItem = <HTMLElement>this.parent.querySelector('[data-header="helpLink"]');
+    AppHeader.setVisibility(listItem, isVisible);
 
-    if (isVisible && helpUrl) {
-      link.querySelector('a')!.href = helpUrl;
+    if (isVisible && typeof link === 'string') {
+      listItem.querySelector('a').href = link;
     }
   }
 
-  toggleReportBugLink(isVisible: boolean, contentGenerator?: (title: HTMLElement, content: HTMLElement) => void) {
-    const link = <HTMLElement>this.parent.querySelector('*[data-header="bugLink"]');
-    AppHeader.setVisibility(link, isVisible);
+  private toggleReportBugLink(link: boolean | ((title: HTMLElement, content: HTMLElement) => void)) {
+    const isVisible = !!link; // cast to boolean
+    const listItem = <HTMLElement>this.parent.querySelector('[data-header="bugLink"]');
+    AppHeader.setVisibility(listItem, isVisible);
 
     // set the URL to GitHub issues dynamically
     if (isVisible) {
-      contentGenerator = contentGenerator || defaultBuildInfo;
-      import('jquery').then((jquery) => {
-        $('#headerReportBugDialog').one('show.bs.modal', () => {
-          const content = <HTMLElement>this.parent.querySelector('*[data-header="bug"]');
-          const title = <HTMLElement>this.parent.querySelector('#headerReportBugDialog .modal-title');
-          content.innerHTML = 'Loading...';
-          contentGenerator(title, content);
-        });
+      this.openModalDialog({
+        link: listItem.querySelector('a'),
+        title: I18nextManager.getInstance().i18n.t('phovea:ui.reportBug'),
+        contentGenerator: (typeof link === 'function') ? link : defaultBuildInfo,
+        cssClass: 'header-report-bug-dialog'
       });
     }
   }
 
-  private toggleAboutLink(isVisible: boolean, contentGenerator?: (title: HTMLElement, content: HTMLElement) => void) {
-    const link = <HTMLElement>this.parent.querySelector('*[data-header="aboutLink"]');
-    AppHeader.setVisibility(link, isVisible);
-    if (isVisible) {
-      contentGenerator = contentGenerator || defaultAboutInfo;
-      const modifyDialogOnce = () => {
-        // request last deployment data
-        const content = <HTMLElement>this.aboutDialog;
-        const title = <HTMLElement>this.aboutDialog.parentElement.querySelector('.modal-title');
+  private toggleAboutLink(link: boolean | ((title: HTMLElement, content: HTMLElement) => void)) {
+    const isVisible = !!link; // cast to boolean
+    const listItem = <HTMLElement>this.parent.querySelector('[data-header="aboutLink"]');
+    AppHeader.setVisibility(listItem, isVisible);
 
-        contentGenerator(title, content);
-        // remove event listener to prevent another DOM modification
-        link.removeEventListener('click', modifyDialogOnce);
-      };
-      link.addEventListener('click', modifyDialogOnce);
+    if (isVisible) {
+      this.openModalDialog({
+        link: listItem.querySelector('a'),
+        title: I18nextManager.getInstance().i18n.t('phovea:ui.about'),
+        contentGenerator: (typeof link === 'function') ? link : defaultAboutInfo,
+        cssClass: 'header-about-dialog'
+      });
     }
   }
 
@@ -499,8 +445,8 @@ export class AppHeader {
 }
 
 
-
 function defaultBuildInfo(_title: HTMLElement, content: HTMLElement) {
+  content.innerHTML = I18nextManager.getInstance().i18n.t('phovea:ui.loading');
   BuildInfo.build().then((buildInfo) => {
     content.innerHTML = buildInfo.toHTML();
   }).catch((error) => {
@@ -509,6 +455,17 @@ function defaultBuildInfo(_title: HTMLElement, content: HTMLElement) {
 }
 
 function defaultAboutInfo(title: HTMLElement, content: HTMLElement) {
+  content.innerHTML = `<div class="metaData">${I18nextManager.getInstance().i18n.t('phovea:ui.loading')}</div>
+  <div class="caleydoInfo">
+      <a class="logo" href="https://phovea.caleydo.org" target="_blank"><img src="${caleydoLogo}"></a>
+      <p class="info">
+      ${I18nextManager.getInstance().i18n.t('phovea:ui.infoPart1')}
+        <strong><a href="http://phovea.caleydo.org/"  target="_blank"> ${I18nextManager.getInstance().i18n.t('phovea:ui.phoveaName')}</a></strong>
+            ${I18nextManager.getInstance().i18n.t('phovea:ui.infoPart2')}
+          <a href="http://phovea.caleydo.org" target="_blank"> ${I18nextManager.getInstance().i18n.t('phovea:ui.infoPart3')}</a>.
+      </p>
+  </div>`;
+
   content = <HTMLElement>content.querySelector('.metaData');
   AppMetaDataUtils.getMetaData().then((metaData) => {
     title.innerHTML = (metaData.displayName || metaData.name).replace('_', ' ');

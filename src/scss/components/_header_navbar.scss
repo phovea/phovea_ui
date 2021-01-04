@@ -82,8 +82,17 @@ nav.navbar-inverse {
   }
 }
 
+.header-about-dialog,
+.header-report-bug-dialog,
+.header-options-dialog {
+  // hide modal dialog footer for all header dialogs
+  .modal-footer {
+    display: none;
+  }
+}
+
 // aboutDialog dialog that opens from a link in the header
-#headerAboutDialog {
+.header-about-dialog {
   .modal-title {
     text-transform: capitalize;
   }
@@ -91,25 +100,21 @@ nav.navbar-inverse {
   .caleydoInfo {
     margin-top: 15px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    gap: 15px;
 
     .logo {
       width: 100px;
-      margin-right: 15px;
 
       img {
         width: 100%;
       }
     }
-
-    p {
-      margin-bottom: 0;
-    }
   }
 }
 
-#headerReportBugDialog {
-  *[data-header="bug"] textarea {
+.header-report-bug-dialog {
+  textarea {
     width: 100%;
     height: 25vh;
     overflow: auto;
