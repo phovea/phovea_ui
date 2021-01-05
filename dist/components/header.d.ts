@@ -52,24 +52,29 @@ export interface IAppHeaderOptions {
      * a list of links that should be shown in the right menu
      */
     rightMenu?: IHeaderLink[];
+    /**
+     * show/hide the about dialog link
+     * @default true
+     */
     showAboutLink?: boolean | ((title: HTMLElement, content: HTMLElement) => void);
     /**
      * show/hide the options link
-     * default: false
+     * @default false
      */
     showOptionsLink?: boolean | ((title: HTMLElement, content: HTMLElement) => void);
     /**
      * show/hide the bug report link
-     * default: true
+     * @default true
      */
     showReportBugLink?: boolean | ((title: HTMLElement, content: HTMLElement) => void);
     /**
      * show/hide the EU cookie disclaimer bar from `cookie-bar.eu`
+     * @default false
      */
     showCookieDisclaimer?: boolean;
     /**
      * show help link true or the url to link
-     * default: false
+     * @default false
      */
     showHelpLink?: boolean | string;
 }
@@ -92,14 +97,6 @@ export declare class AppHeader {
      */
     rightMenu: HTMLElement;
     /**
-     * About dialog
-     */
-    aboutDialog: HTMLElement;
-    /**
-     * Options dialog
-     */
-    optionsDialog: HTMLElement;
-    /**
      * Constructor overrides the default options with the given options
      * @param parent
      * @param options
@@ -114,9 +111,10 @@ export declare class AppHeader {
     wait(): void;
     ready(): void;
     private static setVisibility;
-    toggleOptionsLink(isVisible: boolean, contentGenerator?: (title: HTMLElement, content: HTMLElement) => void): void;
-    toggleHelpLink(isVisible: boolean, helpUrl?: string): void;
-    toggleReportBugLink(isVisible: boolean, contentGenerator?: (title: HTMLElement, content: HTMLElement) => void): void;
+    private openModalDialog;
+    private toggleOptionsLink;
+    private toggleHelpLink;
+    private toggleReportBugLink;
     private toggleAboutLink;
     hideDialog(selector: string): void;
     showAndFocusOn(selector: string, focusSelector: string): void;
