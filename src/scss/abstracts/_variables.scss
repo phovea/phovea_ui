@@ -4,7 +4,10 @@ $icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/' !default;
 
 $boostrapAssetDir: '~phovea_ui/dist/assets' !default;
 $phovea-loading-icon: rgba(255, 255, 255, 0.26) url('#{$boostrapAssetDir}/caleydo_c_anim.svg') no-repeat fixed center !default;
-$phovea-brand-logo: transparent url('#{$boostrapAssetDir}/caleydo_c.svg') no-repeat 0.6em 45% !default;
+$phovea-brand-logo-url: url('#{$boostrapAssetDir}/caleydo_c.svg') !default;
+$phovea-brand-logo-width: 50px !default;
+$phovea-brand-logo-background: transparent #{$phovea-brand-logo-url} no-repeat 0.6em 45% !default;
+$phovea-brand-logo: $phovea-brand-logo-background !default; // @deprecated use $phovea-brand-logo-background instead
 
 // header navbar color (the inverse colors will be computed using sass `invert($color)`)
 $header-bg-color: #f0f0f0 !default;
