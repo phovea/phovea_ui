@@ -14,40 +14,37 @@ import {AppMetaDataUtils} from './metaData';
  * header html template declared inline so we can use i18next
  */
 const getTemplate = () => {
-  return (`<nav class="navbar">
-  <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#headerNavBar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#" data-header="appLink"></a>
-  </div>
-  <div class="collapse navbar-collapse">
-      <ul class="nav navbar-nav" data-header="mainMenu">
+  return (`<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#" data-header="appLink"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#headerNavBar" aria-controls="headerNavBar" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="headerNavBar">
+      <ul class="navbar-nav mr-auto" data-header="mainMenu">
 
       </ul>
-      <ul class="nav navbar-nav navbar-right" data-header="rightMenu">
-          <li class="hidden" data-header="optionsLink">
-              <a href="#" data-toggle="modal" data-target="#headerOptionsDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.options')}">
+      <ul class="navbar-nav" data-header="rightMenu">
+          <li class="nav-item hidden" data-header="optionsLink">
+              <a href="#" class="nav-link" data-toggle="modal" data-target="#headerOptionsDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.options')}">
                   <i class="fas fa-cog fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openOptionsDialog')}</span>
               </a>
           </li>
-          <li class="hidden" data-header="aboutLink">
-              <a href="#" data-toggle="modal" data-target="#headerAboutDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.about')}">
+          <li class="nav-item hidden" data-header="aboutLink">
+              <a href="#" class="nav-link" data-toggle="modal" data-target="#headerAboutDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.about')}">
                   <i class="fas fa-info fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openAboutDialog')}</span>
               </a>
           </li>
-          <li class="hidden" data-header="bugLink">
-              <a href="#" data-toggle="modal" data-target="#headerReportBugDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}">
+          <li class="nav-item hidden" data-header="bugLink">
+              <a href="#" class="nav-link" data-toggle="modal" data-target="#headerReportBugDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}">
                   <i class="fas fa-bug fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}</span>
               </a>
           </li>
-          <li class="hidden" data-header="helpLink">
-              <a href="//caleydo.org" target="_blank" title="${I18nextManager.getInstance().i18n.t('phovea:ui.openHelpPage')}">
+          <li class="nav-item hidden" data-header="helpLink">
+              <a href="//caleydo.org" target="_blank" class="nav-link" title="${I18nextManager.getInstance().i18n.t('phovea:ui.openHelpPage')}">
                   <i class="fas fa-question fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openHelpPage')}</span>
               </a>
@@ -162,7 +159,8 @@ export class AppHeaderLink implements IHeaderLink {
  */
 function createLi(name: string, action: (event: MouseEvent) => any, href: string = '#') {
   const li = <HTMLElement>document.createElement('li');
-  li.innerHTML = `<a href="${href}">${name}</a>`;
+  li.classList.add('list-item');
+  li.innerHTML = `<a href="${href}" class="nav-link">${name}</a>`;
   if (action) {
     (<HTMLElement>li.querySelector('a')).onclick = action;
   }
