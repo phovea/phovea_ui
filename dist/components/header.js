@@ -281,7 +281,7 @@ export class AppHeader {
         AppHeader.setVisibility(document.querySelector('#headerWaitingOverlay'), false);
     }
     static setVisibility(element, isVisible) {
-        element.classList.toggle('hidden', !isVisible);
+        element.toggleAttribute('hidden', !isVisible);
     }
     toggleOptionsLink(isVisible, contentGenerator) {
         const link = this.parent.querySelector('*[data-header="optionsLink"]');

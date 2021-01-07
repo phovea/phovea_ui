@@ -411,7 +411,7 @@ export class AppHeader {
   }
 
   private static setVisibility(element: HTMLElement, isVisible: boolean) {
-    element.classList.toggle('hidden', !isVisible);
+    element.toggleAttribute('hidden', !isVisible);
   }
 
   toggleOptionsLink(isVisible: boolean, contentGenerator?: (title: HTMLElement, content: HTMLElement) => void) {
