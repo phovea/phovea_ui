@@ -54,7 +54,7 @@
     "bootstrap-sass": "3.4.1",
     "@fortawesome/fontawesome-free": "^5.15.1",
     "jquery": "~3.5.1",
-    "phovea_core": "github:phovea/phovea_core#vstoiber/update_dependencies_provenance_retrieval"
+    "phovea_core": "github:phovea/phovea_core#thinkh/provenance_retrieval"
   },
   "devDependencies": {
     "@types/bootstrap": "~4.5.0",
