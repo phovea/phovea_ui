@@ -43,7 +43,7 @@ export class ViewLayoutContainer extends ALayoutContainer {
         this.node = view.node.ownerDocument.createElement('article');
         this.node.dataset.layout = 'view';
         this.node.appendChild(view.node);
-        this.header.insertAdjacentHTML('beforeend', `<button type="button" title="Expand view" class="size-toggle" aria-label="Toggle View Size"><span><i class="fa fa-expand"></i></span></button>`);
+        this.header.insertAdjacentHTML('beforeend', `<button type="button" title="Expand view" class="size-toggle" aria-label="Toggle View Size"><span><i class="fas fa-expand"></i></span></button>`);
         const min = this.minSize;
         if (min[0] > 0) {
             view.node.style.minWidth = `${min[0]}px`;

@@ -2,10 +2,6 @@
  * Created by Samuel Gratzl on 24.11.2014.
  */
 
-import '../webpack/_font-awesome';
-import '../scss/main.scss';
-import * as caleydoLogo from '../assets/caleydo_c.svg';
-
 import {BaseUtils, I18nextManager} from 'phovea_core';
 import '../webpack/_bootstrap';
 import {BuildInfo} from './buildInfo';
@@ -32,25 +28,25 @@ const getTemplate = () => {
       <ul class="nav navbar-nav navbar-right" data-header="rightMenu">
           <li class="hidden" data-header="optionsLink">
               <a href="#" data-toggle="modal" data-target="#headerOptionsDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.options')}">
-                  <i class="fa fa-cog fa-fw" aria-hidden="true"></i>
+                  <i class="fas fa-cog fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openOptionsDialog')}</span>
               </a>
           </li>
           <li class="hidden" data-header="aboutLink">
               <a href="#" data-toggle="modal" data-target="#headerAboutDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.about')}">
-                  <i class="fa fa-info fa-fw" aria-hidden="true"></i>
+                  <i class="fas fa-info fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openAboutDialog')}</span>
               </a>
           </li>
           <li class="hidden" data-header="bugLink">
               <a href="#" data-toggle="modal" data-target="#headerReportBugDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}">
-                  <i class="fa fa-bug fa-fw" aria-hidden="true"></i>
+                  <i class="fas fa-bug fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}</span>
               </a>
           </li>
           <li class="hidden" data-header="helpLink">
               <a href="//caleydo.org" target="_blank" title="${I18nextManager.getInstance().i18n.t('phovea:ui.openHelpPage')}">
-                  <i class="fa fa-question fa-fw" aria-hidden="true"></i>
+                  <i class="fas fa-question fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openHelpPage')}</span>
               </a>
           </li>
@@ -71,7 +67,6 @@ const getTemplate = () => {
           <div class="modal-body" data-header="about">
               <div class="metaData">${I18nextManager.getInstance().i18n.t('phovea:ui.loading')}</div>
               <div class="caleydoInfo">
-                  <a class="logo" href="https://phovea.caleydo.org" target="_blank"><img src="${caleydoLogo}"></a>
                   <p class="info">
                   ${I18nextManager.getInstance().i18n.t('phovea:ui.infoPart1')}
                    <strong><a href="http://phovea.caleydo.org/"  target="_blank"> ${I18nextManager.getInstance().i18n.t('phovea:ui.phoveaName')}</a></strong>

@@ -2,6 +2,7 @@ import {AParentLayoutContainer} from './AParentLayoutContainer';
 import {ILayoutContainer, ISize} from '../interfaces';
 import {ILayoutContainerOption} from './ALayoutContainer';
 import {EOrientation, IDropArea} from '../interfaces';
+import {LAYOUT_CONTAINER_WRAPPER} from '../constants';
 
 export interface ISequentialLayoutContainerOptions extends ILayoutContainerOption {
   readonly orientation: EOrientation;
@@ -60,6 +61,7 @@ export abstract class ASequentialLayoutContainer<T extends ISequentialLayoutCont
 
   static wrap(child: ILayoutContainer) {
     const s = child.node.ownerDocument.createElement('section');
+    s.classList.add(LAYOUT_CONTAINER_WRAPPER);
     if (!child.hideAbleHeader) {
       s.appendChild(child.header);
     }
