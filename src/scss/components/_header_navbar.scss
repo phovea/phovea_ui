@@ -26,7 +26,7 @@ nav.navbar-inverse {
   // caleydo logo for the app link
   .caleydo_app {
     padding-left: 2.1em;
-    background: $phovea-brand-logo;
+    background: $phovea-brand-logo-background;
     background-size: 20px;
     background-origin: border-box;
     display: flex;
@@ -91,18 +91,20 @@ nav.navbar-inverse {
   .caleydoInfo {
     margin-top: 15px;
     display: flex;
-    align-items: center;
+    align-items: stretch;
+    gap: 15px;
 
-    .logo {
-      width: 100px;
-      margin-right: 15px;
-
-      img {
-        width: 100%;
-      }
+    &::before {
+      display: block;
+      content: '';
+      background: transparent #{$phovea-brand-logo-url} no-repeat top center;
+      background-size: contain;
+      flex-basis: $phovea-brand-logo-width;
+      min-height: $phovea-brand-logo-width;
     }
 
     p {
+      flex: 1;
       margin-bottom: 0;
     }
   }
