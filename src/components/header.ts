@@ -486,7 +486,7 @@ export class AppHeader {
       const $selector = $(selector);
       $selector.modal('show')
         .on('shown.bs.modal', function () {
-          $(focusSelector, $selector).focus();
+          $($selector).trigger('focus');
         });
     });
   }
