@@ -1,7 +1,6 @@
 /**
  * Created by Samuel Gratzl on 24.11.2014.
  */
-import * as caleydoLogo from '../assets/caleydo_c.svg';
 import { BaseUtils, I18nextManager } from 'phovea_core';
 import '../webpack/_bootstrap';
 import { BuildInfo } from './buildInfo';
@@ -65,7 +64,6 @@ const getTemplate = () => {
           <div class="modal-body" data-header="about">
               <div class="metaData">${I18nextManager.getInstance().i18n.t('phovea:ui.loading')}</div>
               <div class="caleydoInfo">
-                  <a class="logo" href="https://phovea.caleydo.org" target="_blank"><img src="${caleydoLogo}"></a>
                   <p class="info">
                   ${I18nextManager.getInstance().i18n.t('phovea:ui.infoPart1')}
                    <strong><a href="http://phovea.caleydo.org/"  target="_blank"> ${I18nextManager.getInstance().i18n.t('phovea:ui.phoveaName')}</a></strong>
