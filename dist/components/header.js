@@ -231,9 +231,7 @@ export class AppHeader {
             this.parent.insertBefore(helper.lastChild, this.parent.firstChild);
         }
         // use the inverse color scheme
-        if (this.options.inverse) {
-            this.parent.querySelector('nav.navbar').classList.add('navbar-inverse');
-        }
+        this.toggleDarkTheme(this.options.inverse);
         // modify app header link
         const appLink = this.parent.querySelector('*[data-header="appLink"]');
         appLink.innerHTML = this.options.appLink.name;
@@ -269,6 +267,18 @@ export class AppHeader {
     }
     insertCustomRightMenu(element) {
         this.rightMenu.parentElement.appendChild(element);
+    }
+    toggleDarkTheme(force) {
+        const navbarElement = this.parent.querySelector('nav.navbar');
+        this.options.inverse = (force !== undefined) ? force : !this.options.inverse;
+        if (this.options.inverse) {
+            navbarElement.classList.remove('navbar-light', 'bg-light');
+            navbarElement.classList.add('navbar-dark', 'bg-dark');
+        }
+        else {
+            navbarElement.classList.add('navbar-light', 'bg-light');
+            navbarElement.classList.remove('navbar-dark', 'bg-dark');
+        }
     }
     wait() {
         AppHeader.setVisibility(document.querySelector('#headerWaitingOverlay'), true);

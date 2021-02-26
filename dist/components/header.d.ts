@@ -111,6 +111,7 @@ export declare class AppHeader {
     addRightMenu(name: string, action: (event: MouseEvent) => any, href?: string): HTMLElement;
     insertCustomMenu(element: Element): void;
     insertCustomRightMenu(element: Element): void;
+    toggleDarkTheme(force?: boolean): void;
     wait(): void;
     ready(): void;
     private static setVisibility;

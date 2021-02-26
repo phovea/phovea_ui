@@ -347,9 +347,7 @@ export class AppHeader {
     }
 
     // use the inverse color scheme
-    if (this.options.inverse) {
-      (<HTMLElement>this.parent.querySelector('nav.navbar')).classList.add('navbar-inverse');
-    }
+    this.toggleDarkTheme(this.options.inverse);
 
     // modify app header link
     const appLink = (<HTMLElement>this.parent.querySelector('*[data-header="appLink"]'));
@@ -395,6 +393,21 @@ export class AppHeader {
 
   insertCustomRightMenu(element: Element) {
     this.rightMenu.parentElement.appendChild(element);
+  }
+
+  toggleDarkTheme(force?: boolean) {
+    const navbarElement = (<HTMLElement>this.parent.querySelector('nav.navbar'));
+
+    this.options.inverse = (force !== undefined) ? force : !this.options.inverse;
+
+    if(this.options.inverse) {
+      navbarElement.classList.remove('navbar-light', 'bg-light');
+      navbarElement.classList.add('navbar-dark', 'bg-dark');
+
+    } else {
+      navbarElement.classList.add('navbar-light', 'bg-light');
+      navbarElement.classList.remove('navbar-dark', 'bg-dark');
+    }
   }
 
   wait() {
