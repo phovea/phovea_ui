@@ -22,6 +22,11 @@
   .navbar-nav {
     gap: map-get($spacers, 1);
   }
+
+  // hide caret icon of dropdowns in header
+  .dropdown-toggle::after {
+    content: none;
+  }
 }
 
 /**
