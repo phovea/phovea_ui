@@ -2,20 +2,30 @@
 $fa-font-path: '~@fortawesome/fontawesome-free/webfonts' !default;
 // $icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/' !default; // Bootstrap v3
 
+// Override and set Bootstrap theme colors
+// @see https://getbootstrap.com/docs/4.5/getting-started/theming/#sass-options
+// @usage `color: map-get($theme-colors, "light");`
+$theme-colors: (
+  "light": #F1F2F4,
+  "dark": #2F353A,
+  "white": #FFFFFF,
+  "white-hover": #FFFFFFBF, // add some alpha on hover
+  "gray-1": #6c757d,
+  "gray-2": #72818d,
+  "gray-3":  #d4d7dd,
+  "gray-4":  #aab3bb,
+  "gray-5":  #3b4349,
+); // TODO: change imports to use !default here and allow overriding
+
+
 $phovea-loading-icon-url: url('~phovea_ui/dist/assets/caleydo_c_anim.svg') !default;
 $phovea-loading-icon-background: rgba(255, 255, 255, 0.26) #{$phovea-loading-icon-url} no-repeat fixed center !default;
 $phovea-loading-icon: $phovea-loading-icon-background !default; // @deprecated use $phovea-loading-icon-background instead
 
 $phovea-brand-logo-url: url('~phovea_ui/dist/assets/caleydo_c.svg') !default;
 $phovea-brand-logo-width: 50px !default;
-$phovea-brand-logo-background: transparent #{$phovea-brand-logo-url} no-repeat 0.6em 45% !default;
+$phovea-brand-logo-background: transparent #{$phovea-brand-logo-url} no-repeat 0 45% !default;
 $phovea-brand-logo: $phovea-brand-logo-background !default; // @deprecated use $phovea-brand-logo-background instead
-
-// header navbar color (the inverse colors will be computed using sass `invert($color)`)
-$header-bg-color: #f0f0f0 !default;
-$header-border-color: #ddd !default;
-$header-link-color: #333 !default;
-$header-dropdown-link-color: $header-link-color !default;
 
 $select-color: orange !default;
 $select-color-bright: #ffdca3 !default;
