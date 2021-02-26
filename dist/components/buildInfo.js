@@ -12,7 +12,7 @@ export class BuildInfo {
     }
     buildBuildInfo() {
         const build = this.client;
-        return `<table class="table table-bordered table-condensed">
+        return `<table class="table table-bordered table-sm">
             <tbody>
               <tr><th>${I18nextManager.getInstance().i18n.t('phovea:ui.application')}</th><td>${build.name}</td></tr>
               <tr><th>${I18nextManager.getInstance().i18n.t('phovea:ui.version')}</th><td>${build.version}</td></tr>
