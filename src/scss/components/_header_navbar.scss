@@ -29,55 +29,57 @@
   }
 }
 
-/**
- * Colors light theme
- */
-.navbar-light {
-  border-bottom: 1px solid map-get($theme-colors, "gray-3");
+.phovea-navbar {
+  /**
+   * Colors light theme
+   */
+  &.navbar-light {
+    border-bottom: 1px solid map-get($theme-colors, "gray-3");
 
-  .navbar-brand {
-    color: map-get($theme-colors, "dark");
-  }
+    .navbar-brand {
+      color: map-get($theme-colors, "dark");
+    }
 
-  .nav-link {
-    color: map-get($theme-colors, "dark");
+    .nav-link {
+      color: map-get($theme-colors, "dark");
 
-    &:hover,
-    &:focus {
+      &:hover,
+      &:focus {
+        background-color: map-get($theme-colors, "gray-3");
+        color: map-get($theme-colors, "dark");
+      }
+    }
+
+    .active > .nav-link {
       background-color: map-get($theme-colors, "gray-3");
       color: map-get($theme-colors, "dark");
     }
   }
 
-  .active > .nav-link {
-    background-color: map-get($theme-colors, "gray-3");
-    color: map-get($theme-colors, "dark");
-  }
-}
+  /**
+   * Colors dark theme
+   */
+  &.navbar-dark {
+    border-bottom-color: map-get($theme-colors, "gray-5");
 
-/**
- * Colors dark theme
- */
-.navbar-dark {
-  border-bottom-color: map-get($theme-colors, "gray-5");
+    .navbar-brand {
+      color: map-get($theme-colors, "white");
+    }
 
-  .navbar-brand {
-    color: map-get($theme-colors, "white");
-  }
+    .nav-link {
+      color: map-get($theme-colors, "light");
 
-  .nav-link {
-    color: map-get($theme-colors, "light");
+      &:hover,
+      &:focus {
+        background-color: map-get($theme-colors, "light");
+        color: map-get($theme-colors, "dark");
+      }
+    }
 
-    &:hover,
-    &:focus {
+    .active > .nav-link {
       background-color: map-get($theme-colors, "light");
       color: map-get($theme-colors, "dark");
     }
-  }
-
-  .active > .nav-link {
-    background-color: map-get($theme-colors, "light");
-    color: map-get($theme-colors, "dark");
   }
 }
 
@@ -95,7 +97,7 @@
 
     &::before {
       display: block;
-      content: '';
+      content: "";
       background: transparent #{$phovea-brand-logo-url} no-repeat top center;
       background-size: contain;
       flex-basis: $phovea-brand-logo-width;
