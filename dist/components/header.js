@@ -163,6 +163,10 @@ export class AppHeader {
              */
             inverse: false,
             /**
+             * position of the header: static (= false) or fixed at the top (= true)
+             */
+            positionFixed: false,
+            /**
              * @DEPRECATED use `appLink.name` instead
              */
             //app: 'Caleydo Web',
@@ -279,6 +283,11 @@ export class AppHeader {
             navbarElement.classList.add('navbar-light', 'bg-light');
             navbarElement.classList.remove('navbar-dark', 'bg-dark');
         }
+    }
+    togglePositionFixed(force) {
+        const navbarElement = this.parent.querySelector('nav.navbar');
+        this.options.positionFixed = (force !== undefined) ? force : !this.options.positionFixed;
+        navbarElement.classList.toggle('fixed-top', this.options.positionFixed);
     }
     wait() {
         AppHeader.setVisibility(document.querySelector('#headerWaitingOverlay'), true);
