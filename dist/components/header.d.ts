@@ -41,6 +41,11 @@ export interface IAppHeaderOptions {
      */
     inverse?: boolean;
     /**
+     * position of the header: static (= false) or fixed at the top (= true)
+     * default: false
+     */
+    positionFixed?: boolean;
+    /**
      * the app link with the app name
      */
     appLink?: AppHeaderLink;
@@ -112,6 +117,7 @@ export declare class AppHeader {
     insertCustomMenu(element: Element): void;
     insertCustomRightMenu(element: Element): void;
     toggleDarkTheme(force?: boolean): void;
+    togglePositionFixed(force?: boolean): void;
     wait(): void;
     ready(): void;
     private static setVisibility;

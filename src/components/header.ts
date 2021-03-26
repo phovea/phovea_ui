@@ -178,6 +178,12 @@ export interface IAppHeaderOptions {
   inverse?: boolean;
 
   /**
+   * position of the header: static (= false) or fixed at the top (= true)
+   * default: false
+   */
+  positionFixed?: boolean;
+
+  /**
    * the app link with the app name
    */
   appLink?: AppHeaderLink;
@@ -237,6 +243,11 @@ export class AppHeader {
      * color scheme: bright (= false) or dark (= true)
      */
     inverse: false,
+
+    /**
+     * position of the header: static (= false) or fixed at the top (= true)
+     */
+    positionFixed: false,
 
     /**
      * @DEPRECATED use `appLink.name` instead
@@ -408,6 +419,13 @@ export class AppHeader {
       navbarElement.classList.add('navbar-light', 'bg-light');
       navbarElement.classList.remove('navbar-dark', 'bg-dark');
     }
+  }
+
+  togglePositionFixed(force?: boolean) {
+    const navbarElement = (<HTMLElement>this.parent.querySelector('nav.navbar'));
+    this.options.positionFixed = (force !== undefined) ? force : !this.options.positionFixed;
+
+    navbarElement.classList.toggle('fixed-top', this.options.positionFixed);
   }
 
   wait() {
