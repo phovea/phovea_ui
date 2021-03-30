@@ -544,7 +544,7 @@ function defaultAboutInfo(title: HTMLElement, content: HTMLElement) {
     }
     contentTpl += `<p class="version"><strong>${I18nextManager.getInstance().i18n.t('phovea:ui.version')}</strong>: ${metaData.version}</p>`;
     if (metaData.screenshot) {
-      contentTpl += `<img src="${metaData.screenshot}" class="center-block img-responsive img-thumbnail"/>`;
+      contentTpl += `<img src="${metaData.screenshot}" class="center-block img-fluid img-thumbnail"/>`;
     }
     content.innerHTML = contentTpl;
   });
