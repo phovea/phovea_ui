@@ -6,10 +6,9 @@ $phovea-loading-icon-url: url('~phovea_ui/dist/assets/caleydo_c_anim.svg') !defa
 $phovea-loading-icon-background: rgba(255, 255, 255, 0.26) #{$phovea-loading-icon-url} no-repeat fixed center !default;
 $phovea-loading-icon: $phovea-loading-icon-background !default; // @deprecated use $phovea-loading-icon-background instead
 
-$phovea-brand-logo-url: url('~phovea_ui/dist/assets/caleydo_c.svg') !default;
-$phovea-brand-logo-width: 50px !default;
-$phovea-brand-logo-background: transparent #{$phovea-brand-logo-url} no-repeat 0.6em 45% !default;
-$phovea-brand-logo: $phovea-brand-logo-background !default; // @deprecated use $phovea-brand-logo-background instead
+$phovea-navbar-logo-url: url('~phovea_ui/dist/assets/caleydo_c.svg') !default;
+$phovea-navbar-logo-width: 20px !default;
+$phovea-navbar-logo-top: center !default;
 
 // header navbar color (the inverse colors will be computed using sass `invert($color)`)
 $header-bg-color: #f0f0f0 !default;

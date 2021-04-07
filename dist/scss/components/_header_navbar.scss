@@ -25,12 +25,19 @@ nav.navbar-inverse {
 
   // caleydo logo for the app link
   .caleydo_app {
-    padding-left: 2.1em;
-    background: $phovea-brand-logo-background;
-    background-size: 20px;
-    background-origin: border-box;
     display: flex;
     align-items: center;
+    gap: 1rem;
+
+    &::before {
+      content: '';
+      display: block;
+      background: $phovea-navbar-logo-url no-repeat center $phovea-navbar-logo-top;
+      background-size: contain;
+      height: 100%;
+      width: $phovea-navbar-logo-width; // = text height of the navbar link
+      transform: scale(1.2);
+    }
   }
 }
 
@@ -95,12 +102,12 @@ nav.navbar-inverse {
     gap: 15px;
 
     &::before {
-      display: block;
-      content: '';
-      background: transparent #{$phovea-brand-logo-url} no-repeat top center;
-      background-size: contain;
-      flex-basis: $phovea-brand-logo-width;
-      min-height: $phovea-brand-logo-width;
+      // display: block;
+      // content: '';
+      // background: transparent #{$phovea-navbar-logo-url} no-repeat top center;
+      // background-size: contain;
+      // flex-basis: $phovea-navbar-logo-width;
+      // min-height: $phovea-navbar-logo-width;
     }
 
     p {
