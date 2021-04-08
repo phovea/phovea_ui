@@ -102,12 +102,11 @@ nav.navbar-inverse {
     gap: 15px;
 
     &::before {
-      // display: block;
-      // content: '';
-      // background: transparent #{$phovea-navbar-logo-url} no-repeat top center;
-      // background-size: contain;
-      // flex-basis: $phovea-navbar-logo-width;
-      // min-height: $phovea-navbar-logo-width;
+      display: block;
+      content: '';
+      background: $phovea-about-dialog-logo-url no-repeat center top;
+      background-size: contain;
+      flex-basis: 40px;
     }
 
     p {

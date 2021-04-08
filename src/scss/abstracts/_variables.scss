@@ -10,6 +10,8 @@ $phovea-navbar-logo-url: url('~phovea_ui/dist/assets/caleydo_c.svg') !default;
 $phovea-navbar-logo-width: 20px !default;
 $phovea-navbar-logo-top: center !default;
 
+$phovea-about-dialog-logo-url: url('~phovea_ui/dist/assets/caleydo_c.svg') !default;
+
 // header navbar color (the inverse colors will be computed using sass `invert($color)`)
 $header-bg-color: #f0f0f0 !default;
 $header-border-color: #ddd !default;
