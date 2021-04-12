@@ -62,7 +62,7 @@ export class Dialog {
 
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary btn-primary submit-dialog">${primaryBtnText}</button>
+            <button type="button" class="btn btn-primary btn-primary submit-dialog">${primaryBtnText}</button>
           </div>
         </div>
       </div>`;
