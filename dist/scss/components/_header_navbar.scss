@@ -32,10 +32,10 @@ nav.navbar-inverse {
     &::before {
       content: '';
       display: block;
-      background: $phovea-navbar-logo-url no-repeat center $phovea-navbar-logo-top;
+      background: $phovea-navbar-icon-url no-repeat center $phovea-navbar-icon-top;
       background-size: contain;
       height: 100%;
-      width: $phovea-navbar-logo-width; // = text height of the navbar link
+      width: $phovea-navbar-icon-width;
       transform: scale(1.2);
     }
   }
@@ -104,9 +104,10 @@ nav.navbar-inverse {
     &::before {
       display: block;
       content: '';
-      background: $phovea-about-dialog-logo-url no-repeat center top;
+      background: $phovea-about-dialog-icon-url no-repeat center top;
       background-size: contain;
       flex-basis: 40px;
+      min-height: $phovea-about-dialog-icon-height;
     }
 
     p {

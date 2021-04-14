@@ -4,11 +4,12 @@ $icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/' !default;
 
 $phovea-loading-icon-url: url('~phovea_ui/dist/assets/caleydo_c_anim.svg') !default;
 
-$phovea-navbar-logo-url: url('~phovea_ui/dist/assets/caleydo_c.svg') !default;
-$phovea-navbar-logo-width: 20px !default;
-$phovea-navbar-logo-top: center !default;
+$phovea-navbar-icon-url: url('~phovea_ui/dist/assets/caleydo_c.svg') !default;
+$phovea-navbar-icon-width: 20px !default;
+$phovea-navbar-icon-top: center !default;
 
-$phovea-about-dialog-logo-url: url('~phovea_ui/dist/assets/caleydo_c.svg') !default;
+$phovea-about-dialog-icon-url: url('~phovea_ui/dist/assets/caleydo_c.svg') !default;
+$phovea-about-dialog-icon-height: unset !default;
 
 // header navbar color (the inverse colors will be computed using sass `invert($color)`)
 $header-bg-color: #f0f0f0 !default;
