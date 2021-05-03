@@ -110,7 +110,7 @@ const getTemplate = () => {
   </div>
 </div>
 
-<div id="headerWaitingOverlay" class="phovea-busy hidden">
+<div id="headerWaitingOverlay" class="phovea-busy" hidden="true">
 </div>
 `);
 };
