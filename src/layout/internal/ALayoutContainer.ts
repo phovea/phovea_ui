@@ -43,7 +43,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
 
     this.header = document.createElement('header');
     this.header.innerHTML = `
-        <button type="button" class="close${this.options.fixed ? ' hidden' : ''}" aria-label="Close"><span>×</span></button>
+        <button type="button" class="close" ${this.options.fixed ? 'hidden' : ''} aria-label="Close"><span>×</span></button>
         <span>${this.name}</span>`;
 
     //remove
@@ -168,7 +168,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
     this.isMaximized = !this.isMaximized;
 
     if (this.isMaximized) {
-      closeButton.classList.add('hidden');
+      closeButton.toggleAttribute('hidden');
       sizeToggle.title = 'Restore default size';
       sizeToggleIcon.classList.remove('fa-expand');
       sizeToggleIcon.classList.add('fa-compress');
@@ -178,7 +178,7 @@ export abstract class ALayoutContainer<T extends ILayoutContainerOption> extends
       this.fire(LayoutContainerEvents.EVENT_MAXIMIZE, this);
     } else {
       if (!this.options.fixedLayout) {
-        closeButton.classList.remove('hidden');
+        closeButton.removeAttribute('hidden');
       }
 
       sizeToggle.title = 'Expand view';

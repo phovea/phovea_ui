@@ -23,25 +23,25 @@ const getTemplate = () => {
 
       </ul>
       <ul class="navbar-nav" data-header="rightMenu">
-          <li class="nav-item hidden" data-header="optionsLink">
+          <li class="nav-item" hidden data-header="optionsLink">
               <a href="#" class="nav-link" data-toggle="modal" data-target="#headerOptionsDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.options')}">
                   <i class="fas fa-cog fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openOptionsDialog')}</span>
               </a>
           </li>
-          <li class="nav-item hidden" data-header="aboutLink">
+          <li class="nav-item" hidden data-header="aboutLink">
               <a href="#" class="nav-link" data-toggle="modal" data-target="#headerAboutDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.about')}">
                   <i class="fas fa-info fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openAboutDialog')}</span>
               </a>
           </li>
-          <li class="nav-item hidden" data-header="bugLink">
+          <li class="nav-item" hidden data-header="bugLink">
               <a href="#" class="nav-link" data-toggle="modal" data-target="#headerReportBugDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}">
                   <i class="fas fa-bug fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}</span>
               </a>
           </li>
-          <li class="nav-item hidden" data-header="helpLink">
+          <li class="nav-item" hidden data-header="helpLink">
               <a href="//caleydo.org" target="_blank" class="nav-link" title="${I18nextManager.getInstance().i18n.t('phovea:ui.openHelpPage')}">
                   <i class="fas fa-question fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openHelpPage')}</span>
