@@ -19,7 +19,7 @@ export class ALayoutContainer extends EventHandler {
         }
         this.header = document.createElement('header');
         this.header.innerHTML = `
-        <button type="button" class="close${this.options.fixed ? ' hidden' : ''}" aria-label="Close"><span>×</span></button>
+        <button type="button" class="close" ${this.options.fixed ? 'hidden' : ''} aria-label="Close"><span>×</span></button>
         <span>${this.name}</span>`;
         //remove
         this.header.firstElementChild.addEventListener('click', (evt) => {
@@ -127,7 +127,7 @@ export class ALayoutContainer extends EventHandler {
         const closeButton = this.header.querySelector('.close');
         this.isMaximized = !this.isMaximized;
         if (this.isMaximized) {
-            closeButton.classList.add('hidden');
+            closeButton.toggleAttribute('hidden');
             sizeToggle.title = 'Restore default size';
             sizeToggleIcon.classList.remove('fa-expand');
             sizeToggleIcon.classList.add('fa-compress');
@@ -136,7 +136,7 @@ export class ALayoutContainer extends EventHandler {
         }
         else {
             if (!this.options.fixedLayout) {
-                closeButton.classList.remove('hidden');
+                closeButton.removeAttribute('hidden');
             }
             sizeToggle.title = 'Expand view';
             sizeToggleIcon.classList.add('fa-expand');

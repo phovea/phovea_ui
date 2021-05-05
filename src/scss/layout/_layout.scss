@@ -1,7 +1,5 @@
-.phovea-layout {
-  .hidden {
+.phovea-layout[hidden] {
     display: none;
-  }
 
   @import './header';
   @import './root';

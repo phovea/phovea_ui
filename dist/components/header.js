@@ -9,7 +9,7 @@ import { AppMetaDataUtils } from './metaData';
  * header html template declared inline so we can use i18next
  */
 const getTemplate = () => {
-    return (`<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    return (`<nav class="navbar phovea-navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#" data-header="appLink"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#headerNavBar" aria-controls="headerNavBar" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -20,25 +20,25 @@ const getTemplate = () => {
 
       </ul>
       <ul class="navbar-nav" data-header="rightMenu">
-          <li class="nav-item hidden" data-header="optionsLink">
+          <li class="nav-item" hidden data-header="optionsLink">
               <a href="#" class="nav-link" data-toggle="modal" data-target="#headerOptionsDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.options')}">
                   <i class="fas fa-cog fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openOptionsDialog')}</span>
               </a>
           </li>
-          <li class="nav-item hidden" data-header="aboutLink">
+          <li class="nav-item" hidden data-header="aboutLink">
               <a href="#" class="nav-link" data-toggle="modal" data-target="#headerAboutDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.about')}">
                   <i class="fas fa-info fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openAboutDialog')}</span>
               </a>
           </li>
-          <li class="nav-item hidden" data-header="bugLink">
+          <li class="nav-item" hidden data-header="bugLink">
               <a href="#" class="nav-link" data-toggle="modal" data-target="#headerReportBugDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}">
                   <i class="fas fa-bug fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}</span>
               </a>
           </li>
-          <li class="nav-item hidden" data-header="helpLink">
+          <li class="nav-item" hidden data-header="helpLink">
               <a href="//caleydo.org" target="_blank" class="nav-link" title="${I18nextManager.getInstance().i18n.t('phovea:ui.openHelpPage')}">
                   <i class="fas fa-question fa-fw" aria-hidden="true"></i>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openHelpPage')}</span>
@@ -53,10 +53,10 @@ const getTemplate = () => {
   <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
+              <h4 class="modal-title"> ${I18nextManager.getInstance().i18n.t('phovea:ui.about')}</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label=" ${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
                   <span aria-hidden="true">&times;</span>
               </button>
-              <h4 class="modal-title">${I18nextManager.getInstance().i18n.t('phovea:ui.about')}</h4>
           </div>
           <div class="modal-body" data-header="about">
               <div class="metaData">${I18nextManager.getInstance().i18n.t('phovea:ui.loading')}</div>
@@ -78,10 +78,10 @@ const getTemplate = () => {
   <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="modal-header">
+              <h4 class="modal-title"> ${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label=" ${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
                   <span aria-hidden="true">&times;</span>
               </button>
-              <h4 class="modal-title"> ${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}</h4>
           </div>
           <div class="modal-body" data-header="bug">
           ${I18nextManager.getInstance().i18n.t('phovea:ui.loading')}
@@ -95,10 +95,10 @@ const getTemplate = () => {
   <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="modal-header">
+              <h4 class="modal-title"> ${I18nextManager.getInstance().i18n.t('phovea:ui.options')}</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label=" ${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
                   <span aria-hidden="true">&times;</span>
               </button>
-              <h4 class="modal-title"> ${I18nextManager.getInstance().i18n.t('phovea:ui.options')}</h4>
           </div>
           <div class="modal-body" data-header="options">
           ${I18nextManager.getInstance().i18n.t('phovea:ui.loading')}
@@ -107,7 +107,7 @@ const getTemplate = () => {
   </div>
 </div>
 
-<div id="headerWaitingOverlay" class="phovea-busy hidden">
+<div id="headerWaitingOverlay" class="phovea-busy" hidden="true">
 </div>
 `);
 };
@@ -162,6 +162,10 @@ export class AppHeader {
              * color scheme: bright (= false) or dark (= true)
              */
             inverse: false,
+            /**
+             * position of the header: static (= false) or fixed at the top (= true)
+             */
+            positionFixed: false,
             /**
              * @DEPRECATED use `appLink.name` instead
              */
@@ -231,9 +235,7 @@ export class AppHeader {
             this.parent.insertBefore(helper.lastChild, this.parent.firstChild);
         }
         // use the inverse color scheme
-        if (this.options.inverse) {
-            this.parent.querySelector('nav.navbar').classList.add('navbar-inverse');
-        }
+        this.toggleDarkTheme(this.options.inverse);
         // modify app header link
         const appLink = this.parent.querySelector('*[data-header="appLink"]');
         appLink.innerHTML = this.options.appLink.name;
@@ -269,6 +271,23 @@ export class AppHeader {
     }
     insertCustomRightMenu(element) {
         this.rightMenu.parentElement.appendChild(element);
+    }
+    toggleDarkTheme(force) {
+        const navbarElement = this.parent.querySelector('nav.navbar');
+        this.options.inverse = (force !== undefined) ? force : !this.options.inverse;
+        if (this.options.inverse) {
+            navbarElement.classList.remove('navbar-light', 'bg-light');
+            navbarElement.classList.add('navbar-dark', 'bg-dark');
+        }
+        else {
+            navbarElement.classList.add('navbar-light', 'bg-light');
+            navbarElement.classList.remove('navbar-dark', 'bg-dark');
+        }
+    }
+    togglePositionFixed(force) {
+        const navbarElement = this.parent.querySelector('nav.navbar');
+        this.options.positionFixed = (force !== undefined) ? force : !this.options.positionFixed;
+        navbarElement.classList.toggle('fixed-top', this.options.positionFixed);
     }
     wait() {
         AppHeader.setVisibility(document.querySelector('#headerWaitingOverlay'), true);
@@ -344,7 +363,7 @@ export class AppHeader {
             const $selector = $(selector);
             $selector.modal('show')
                 .on('shown.bs.modal', function () {
-                $(focusSelector, $selector).focus();
+                $($selector).trigger('focus');
             });
         });
     }
@@ -369,7 +388,7 @@ function defaultAboutInfo(title, content) {
         }
         contentTpl += `<p class="version"><strong>${I18nextManager.getInstance().i18n.t('phovea:ui.version')}</strong>: ${metaData.version}</p>`;
         if (metaData.screenshot) {
-            contentTpl += `<img src="${metaData.screenshot}" class="center-block img-responsive img-thumbnail"/>`;
+            contentTpl += `<img src="${metaData.screenshot}" class="mx-auto img-fluid img-thumbnail"/>`;
         }
         content.innerHTML = contentTpl;
     });

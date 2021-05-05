@@ -31,7 +31,7 @@ export class BuildInfo {
 
   private buildBuildInfo() {
     const build = this.client;
-    return `<table class="table table-bordered table-condensed">
+    return `<table class="table table-bordered table-sm">
             <tbody>
               <tr><th>${I18nextManager.getInstance().i18n.t('phovea:ui.application')}</th><td>${build.name}</td></tr>
               <tr><th>${I18nextManager.getInstance().i18n.t('phovea:ui.version')}</th><td>${build.version}</td></tr>
@@ -69,11 +69,9 @@ export class BuildInfo {
 
   static build(): Promise<BuildInfo> {
     const buildInfos = Promise.all([
-      (<any>self).fetch('./buildInfo.json').then((response) => response.json()),
+      (<any>self).fetch('/buildInfo.json').then((response) => response.json()),
       AppContext.getInstance().offline ? null : AppContext.getInstance().getAPIJSON('/buildInfo.json')
     ]);
     return buildInfos.then((args: any[]) => new BuildInfo(args[0], args[1]));
   }
 }
-
-
