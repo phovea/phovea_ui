@@ -54,7 +54,7 @@
     "bootstrap": "^5.0.1",
     "@fortawesome/fontawesome-free": "^5.15.1",
     "jquery": "~3.5.1",
-    "phovea_core": "github:phovea/phovea_core#vstoiber/bootstrap_v4"
+    "phovea_core": "github:phovea/phovea_core#vstoiber/bootstrap_v5"
   },
   "devDependencies": {
     "@types/bootstrap": "~5.0.15",
