@@ -57,8 +57,7 @@ const getTemplate = () => {
       <div class="modal-content">
           <div class="modal-header">
               <h4 class="modal-title"> ${I18nextManager.getInstance().i18n.t('phovea:ui.about')}</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label=" ${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
-                  <span aria-hidden="true">&times;</span>
+              <button type="button" class="btn-close" data-dismiss="modal" aria-label=" ${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
               </button>
           </div>
           <div class="modal-body" data-header="about">
@@ -82,8 +81,7 @@ const getTemplate = () => {
       <div class="modal-content">
           <div class="modal-header">
               <h4 class="modal-title"> ${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label=" ${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
-                  <span aria-hidden="true">&times;</span>
+              <button type="button" class="btn-close" data-dismiss="modal" aria-label=" ${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
               </button>
           </div>
           <div class="modal-body" data-header="bug">
@@ -99,8 +97,7 @@ const getTemplate = () => {
       <div class="modal-content">
           <div class="modal-header">
               <h4 class="modal-title"> ${I18nextManager.getInstance().i18n.t('phovea:ui.options')}</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label=" ${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
-                  <span aria-hidden="true">&times;</span>
+              <button type="button" class="btn-close" data-dismiss="modal" aria-label=" ${I18nextManager.getInstance().i18n.t('phovea:ui.close')}">
               </button>
           </div>
           <div class="modal-body" data-header="options">
@@ -513,6 +510,7 @@ export class AppHeader {
     import('jquery').then((jquery) => {
       const $selector = $(selector);
       $selector.modal('show')
+      // @ts-ignore
         .on('shown.bs.modal', function () {
           $($selector).trigger('focus');
         });
