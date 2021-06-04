@@ -153,7 +153,7 @@ export class AParentBuilder extends ABuilder {
     constructor(children) {
         super();
         this.children = [];
-        this._name = 'Container';
+        this._name = '';
         children.forEach((c) => this.push(c));
     }
     push(view) {

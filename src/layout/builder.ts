@@ -176,7 +176,7 @@ export abstract class AParentBuilder extends ABuilder {
 
   constructor(children: IBuildAbleOrViewLike[]) {
     super();
-    this._name = 'Container';
+    this._name = '';
     children.forEach((c) => this.push(c));
   }
 
