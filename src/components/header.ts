@@ -15,7 +15,7 @@ const getTemplate = () => {
   return (`<nav class="navbar phovea-navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="#" data-header="appLink"></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="button" data-target="#headerNavBar" aria-controls="headerNavBar" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="button" data-bs-target="#headerNavBar" aria-controls="headerNavBar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -25,19 +25,19 @@ const getTemplate = () => {
         </ul>
         <ul class="navbar-nav" data-header="rightMenu">
             <li class="nav-item" hidden data-header="optionsLink">
-                <a href="#" class="nav-link" data-bs-toggle="modal" data-target="#headerOptionsDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.options')}">
+                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#headerOptionsDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.options')}">
                     <i class="fas fa-cog fa-fw" aria-hidden="true"></i>
                     <span class="visually-hidden">${I18nextManager.getInstance().i18n.t('phovea:ui.openOptionsDialog')}</span>
                 </a>
             </li>
             <li class="nav-item" hidden data-header="aboutLink">
-                <a href="#" class="nav-link" data-bs-toggle="modal" data-target="#headerAboutDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.about')}">
+                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#headerAboutDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.about')}">
                     <i class="fas fa-info fa-fw" aria-hidden="true"></i>
                     <span class="visually-hidden">${I18nextManager.getInstance().i18n.t('phovea:ui.openAboutDialog')}</span>
                 </a>
             </li>
             <li class="nav-item" hidden data-header="bugLink">
-                <a href="#" class="nav-link" data-bs-toggle="modal" data-target="#headerReportBugDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}">
+                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#headerReportBugDialog" title="${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}">
                     <i class="fas fa-bug fa-fw" aria-hidden="true"></i>
                     <span class="visually-hidden">${I18nextManager.getInstance().i18n.t('phovea:ui.reportBug')}</span>
                 </a>
