@@ -69,7 +69,7 @@ export class BuildInfo {
 
   static build(): Promise<BuildInfo> {
     const buildInfos = Promise.all([
-      (<any>self).fetch('/buildInfo.json').then((response) => response.json()),
+      (<any>self).fetch('./buildInfo.json').then((response) => response.json()),
       AppContext.getInstance().offline ? null : AppContext.getInstance().getAPIJSON('/buildInfo.json')
     ]);
     return buildInfos.then((args: any[]) => new BuildInfo(args[0], args[1]));
