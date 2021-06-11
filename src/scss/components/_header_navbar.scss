@@ -44,7 +44,8 @@
       color: map-get($theme-colors, "dark");
 
       &:hover,
-      &:focus {
+      &:focus,
+      &.hover { // add .hover class to set state programmatically from TDP tours
         background-color: map-get($theme-colors, "gray-3");
         color: map-get($theme-colors, "dark");
       }
@@ -69,8 +70,10 @@
     .nav-link {
       color: map-get($theme-colors, "light");
 
+      &:active,
       &:hover,
-      &:focus {
+      &:focus,
+      &.hover { // add .hover class to set state programmatically from TDP tours
         background-color: map-get($theme-colors, "gray-6");
         color: map-get($theme-colors, "light");
       }
