@@ -43,7 +43,10 @@ const getTemplate = () => {
           </li>
           <li class="nav-item" hidden data-header="helpLink">
               <a href="//caleydo.org" target="_blank" class="nav-link" title="${I18nextManager.getInstance().i18n.t('phovea:ui.openHelpPage')}">
-                  <i class="fas fa-question fa-fw" aria-hidden="true"></i>
+                  <span class="fa-stack" style="font-size: 0.5em; height: 2.3em;">
+                    <i class="fas fa-book-open fa-stack-2x"></i>
+                    <i class="fas fa-info fa-stack-1x" style="left: 20%; filter:invert(100%);"></i>
+                  </span>
                   <span class="sr-only">${I18nextManager.getInstance().i18n.t('phovea:ui.openHelpPage')}</span>
               </a>
           </li>
