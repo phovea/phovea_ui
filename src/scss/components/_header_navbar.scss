@@ -11,12 +11,19 @@
 
   // caleydo logo for the app link
   .caleydo_app {
-    padding-left: 1.4em;
-    background: $phovea-brand-logo-background;
-    background-size: 20px;
-    background-origin: border-box;
     display: flex;
     align-items: center;
+    gap: 1rem;
+
+    &::before {
+      content: '';
+      display: block;
+      background: $phovea-navbar-icon-url no-repeat center $phovea-navbar-icon-top;
+      background-size: contain;
+      height: 100%;
+      width: $phovea-navbar-icon-width;
+      transform: scale(1.2);
+    }
   }
 
   .navbar-nav {
@@ -44,7 +51,8 @@
       color: map-get($theme-colors, "dark");
 
       &:hover,
-      &:focus {
+      &:focus,
+      &.hover { // add .hover class to set state programmatically from TDP tours
         background-color: map-get($theme-colors, "gray-3");
         color: map-get($theme-colors, "dark");
       }
@@ -69,10 +77,12 @@
     .nav-link {
       color: map-get($theme-colors, "light");
 
+      &:active,
       &:hover,
-      &:focus {
-        background-color: map-get($theme-colors, "light");
-        color: map-get($theme-colors, "dark");
+      &:focus,
+      &.hover { // add .hover class to set state programmatically from TDP tours
+        background-color: map-get($theme-colors, "gray-6");
+        color: map-get($theme-colors, "light");
       }
     }
 
@@ -97,11 +107,11 @@
 
     &::before {
       display: block;
-      content: "";
-      background: transparent #{$phovea-brand-logo-url} no-repeat top center;
+      content: '';
+      background: $phovea-about-dialog-icon-url no-repeat center top;
       background-size: contain;
-      flex-basis: $phovea-brand-logo-width;
-      min-height: $phovea-brand-logo-width;
+      flex-basis: 40px;
+      min-height: $phovea-about-dialog-icon-height;
     }
 
     p {
