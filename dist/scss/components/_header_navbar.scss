@@ -16,7 +16,9 @@
     gap: 1rem;
 
     &::before {
-      content: '';
+      content: ' ';
+      white-space: pre;
+      margin-left: 1rem;
       display: block;
       background: $phovea-navbar-icon-url no-repeat center $phovea-navbar-icon-top;
       background-size: contain;
