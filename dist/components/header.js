@@ -163,7 +163,7 @@ export class AppHeader {
             /**
              * color scheme: bright (= false) or dark (= true)
              */
-            inverse: false,
+            inverse: true,
             /**
              * position of the header: static (= false) or fixed at the top (= true)
              */
