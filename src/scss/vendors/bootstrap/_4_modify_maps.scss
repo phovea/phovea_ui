@@ -11,6 +11,8 @@ $phovea-theme-colors: (
   "gray-3":  #d4d7dd,
   "gray-4":  #aab3bb,
   "gray-5":  #3b4349,
+  "gray-6":  #5c6873,
+  "gray-7":  #73818f,
 ) !default;
 
 $theme-colors: map-merge($theme-colors, $phovea-theme-colors);
