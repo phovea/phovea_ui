@@ -19,7 +19,7 @@ export class ALayoutContainer extends EventHandler {
         }
         this.header = document.createElement('header');
         this.header.innerHTML = `
-        <button type="button" class="btn-close" ${this.options.fixed ? 'hidden' : ''} aria-label="Close"></button>
+        <button type="button" class="btn-close float-end" ${this.options.fixed ? 'hidden' : ''} aria-label="Close"></button>
         <span>${this.name}</span>`;
         //remove
         this.header.firstElementChild.addEventListener('click', (evt) => {
