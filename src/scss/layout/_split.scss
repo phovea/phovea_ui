@@ -52,24 +52,6 @@
     }
   }
 
-  > section {
-    flex: 1 1 0;
-    display: inline-flex;
-    flex-direction: column;
-    position: relative;
-
-    > header {
-      flex: 0 0 auto;
-      background-color: $phovea_layout_view_header;
-    }
-
-    > main,
-    > article {
-      flex: 1 1 auto;
-      position: relative;
-    }
-  }
-
   &.slider-dragging {
     -moz-user-select: none;
     user-select: none;
@@ -122,6 +104,28 @@
       span {
         display: none;
       }
+    }
+  }
+}
+
+
+&[data-layout=split], 
+&[data-layout=tabbing] {
+  > section {
+    flex: 1 1 0;
+    display: inline-flex;
+    flex-direction: column;
+    position: relative;
+
+    > header {
+      flex: 0 0 auto;
+      background-color: $phovea_layout_view_header;
+    }
+
+    > main,
+    > article {
+      flex: 1 1 auto;
+      position: relative;
     }
   }
 }
