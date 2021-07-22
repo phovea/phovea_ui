@@ -46,7 +46,6 @@ export class TabbingLayoutContainer extends AParentLayoutContainer {
                 this.toggleFrozenLayout();
             });
         }
-        // this.node.classList.add(LAYOUT_CONTAINER_WRAPPER);
     }
     canDrop(area) {
         return area === 'center';
