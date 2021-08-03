@@ -23,6 +23,7 @@ $phovea-theme-colors: (
 $theme-colors: map-merge($theme-colors, $phovea-theme-colors);
 
 $phovea-loading-icon-url: url('~phovea_ui/dist/assets/caleydo_c_anim.svg') !default;
+$phovea-loading-icon-size: auto !default;
 
 $phovea-navbar-icon-url: url('~phovea_ui/dist/assets/caleydo_c.svg') !default;
 $phovea-navbar-icon-width: 20px !default;
