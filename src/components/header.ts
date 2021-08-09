@@ -158,7 +158,7 @@ export class AppHeaderLink implements IHeaderLink {
  */
 function createLi(name: string, action: (event: MouseEvent) => any, href: string = '#') {
   const li = <HTMLElement>document.createElement('li');
-  li.classList.add('list-item');
+  li.classList.add('nav-item');
   li.innerHTML = `<a href="${href}" class="nav-link">${name}</a>`;
   if (action) {
     (<HTMLElement>li.querySelector('a')).onclick = action;

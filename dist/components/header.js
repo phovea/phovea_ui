@@ -133,7 +133,7 @@ export class AppHeaderLink {
  */
 function createLi(name, action, href = '#') {
     const li = document.createElement('li');
-    li.classList.add('list-item');
+    li.classList.add('nav-item');
     li.innerHTML = `<a href="${href}" class="nav-link">${name}</a>`;
     if (action) {
         li.querySelector('a').onclick = action;
