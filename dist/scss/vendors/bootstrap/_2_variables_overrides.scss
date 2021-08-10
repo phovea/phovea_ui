@@ -5,6 +5,10 @@ $primary: #337AB7 !default;
 $light: #F1F2F4 !default;
 $dark: #2F353A !default;
 
+// Scale down to 90% of default font-size
+// @see https://getbootstrap.com/docs/5.0/content/typography/#global-settings
+$font-size-base: 0.9rem;
+
 // Override spacing (Bootstrap default: 1 rem)
 // @see https://getbootstrap.com/docs/5.0/utilities/spacing/
 $spacer: 1.25rem !default;
