@@ -1,9 +1,9 @@
 // 2. Include any default variable overrides here
 // @see https://getbootstrap.com/docs/5.0/customize/sass/#importing
 
-$primary: #337AB7;
-$light: #F1F2F4;
-$dark: #2F353A;
+$primary: #337AB7 !default;
+$light: #F1F2F4 !default;
+$dark: #2F353A !default;
 
 // Override spacing (Bootstrap default: 1 rem)
 // @see https://getbootstrap.com/docs/5.0/utilities/spacing/
