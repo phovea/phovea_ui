@@ -1,91 +1,95 @@
-// set positions and spacings
-nav.navbar,
-nav.navbar-inverse {
-  margin: 0;
-  min-height: auto;
-  border-radius: 0;
-  border: none;
-  border-bottom: 2px solid;
+/**
+ * Common spacings and logos
+ */
+.navbar {
+  padding-top: 0; // map-get($spacers, 1); // $spacers = bootstrap sass variables map
+  padding-bottom: 0; // map-get($spacers, 1);
 
-  .navbar-header {
-    display: flex;
-    align-items: stretch;
-  }
-
-  .navbar-nav > li > a,
   .navbar-brand {
-    height: auto;
-    padding-top: 8px;
-    padding-bottom: 8px;
-
-    &.disabled {
-      pointer-events: none;
-    }
+    padding-top: map-get($spacers, 1) * 0.5;
   }
 
   // caleydo logo for the app link
   .caleydo_app {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
 
     &::before {
-      content: '';
+      content: ' ';
+      white-space: pre;
       display: block;
       background: $phovea-navbar-icon-url no-repeat center $phovea-navbar-icon-top;
       background-size: contain;
       height: 100%;
       width: $phovea-navbar-icon-width;
-      transform: scale(1.2);
     }
+  }
+
+  .navbar-nav {
+    gap: map-get($spacers, 1);
+  }
+
+  // hide caret icon of dropdowns in header
+  .dropdown-toggle::after {
+    content: none;
   }
 }
 
-// Color the default navbar in a light tone
-nav.navbar {
-  background-color: $header-bg-color;
-  border-bottom-color: $header-border-color;
+.phovea-navbar {
+  /**
+   * Colors light theme
+   */
+  &.navbar-light {
+    border-bottom: 1px solid map-get($theme-colors, "gray-3");
 
-  .navbar-nav > li > a,
-  .navbar-brand {
-    color: $header-link-color;
-
-    &.disabled {
-      color: $header-border-color;
+    .navbar-brand {
+      color: map-get($theme-colors, "dark");
     }
 
-    &:hover, &:focus {
-      background-color: $header-border-color;
-      color: $header-link-color;
-    }
-  }
+    .nav-link {
+      color: map-get($theme-colors, "dark");
 
-  .dropdown-menu a {
-    color: $header-dropdown-link-color;
-  }
-}
-
-// Color the inverse navbar in a dark tone
-nav.navbar-inverse {
-  background-color: invert($header-bg-color);
-  border-bottom-color: invert($header-border-color);
-
-  .navbar-nav > li > a,
-  .navbar-brand {
-    color: invert($header-link-color);
-
-    &.disabled {
-      color: lighten(invert($header-border-color), 30%);
+      &:hover,
+      &:focus,
+      &.hover { // add .hover class to set state programmatically from TDP tours
+        background-color: map-get($theme-colors, "gray-3");
+        color: map-get($theme-colors, "dark");
+      }
     }
 
-    &:hover, &:focus {
-      background-color: lighten(invert($header-border-color), 10%);
-      color: invert($header-link-color);
+    .active > .nav-link {
+      background-color: map-get($theme-colors, "gray-3");
+      color: map-get($theme-colors, "dark");
     }
   }
 
-  .dropdown-menu a {
-    color: invert($header-dropdown-link-color);
+  /**
+   * Colors dark theme
+   */
+  &.navbar-dark {
+    border-bottom-color: map-get($theme-colors, "gray-5");
+
+    .navbar-brand {
+      color: map-get($theme-colors, "white");
+    }
+
+    .nav-link {
+      color: map-get($theme-colors, "light");
+
+      &:active,
+      &:hover,
+      &:focus,
+      &.hover { // add .hover class to set state programmatically from TDP tours
+        background-color: map-get($theme-colors, "gray-6");
+        color: map-get($theme-colors, "light");
+      }
+    }
+
+    .active > .nav-link {
+      background-color: map-get($theme-colors, "light");
+      color: map-get($theme-colors, "dark");
+    }
   }
 }
 
