@@ -22,15 +22,5 @@ $phovea-spacers: (
   10: ($spacer * 7)
 ) !default;
 
-// This will be merged in file _3_variables_mixins_utilities.scss with the bootstrap theme
-$phovea-theme-colors: (
-  "white": #FFFFFF,
-  "white-hover": #FFFFFFBF, // add some alpha on hover
-  "gray-1": #6c757d,
-  "gray-2": #72818d,
-  "gray-3":  #d4d7dd,
-  "gray-4":  #aab3bb,
-  "gray-5":  #3b4349,
-  "gray-6":  #5c6873,
-  "gray-7":  #73818f,
-) !default;
+
+$phovea-theme-colors: () !default;
