@@ -1,8 +1,43 @@
+// Import utilities
+@import "~bootstrap/scss/utilities";
+
+// Generate utilities
+// @see https://getbootstrap.com/docs/5.1/customize/color/#generating-utilities
+$utilities: map-merge-multiple(
+    $utilities,
+    (
+        "color": map-merge(
+        map-get($utilities, "color"),
+        (
+            values: map-merge(
+            map-get(map-get($utilities, "color"), "values"),
+            (
+                $theme-colors
+            ),
+            ),
+        ),
+        ),
+    ),
+    (
+        "background-color": map-merge(
+        map-get($utilities, "background-color"),
+        (
+            values: map-merge(
+            map-get(map-get($utilities, "background-color"), "values"),
+            (
+                $theme-colors
+            ),
+            ),
+        ),
+        ),
+    ),
+);
+
 // 4. Include any optional Bootstrap components as you like
 // @see https://getbootstrap.com/docs/5.1/customize/sass/#importing
 
-// Import utilities and reboot
-@import "~bootstrap/scss/utilities";
+// Import and reboot
+@import "~bootstrap/scss/root"; // Create CSS variables from $theme-colors, ...
 @import "~bootstrap/scss/reboot";
 
 // Import all components
