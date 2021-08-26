@@ -1,11 +1,14 @@
 
-@mixin btn-icon($col: $secondary, $bg: white, $bg-hover: $gray-200) {
-  color: $col;
+@mixin btn-icon($color: $secondary, $bg: white, $bg-hover: $gray-200) {
+  color: $color;
   background-color: $bg;
-  &:hover,&.active {
-    color: $col;
+
+  &:hover,
+  &.active {
+    color: $color;
     background-color: $bg-hover;
   }
+
   &:disabled {
     opacity: 0.65; // bootstrap also changes opacity by this amount for the disabled state
   }
