@@ -51,13 +51,14 @@
     "dist": "mkdir lib && cd dist && tar cvzf ../lib/phovea_ui.tar.gz *"
   },
   "dependencies": {
-    "bootstrap": "^5.0.1",
+    "bootstrap": "~5.1.0",
+    "@popperjs/core": "^2.9.3",
     "@fortawesome/fontawesome-free": "^5.15.1",
     "jquery": "~3.5.1",
     "phovea_core": "github:phovea/phovea_core#develop"
   },
   "devDependencies": {
-    "@types/bootstrap": "~5.0.15",
+    "@types/bootstrap": "~5.1.0",
     "@types/jquery": "~3.5.5",
     "@types/jest": "~26.0.20",
     "identity-obj-proxy": "~3.0.0",
