@@ -1,0 +1,31 @@
+
+@mixin btn-icon($col: $secondary, $bg: white, $bg-hover: $gray-200) {
+  color: $col;
+  background-color: $bg;
+  &:hover,&.active {
+    color: $col;
+    background-color: $bg-hover;
+  }
+  &:disabled {
+    opacity: 0.65; // bootstrap also changes opacity by this amount for the disabled state
+  }
+}
+
+.btn-icon {
+  > i {
+    vertical-align: middle; // vertical align icon inside button
+  }
+  @include btn-icon;
+}
+
+.btn-icon-primary {
+  @include btn-icon($blue-900, $blue-100, $blue-200);
+}
+
+.btn-icon-danger {
+  @include btn-icon($red-800, $red-100, #f1aeb5);
+}
+
+.btn-icon-warning {
+  @include btn-icon($yellow-800, #fff3cd, #ffe69c);
+}
