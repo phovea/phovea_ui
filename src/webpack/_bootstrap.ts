@@ -1,6 +1,6 @@
  // Import jQuery, required for CLUE, ...
 import './jquery-global';
 // Import popper.js to enable bootstrap tooltips, popovers, ...
-import 'popper.js';
+import '@popperjs/core';
 // Import Bootstrap
 import 'bootstrap';
