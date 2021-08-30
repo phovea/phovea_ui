@@ -1,5 +1,5 @@
 /// <reference types="jquery" />
-/// <reference types="jquery.scrollto" />
+/// <reference types="ion.rangeslider" />
 /// <reference types="select2" />
 /// <reference types="bootstrap" />
 /**
