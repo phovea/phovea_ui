@@ -1,35 +1,54 @@
+@mixin btn-icon-common() {
+    // Disable any box-shadow around the button
+    box-shadow: none !important;
 
-@mixin btn-icon($color: $secondary, $bg: white, $bg-hover: $gray-200) {
-  color: $color;
-  background-color: $bg;
-
-  &:hover,
-  &.active {
-    color: $color;
-    background-color: $bg-hover;
-  }
-
-  &:disabled {
-    opacity: 0.65; // bootstrap also changes opacity by this amount for the disabled state
-  }
+    // Align all children vertically
+    > * {
+        vertical-align: middle;
+    }
 }
 
-.btn-icon {
-  > i {
-    vertical-align: middle; // vertical align icon inside button
-  }
+@each $color, $value in $theme-colors {
+    // Create a darker color of the value for the font-color
+    $darker-value: shade-color($value, 30%);
 
-  @include btn-icon;
-}
+    // btn-icon has no border, and sets the background and font-color.
+    .btn-icon-#{$color} {
+        @include button-variant(
+            rgba($value, 0.05), // background
+            transparent, // border
+            rgba($darker-value, 0.75), // color
+            rgba($value, 0.1), // hover-background
+            transparent, // hover-border
+            rgba($darker-value, 0.9), // hover-color
+            rgba($value, 0.15), // active-background
+            transparent, // active-border
+            rgba($darker-value, 1.0), // active-color
+            rgba($value, 0.05), // disabled-background
+            transparent, // disabled-border
+            rgba($darker-value, 0.5), // disabled-color
+        );
 
-.btn-icon-primary {
-  @include btn-icon($blue-900, $blue-100, $blue-200);
-}
+        @include btn-icon-common();
+    }
 
-.btn-icon-danger {
-  @include btn-icon($red-800, $red-100, #f1aeb5);
-}
+    // btn-icon-outline has no background or border, and only sets the font-color.
+    .btn-icon-outline-#{$color} {
+        @include button-variant(
+            transparent, // background
+            transparent, // border
+            rgba($darker-value, 0.6), // color
+            transparent, // hover-background
+            transparent, // hover-border
+            rgba($darker-value, 0.75), // hover-color
+            transparent, // active-background
+            transparent, // active-border
+            rgba($darker-value, 0.85), // active-color
+            transparent, // disabled-background
+            transparent, // disabled-border
+            rgba($darker-value, 0.5), // disabled-color
+        );
 
-.btn-icon-warning {
-  @include btn-icon($yellow-800, #fff3cd, #ffe69c);
+        @include btn-icon-common();
+    }
 }
