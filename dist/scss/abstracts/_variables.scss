@@ -1,26 +1,4 @@
 $fa-font-path: '~@fortawesome/fontawesome-free/webfonts' !default;
-// $icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/' !default; // Bootstrap v3
-
-// Override and set Bootstrap theme colors
-// @see https://getbootstrap.com/docs/4.5/getting-started/theming/#sass-options
-// @usage `color: map-get($theme-colors, "light");`
-$theme-colors: () !default; // define empty $theme-colors map first to merge other colors later
-
-$phovea-theme-colors: (
-  "light": #F1F2F4,
-  "dark": #2F353A,
-  "white": #FFFFFF,
-  "white-hover": #FFFFFFBF, // add some alpha on hover
-  "gray-1": #6c757d,
-  "gray-2": #72818d,
-  "gray-3":  #d4d7dd,
-  "gray-4":  #aab3bb,
-  "gray-5":  #3b4349,
-  "gray-6":  #5c6873,
-  "gray-7":  #73818f,
-) !default;
-
-$theme-colors: map-merge($theme-colors, $phovea-theme-colors);
 
 $phovea-loading-icon-url: url('~phovea_ui/dist/assets/caleydo_c_anim.svg') !default;
 $phovea-loading-icon-size: auto !default;

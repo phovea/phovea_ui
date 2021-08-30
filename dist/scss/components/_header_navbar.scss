@@ -41,7 +41,7 @@
    * Colors light theme
    */
   &.navbar-light {
-    border-bottom: 1px solid map-get($theme-colors, "gray-3");
+    border-bottom: 1px solid $gray-400;
 
     .navbar-brand {
       color: map-get($theme-colors, "dark");
@@ -53,13 +53,13 @@
       &:hover,
       &:focus,
       &.hover { // add .hover class to set state programmatically from TDP tours
-        background-color: map-get($theme-colors, "gray-3");
+        background-color: $gray-400;
         color: map-get($theme-colors, "dark");
       }
     }
 
     .active > .nav-link {
-      background-color: map-get($theme-colors, "gray-3");
+      background-color: $gray-400;
       color: map-get($theme-colors, "dark");
     }
   }
@@ -68,10 +68,10 @@
    * Colors dark theme
    */
   &.navbar-dark {
-    border-bottom-color: map-get($theme-colors, "gray-5");
+    border-bottom-color: $gray-800;
 
     .navbar-brand {
-      color: map-get($theme-colors, "white");
+      color: $white;
     }
 
     .nav-link {
@@ -81,7 +81,7 @@
       &:hover,
       &:focus,
       &.hover { // add .hover class to set state programmatically from TDP tours
-        background-color: map-get($theme-colors, "gray-6");
+        background-color: $gray-700;
         color: map-get($theme-colors, "light");
       }
     }
