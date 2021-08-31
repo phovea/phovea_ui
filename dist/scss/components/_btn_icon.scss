@@ -1,7 +1,4 @@
 @mixin btn-icon-common() {
-    // Disable any box-shadow around the button
-    box-shadow: none !important;
-
     // Align all children vertically
     > * {
         vertical-align: middle;
@@ -11,44 +8,48 @@
 @each $color, $value in $theme-colors {
     // Create a darker color of the value for the font-color
     $darker-value: shade-color($value, 30%);
+    $lighter-value: tint-color($value, 30%);
 
-    // btn-icon has no border, and sets the background and font-color.
-    .btn-icon-#{$color} {
+    // btn-icon-bg has no border, and sets the background and font-color.
+    .btn-icon-bg-#{$color} {
         @include button-variant(
-            rgba($value, 0.05), // background
+            rgba($lighter-value, 0.15), // background
             transparent, // border
             rgba($darker-value, 0.75), // color
-            rgba($value, 0.1), // hover-background
+            rgba($lighter-value, 0.25), // hover-background
             transparent, // hover-border
             rgba($darker-value, 0.9), // hover-color
-            rgba($value, 0.15), // active-background
+            rgba($lighter-value, 0.30), // active-background
             transparent, // active-border
             rgba($darker-value, 1.0), // active-color
-            rgba($value, 0.05), // disabled-background
+            rgba($lighter-value, 0.05), // disabled-background
             transparent, // disabled-border
-            rgba($darker-value, 0.5), // disabled-color
+            rgba($darker-value, 0.35), // disabled-color
         );
 
         @include btn-icon-common();
     }
 
-    // btn-icon-outline has no background or border, and only sets the font-color.
-    .btn-icon-outline-#{$color} {
+    // btn-icon has no background or border, and only sets the font-color.
+    .btn-icon-#{$color} {
         @include button-variant(
             transparent, // background
             transparent, // border
-            rgba($darker-value, 0.6), // color
+            rgba($darker-value, 0.5), // color
             transparent, // hover-background
             transparent, // hover-border
             rgba($darker-value, 0.75), // hover-color
             transparent, // active-background
             transparent, // active-border
-            rgba($darker-value, 0.85), // active-color
+            rgba($darker-value, 0.9), // active-color
             transparent, // disabled-background
             transparent, // disabled-border
-            rgba($darker-value, 0.5), // disabled-color
-        );
+            rgba($darker-value, 0.35), // disabled-color
+        ); 
 
         @include btn-icon-common();
+
+        // Disable any box-shadow around the button
+        box-shadow: none !important;   
     }
 }
