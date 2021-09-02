@@ -105,7 +105,6 @@ export class TabbingLayoutContainer extends AParentLayoutContainer {
         if (index < 0 || index >= this.length - 1) {
             this.header.appendChild(child.header);
             const parametersHeader = this.node.ownerDocument.createElement('header');
-            parametersHeader.classList.add('container-fluid');
             const s = child.node.ownerDocument.createElement('section');
             s.classList.add(LAYOUT_CONTAINER_WRAPPER);
             s.appendChild(parametersHeader);

@@ -64,7 +64,8 @@ export class ViewLayoutContainer extends ALayoutContainer<IViewLayoutContainerOp
     this.node.dataset.layout = 'view';
     this.node.appendChild(view.node);
 
-    this.header.insertAdjacentHTML('beforeend', `<button type="button" title="Expand view" class="size-toggle" aria-label="Toggle View Size"><span><i class="fas fa-expand"></i></span></button>`);
+    // TODO: The expand view is broken currently, therefore we hide it temporarily.
+    this.header.insertAdjacentHTML('beforeend', `<button type="button" title="Expand view" class="size-toggle invisible" aria-label="Toggle View Size"><span><i class="fas fa-expand"></i></span></button>`);
 
     const min = this.minSize;
     if (min[0] > 0) {
