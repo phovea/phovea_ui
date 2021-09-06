@@ -1,35 +1,13 @@
-@mixin btn-icon-common() {
+@mixin btn-text-common() {
     // Align all children vertically
     > * {
         vertical-align: middle;
     }
 }
 
-.btn-icon {
-  @include button-variant(
-    transparent, // background
-    transparent, // border
-    $gray-700, // color
-
-    $gray-200, // hover-background
-    transparent, // hover-border
-    $gray-900, // hover-color
-
-    $gray-300, // active-background
-    transparent, // active-border
-    $gray-900, // active-color
-
-    transparent, // disabled-background
-    transparent, // disabled-border
-    $gray-500, // disabled-color
-  );
-
-  @include btn-icon-common();
-}
-
 @each $color, $value in $theme-colors {
     // btn-icon-bg has no border, and sets the background and font-color.
-    .btn-icon-bg-#{$color} {
+    .btn-text-bg#{$color == '' ? '' : '-'}#{$color} {
         @include button-variant(
             tint-color($value, 80%), // background (e.g., $blue-100)
             transparent, // border
@@ -48,11 +26,11 @@
             $gray-600, // disabled-color
         );
 
-        @include btn-icon-common();
+        @include btn-text-common();
     }
 
     // btn-icon has no background or border, and only sets the font-color.
-    .btn-icon-#{$color} {
+    .btn-text-hover-bg-#{$color} {
         @include button-variant(
             transparent, // background
             transparent, // border
@@ -71,6 +49,29 @@
             $gray-500, // disabled-color
         );
 
-        @include btn-icon-common();
+        @include btn-text-common();
+    }
+
+    // btn-icon has no background or border, and only sets the font-color.
+    .btn-text-#{$color} {
+        @include button-variant(
+            transparent, // background
+            transparent, // border
+            shade-color($value, 20%), // color (e.g., $blue-600)
+
+            transparent, // hover-background
+            transparent, // hover-border
+            shade-color($value, 80%), // hover-color (e.g., $blue-900)
+
+            transparent, // active-background
+            transparent, // active-border
+            shade-color($value, 80%), // active-color (e.g., $blue-900)
+
+            transparent, // disabled-background
+            transparent, // disabled-border
+            $gray-500, // disabled-color
+        );
+
+        @include btn-text-common();
     }
 }
