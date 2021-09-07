@@ -1,0 +1,111 @@
+@mixin btn-text-common() {
+    // Align all children vertically
+    > * {
+        vertical-align: middle;
+    }
+}
+
+.btn-text {
+  @include button-variant(
+    transparent, // background
+    transparent, // border
+    $gray-700, // color
+
+    $gray-200, // hover-background
+    transparent, // hover-border
+    $gray-900, // hover-color
+
+    $gray-300, // active-background
+    transparent, // active-border
+    $gray-900, // active-color
+
+    transparent, // disabled-background
+    transparent, // disabled-border
+    $gray-500, // disabled-color
+  );
+
+  @include btn-text-common();
+}
+
+// also add gray variants to use i.e. .btn-text-gray
+$theme-colors-and-gray: map-merge(
+  $theme-colors,
+  (
+    "gray": $gray-600
+  ));
+
+@each $color, $value in $theme-colors-and-gray {
+  @debug "color: #{$color}, #{$value}";
+
+    $hyphen: '';
+    @if($color == ''){ 	$hyphen : ''; } @else { 	$hyphen : '-'; }
+
+    // btn-text has no background or border, and only sets the font-color.
+    .btn-text-hover-bg#{$hyphen}#{$color} {
+      @include button-variant(
+          transparent, // background
+          transparent, // border
+          shade-color($value, 20%), // color (e.g., $blue-600)
+
+          if($color == $color-contrast-light, shade-color($value, $btn-hover-bg-shade-amount), tint-color($value, 83%)), // hover-background (e.g., $blue-200)
+          transparent, // hover-border
+          shade-color($value, 50%), // hover-color (e.g., $blue-900)
+
+          tint-color($value, 40%), // active-background (e.g., $blue-300)
+          transparent, // active-border
+          shade-color($value, 80%), // active-color (e.g., $blue-900)
+
+          transparent, // disabled-background
+          transparent, // disabled-border
+          $gray-500, // disabled-color
+      );
+
+      @include btn-text-common();
+  }
+
+  // btn-text bg has no border, and sets the background and font-color.
+  .btn-text-bg#{$hyphen}#{$color} {
+      @include button-variant(
+          tint-color($value, 80%), // background (e.g., $blue-100)
+          transparent, // border
+          shade-color($value, 80%), // color (e.g., $blue-900)
+
+          tint-color($value, 60%), // hover-background (e.g., $blue-200)
+          transparent, // hover-border
+          shade-color($value, 80%), // hover-color (e.g., $blue-900)
+
+          tint-color($value, 40%), // active-background (e.g., $blue-300)
+          transparent, // active-border
+          shade-color($value, 80%), // active-color (e.g., $blue-900)
+
+          $gray-200, // disabled-background
+          transparent, // disabled-border
+          $gray-600, // disabled-color
+      );
+
+      @include btn-text-common();
+  }
+
+    // btn-text has no background or border, and only sets the font-color.
+    .btn-text#{$hyphen}#{$color} {
+      @include button-variant(
+          transparent, // background
+          transparent, // border
+          shade-color($value, 20%), // color (e.g., $blue-600)
+
+          transparent, // hover-background
+          transparent, // hover-border
+          shade-color($value, 80%), // hover-color (e.g., $blue-900)
+
+          transparent, // active-background
+          transparent, // active-border
+          shade-color($value, 20%), // active-color (e.g., $blue-900)
+
+          transparent, // disabled-background
+          transparent, // disabled-border
+          $gray-500, // disabled-color
+      );
+
+      @include btn-text-common();
+  }
+}
