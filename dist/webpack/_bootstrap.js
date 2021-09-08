@@ -1,3 +1,7 @@
+// Import jQuery, required for CLUE, ...
 import './jquery-global';
-import 'bootstrap-sass/assets/javascripts/bootstrap.js';
+// Import popper.js to enable bootstrap tooltips, popovers, ...
+import '@popperjs/core';
+// Import Bootstrap
+import 'bootstrap';
 //# sourceMappingURL=_bootstrap.js.map

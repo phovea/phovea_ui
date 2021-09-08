@@ -61,8 +61,6 @@ export class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayou
         this.toggleFrozenLayout();
       });
     }
-
-    this.node.classList.add(LAYOUT_CONTAINER_WRAPPER);
   }
 
   canDrop(area: IDropArea) {
@@ -129,8 +127,11 @@ export class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayou
     if (index < 0 || index >= this.length - 1) {
       this.header.appendChild(child.header);
       const parametersHeader = this.node.ownerDocument.createElement('header');
-      this.node.appendChild(parametersHeader);
-      this.node.appendChild(child.node);
+      const s = child.node.ownerDocument.createElement('section');
+      s.classList.add(LAYOUT_CONTAINER_WRAPPER);
+      s.appendChild(parametersHeader);
+      s.appendChild(child.node);
+      this.node.appendChild(s);
     } else {
       this.header.insertBefore(child.header, this._children[index + 1].header.previousSibling);
       this.header.insertBefore(reorder, child.header);
@@ -160,13 +161,13 @@ export class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayou
       //reorder
       this.header.appendChild(reorder);
       this.header.appendChild(child.header);
-      this.node.appendChild(child.node);
+      this.node.appendChild(child.node.parentElement);
       return;
     }
     const next = this._children[index + 1];
     this.header.insertBefore(child.header, next.header.previousSibling); //2 extra items
     this.header.insertBefore(reorder, child.header);
-    this.node.insertBefore(child.node, next.node);
+    this.node.insertBefore(child.node.parentElement, next.node.parentElement);
     this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_TAB_REORDED), child, index);
   }
 
@@ -188,7 +189,7 @@ export class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayou
     //reorder
     this.header.removeChild(child.header.previousSibling);
     this.header.removeChild(child.header);
-    this.node.removeChild(child.node);
+    this.node.removeChild(child.node.parentElement);
     super.takeDownChild(child);
   }
 
@@ -203,12 +204,12 @@ export class TabbingLayoutContainer extends AParentLayoutContainer<ITabbingLayou
   private activeChanged(oldActive: ILayoutContainer | null, newActive: ILayoutContainer | null) {
     if (oldActive) {
       oldActive.header.classList.remove('active');
-      oldActive.node.classList.remove('active');
+      oldActive.node.parentElement.classList.remove('active');
       oldActive.visible = false;
     }
     if (newActive) {
       newActive.header.classList.add('active');
-      newActive.node.classList.add('active');
+      newActive.node.parentElement.classList.add('active');
       newActive.visible = this.visible;
     }
     this.fire(ALayoutContainer.withChanged(LayoutContainerEvents.EVENT_CHANGE_ACTIVE_TAB), oldActive, newActive);

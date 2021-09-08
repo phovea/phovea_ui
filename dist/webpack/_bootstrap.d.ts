@@ -1,2 +1,3 @@
 import './jquery-global';
-import 'bootstrap-sass/assets/javascripts/bootstrap.js';
+import '@popperjs/core';
+import 'bootstrap';

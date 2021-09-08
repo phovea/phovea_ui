@@ -1,8 +1,7 @@
-
 $fa-font-path: '~@fortawesome/fontawesome-free/webfonts' !default;
-$icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/' !default;
 
 $phovea-loading-icon-url: url('~phovea_ui/dist/assets/caleydo_c_anim.svg') !default;
+$phovea-loading-icon-size: auto !default;
 
 $phovea-navbar-icon-url: url('~phovea_ui/dist/assets/caleydo_c.svg') !default;
 $phovea-navbar-icon-width: 20px !default;
@@ -10,12 +9,6 @@ $phovea-navbar-icon-top: center !default;
 
 $phovea-about-dialog-icon-url: url('~phovea_ui/dist/assets/caleydo_c.svg') !default;
 $phovea-about-dialog-icon-height: unset !default;
-
-// header navbar color (the inverse colors will be computed using sass `invert($color)`)
-$header-bg-color: #f0f0f0 !default;
-$header-border-color: #ddd !default;
-$header-link-color: #333 !default;
-$header-dropdown-link-color: $header-link-color !default;
 
 $select-color: orange !default;
 $select-color-bright: #ffdca3 !default;

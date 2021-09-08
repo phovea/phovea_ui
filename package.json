@@ -1,7 +1,7 @@
 {
   "name": "phovea_ui",
   "description": "Wrapper for integration of Bootstrap and FontAwesome along with a common header for Phovea apps",
-  "version": "6.1.0",
+  "version": "7.0.0",
   "author": {
     "name": "The Caleydo Team",
     "email": "contact@caleydo.org",
@@ -51,13 +51,14 @@
     "dist": "mkdir lib && cd dist && tar cvzf ../lib/phovea_ui.tar.gz *"
   },
   "dependencies": {
-    "bootstrap-sass": "3.4.1",
+    "bootstrap": "~5.1.0",
+    "@popperjs/core": "^2.9.3",
     "@fortawesome/fontawesome-free": "^5.15.1",
     "jquery": "~3.5.1",
-    "phovea_core": "^6.0.0"
+    "phovea_core": "^7.0.0"
   },
   "devDependencies": {
-    "@types/bootstrap": "~4.5.0",
+    "@types/bootstrap": "~5.1.0",
     "@types/jquery": "~3.5.5",
     "@types/jest": "~26.0.20",
     "identity-obj-proxy": "~3.0.0",

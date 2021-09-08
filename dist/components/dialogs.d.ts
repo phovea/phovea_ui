@@ -40,8 +40,8 @@ export declare class Dialog {
      * @default backdrop true
      */
     constructor(title: string, primaryBtnText?: string, additionalCSSClasses?: string, backdrop?: boolean | 'static');
-    show(): JQuery<HTMLElement>;
-    hide(): JQuery<HTMLElement>;
+    show(): void;
+    hide(): void;
     get body(): HTMLElement;
     get footer(): HTMLElement;
     get header(): HTMLElement;

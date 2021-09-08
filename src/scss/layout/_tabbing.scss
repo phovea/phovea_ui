@@ -5,9 +5,21 @@
   display: flex;
   flex-direction: row;
 
-  > * {
-    flex: 1 1 auto;
+  > section {
+    flex: 1 1 0;
+    display: inline-flex;
+    flex-direction: column;
     position: relative;
+
+    > header {
+      flex: 0 0 auto;
+    }
+
+    > main,
+    > article {
+      flex: 1 1 auto;
+      position: relative;
+    }
   }
 
   > *:not(.active) {
@@ -86,7 +98,7 @@ header[data-layout=tabbing] {
       cursor: -webkit-grab; // indicate grab able
     }
 
-    > button.close {
+    > button.btn-close {
       margin-left: 6px;
       font-size: 140%;
     }
