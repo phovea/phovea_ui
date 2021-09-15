@@ -86,11 +86,8 @@ $theme-colors-and-gray: map-merge(("gray": $gray-600), $theme-colors);
   }
 
   $colors: a11y-color(if($color=='dark', tint-color($value, 10%), shade-color($value, 10%)), if($color=='dark', tint-color($value, 90%), tint-color($value, 85%)), 'lighter');
-  $fg:  nth($colors, 1);
+  $fg: nth($colors, 1);
   $bg: nth($colors, 2);
-  $colors-hover: a11y-color(shade-color($value, 15%), tint-color($value, 75%), 'lighter');
-  $fg-hover: nth($colors-hover, 1);
-  $bg-hover: nth($colors-hover, 2);
   $colors-active: a11y-color(shade-color($value, 20%), tint-color($value, 65%), 'lighter');
   $fg-active: nth($colors-active, 1);
   $bg-active: nth($colors-active, 2);
@@ -137,30 +134,6 @@ $theme-colors-and-gray: map-merge(("gray": $gray-600), $theme-colors);
       transparent, // disabled-background
       transparent, // disabled-border
       $gray-500, // disabled-color
-    );
-
-    @include btn-text-common();
-  }
-
-  // btn-text-bg has no border, and sets the background and font-color.
-  .btn-text-bg#{$hyphen}#{$color} {
-
-    @include button-variant(
-      if($color=='light', nth(a11y-color(tint-color($value, 55%), $value), 1), if($color=='dark', $value, $bg)), // background
-      transparent, // border
-      if($color=='light', shade-color($value, 55%), if($color=='dark', $white, $fg)), // color
-
-      if($color=='light', shade-color($value, 5%), if($color=='dark', tint-color($value, 10%), $bg-hover)), // hover-background
-      transparent, // hover-border
-      if($color=='light', shade-color($value, 55%), if($color=='dark', $white, $fg-hover)), // hover-color
-
-      if($color=='light', shade-color($value, 10%), if($color=='dark', tint-color($value, 20%), $bg-active)), // active-background
-      transparent, // active-border
-      if($color=='light', shade-color($value, 55%), if($color=='dark', $white, $fg-active)), // active-color
-
-      $gray-200, // disabled-background
-      transparent, // disabled-border
-      $gray-600, // disabled-color
     );
 
     @include btn-text-common();
