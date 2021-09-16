@@ -1,0 +1,124 @@
+// This file contains all colors for visualizations to use in scss.
+// The variables need to be kept in sync with the corresponding javascript variables in /scss/abstracts/_vis_colors.scss.
+
+// categorical colors
+$c-1-blue: #337AB7;
+$c-2-red: #ec6836;
+$c-3-turquoise: #75c4c2;
+$c-4-yellow: #e9d36c;
+$c-5-green: #24b466;
+$c-6-pink: #e891ae;
+$c-7-orange: #db933c;
+$c-8-violet: #b08aa6;
+$c-9-brown: #8a6044;
+$c-10-gray: #7b7b7b;
+
+
+// sequential colors
+
+// blue
+$s-blue-1: #cff6ff;
+$s-blue-2: #93b9e8;
+$s-blue-3: #93b9e8;
+$s-blue-4: #779ecb;
+$s-blue-5: #5c84af;
+$s-blue-6: #406a94;
+$s-blue-7: #23527a;
+$s-blue-8: #023a60;
+$s-blue-9: #002245;
+
+// red
+$s-red-1: #ffd7a9;
+$s-red-2: #ffb286;
+$s-red-3: #f69066;
+$s-red-4: #de754d;
+$s-red-5: #c25d37;
+$s-red-6: #a64621;
+$s-red-7: #8b2f0c;
+$s-red-8: #701601;
+$s-red-9: #520000;
+
+// green
+$s-green-1: #95f4b3;
+$s-green-2: #79d798;
+$s-green-3: #5dbc7f;
+$s-green-4: #41a065;
+$s-green-5: #20864d;
+$s-green-6: #066b35;
+$s-green-7: #00511e;
+$s-green-8: #003806;
+$s-green-9: #002100;
+
+// yellow
+$s-yellow-1: #fff188;
+$s-yellow-2: #e7d26b;
+$s-yellow-3: #cab650;
+$s-yellow-4: #ac9a35;
+$s-yellow-5: #8f8018;
+$s-yellow-6: #736601;
+$s-yellow-7: #584e00;
+$s-yellow-8: #3f3600;
+$s-yellow-9: #2d1e00;
+
+
+// diverging colors
+
+// blue-red
+$d-blue-red-1: #003367;
+$d-blue-red-2: #16518a;
+$d-blue-red-3: #2e72ae;
+$d-blue-red-4: #5093cd;
+$d-blue-red-5: #77b5ea;
+$d-blue-red-6: #aad7fd;
+$d-blue-red-7: #f5f5f5;
+$d-blue-red-8: #fac7a9;
+$d-blue-red-9: #f99761;
+$d-blue-red-10: #e06d3b;
+$d-blue-red-11: #c2451a;
+$d-blue-red-12: #99230d;
+$d-blue-red-13: #6f0000;
+
+// red-turquoise
+$d-red-turquois-1: #6f0000;
+$d-red-turquois-2: #99230d;
+$d-red-turquois-3: #c2451a;
+$d-red-turquois-4: #e06d3b;
+$d-red-turquois-5: #f99761;
+$d-red-turquois-6: #fac7a9;
+$d-red-turquois-7: #f5f5f5;
+$d-red-turquois-8: #9ddddb;
+$d-red-turquois-9: #6bbbba;
+$d-red-turquois-10: #489997;
+$d-red-turquois-11: #297776;
+$d-red-turquois-12: #145656;
+$d-red-turquois-13: #003838;
+
+// blue-yellow
+$d-blue-yellow-1: #003367;
+$d-blue-yellow-2: #16518a;
+$d-blue-yellow-3: #2e72ae;
+$d-blue-yellow-4: #5093cd;
+$d-blue-yellow-5: #77b5ea;
+$d-blue-yellow-6: #aad7fd;
+$d-blue-yellow-7: #f5f5f5;
+$d-blue-yellow-8: #e3d17f;
+$d-blue-yellow-9: #c1ae46;
+$d-blue-yellow-10: #9d8c22;
+$d-blue-yellow-11: #7a6c0a;
+$d-blue-yellow-12: #584c05;
+$d-blue-yellow-13: #392f00;
+
+// blue-pink
+$d-blue-pink-1: #003367;
+$d-blue-pink-2: #16518a;
+$d-blue-pink-3: #2e72ae;
+$d-blue-pink-4: #5093cd;
+$d-blue-pink-5: #77b5ea;
+$d-blue-pink-6: #aad7fd;
+$d-blue-pink-7: #f5f5f5;
+$d-blue-pink-8: #fdc0d6;
+$d-blue-pink-9: #e696b3;
+$d-blue-pink-10: #c4728f;
+$d-blue-pink-11: #a1506e;
+$d-blue-pink-12: #7e2f50;
+$d-blue-pink-13: #5b0e31;
