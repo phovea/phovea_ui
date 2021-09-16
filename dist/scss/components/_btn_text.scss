@@ -75,16 +75,9 @@
 
 
 // also add gray variants to use i.e. .btn-text-gray
-$theme-colors-and-gray: map-merge(("gray": $gray-600), $theme-colors);
+// $theme-colors-and-gray: map-merge(("gray": $gray-600), $theme-colors);
 
-@each $color, $value in $theme-colors-and-gray {
-  $hyphen: '';
-  @if($color=='') {
-    $hyphen: '';
-  } @else {
-    $hyphen: '-';
-  }
-
+@each $color, $value in $theme-colors {
   $colors: a11y-color(if($color=='dark', tint-color($value, 10%), shade-color($value, 10%)), if($color=='dark', tint-color($value, 90%), tint-color($value, 85%)), 'lighter');
   $fg: nth($colors, 1);
   $bg: nth($colors, 2);
@@ -93,7 +86,7 @@ $theme-colors-and-gray: map-merge(("gray": $gray-600), $theme-colors);
   $bg-active: nth($colors-active, 2);
 
   // btn-text has no background or border, and only sets the font-color.
-  .btn-text#{$hyphen}#{$color} {
+  .btn-text-#{$color} {
     @include button-variant(
       transparent, // background
       transparent, // border
@@ -117,7 +110,7 @@ $theme-colors-and-gray: map-merge(("gray": $gray-600), $theme-colors);
 
 
   // btn-text has no background or border, and only sets the font-color. The background is only set on hover
-  .btn-text-hover-bg#{$hyphen}#{$color} {
+  .btn-text-hover-bg-#{$color} {
     @include button-variant(
       transparent, // background
       transparent, // border
