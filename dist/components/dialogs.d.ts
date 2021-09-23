@@ -1,5 +1,4 @@
 /// <reference types="jquery" />
-/// <reference types="ion.rangeslider" />
 /// <reference types="select2" />
 /// <reference types="bootstrap" />
 /**
