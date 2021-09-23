@@ -1,5 +1,13 @@
 // selection / hover colors
-$visyn-selection-color-light: #ffcf76;
-$visyn-selection-color-dark: #e29609;
-$visyn-selection-color-light-hovered: #ffe8be;
-$visyn-selection-color-dark-hovered: #ffcf76;
+$visyn-selection-colors: (
+  'selection-color-light': '#ffcf76',
+  'selection-color-dark': '#e29609',
+  'selection-color-light-hovered': '#ffe8be',
+  'selection-color-dark-hovered': '#ffcf76'
+);
+
+:root {
+  @each $key, $value in map-collect($visyn-selection-colors) {
+    --visyn-#{$key}: #{$value};
+  }
+}

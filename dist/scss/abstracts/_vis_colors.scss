@@ -137,3 +137,20 @@ $visyn-diverging-colors-blue-pink: (
 // --visyn-c1
 // --visyn-c2
 // https://github.com/datavisyn/marketplace360/blob/67ed33f9a180f86255fd143e9adbd8fd3e69274f/src/base/utils.ts#L44
+
+
+:root {
+  @each $key, $value in map-collect(
+    $visyn-categorical-colors,
+    $visyn-sequential-colors-blue,
+    $visyn-sequential-colors-red,
+    $visyn-sequential-colors-green,
+    $visyn-sequential-colors-yellow,
+    $visyn-diverging-colors-blue-red,
+    $visyn-diverging-colors-red-turquois,
+    $visyn-diverging-colors-blue-yellow,
+    $visyn-diverging-colors-blue-pink)
+  {
+    --visyn-#{$key}: #{$value};
+  }
+}
