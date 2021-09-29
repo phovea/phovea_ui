@@ -1,3 +1,5 @@
+// takes a list of maps
+// spreads all maps into one
 @function map-collect($maps...) {
   $collection: ();
 

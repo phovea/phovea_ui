@@ -6,6 +6,7 @@ $visyn-selection-colors: (
   'selection-color-dark-hovered': '#ffcf76'
 );
 
+// create css variables and inject them in :root
 :root {
   @each $key, $value in map-collect($visyn-selection-colors) {
     --visyn-#{$key}: #{$value};

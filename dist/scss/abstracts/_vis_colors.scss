@@ -134,11 +134,7 @@ $visyn-diverging-colors-blue-pink: (
   'd13-blue-pink': '#5b0e31'
 );
 
-// --visyn-c1
-// --visyn-c2
-// https://github.com/datavisyn/marketplace360/blob/67ed33f9a180f86255fd143e9adbd8fd3e69274f/src/base/utils.ts#L44
-
-
+// create css variables and inject them in :root
 :root {
   @each $key, $value in map-collect(
     $visyn-categorical-colors,
