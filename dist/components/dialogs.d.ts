@@ -26,6 +26,7 @@ export declare class Dialog {
     protected readonly $dialog: JQuery;
     private bakKeyDownListener;
     static openDialogs: number;
+    protected testId: string;
     /**
      * @param title Dialog title
      * @param primaryBtnText Label for primary button
