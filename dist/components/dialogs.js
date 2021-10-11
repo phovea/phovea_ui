@@ -148,6 +148,7 @@ export class FormDialog extends Dialog {
     constructor(title, primaryBtnText = 'OK', formId = 'form' + BaseUtils.randomId(5), additionalCSSClasses = '') {
         super(title, primaryBtnText, additionalCSSClasses);
         this.formId = formId;
+        console.log('formId', formId);
         this.testId = `${formId}-formDialog`;
         this.body.innerHTML = `<form id="${formId}"></form>`;
         const b = this.footer.querySelector('button');
