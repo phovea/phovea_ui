@@ -1,6 +1,6 @@
 {
   "name": "phovea_ui",
-  "description": "Wrapper for integration of Bootstrap and FontAwesome along with a common header for Phovea apps",
+  "description": "DEPRECATED: Wrapper for integration of Bootstrap and FontAwesome along with a common header for Phovea apps",
   "version": "8.0.0",
   "author": {
     "name": "The Caleydo Team",
