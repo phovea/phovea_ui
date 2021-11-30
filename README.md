@@ -1,4 +1,4 @@
-phovea_ui 
+DEPRECATED: phovea_ui 
 =====================
 [![Phovea][phovea-image]][phovea-url] [![NPM version][npm-image]][npm-url] [![Build Status][circleci-image]][circleci-url]
 
@@ -7,6 +7,9 @@ This plugin is a utility plugin for including [Bootstrap](http://getbootstrap.co
  * an AJAX provider based on [jQuery](http://jquery.com/) in `ajax_adapter_jquery.ts`
  * a common header for application in `header.ts`
  * utility dialog generators in `dialogs.ts`
+
+### DEPRECATION Information
+Please note that this project has been archived and is no longer being maintained. There is an active development under https://github.com/datavisyn/tdp_core and we will also contribute our future changes to it.
 
 Installation
 ------------
